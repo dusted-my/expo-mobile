@@ -3,19 +3,27 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { Badge } from 'react-native-paper';
 import * as React from 'react';
-import { List, MD3Colors } from 'react-native-paper';
-
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import HomeScreen from './screens/HomeScreen';
+import LoginScreen from './screens/LoginScreen';
+const Stack = createNativeStackNavigator();
 
 
 export default function App() {
   return (
-    <PaperProvider>
-      <View style={styles.container}>
-        <Image style={{resizeMode : "contain",height: 100,width: 200}} source={require('./assets/dusted.png') }/>
-        <StatusBar style="auto" />
-      </View>
-    </PaperProvider>
-  );
+    <NavigationContainer>
+      <PaperProvider>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+        />
+        <Stack.Screen name="Login" component={LoginScreen} />
+      </Stack.Navigator>
+      </PaperProvider>
+    </NavigationContainer>
+  )
 }
 
 const styles = StyleSheet.create({
