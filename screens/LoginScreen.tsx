@@ -1,11 +1,101 @@
-import React from 'react'
-import { View, Text} from 'react-native'
+import { Inter_700Bold } from "@expo-google-fonts/inter";
+import { useFonts } from "expo-font";
+import React, { useState } from "react";
+import { View, Image, StyleSheet } from "react-native";
+import { Button, TextInput } from "react-native-paper";
 
+const LoginScreen = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  let [fontsLoaded] = useFonts({
+    Inter_700Bold,
+  });
 
-const LoginScreen = () => {
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  function handleSubmit() {
+    // TODO: INTEGRATE LOG IN
+    navigation.navigate("Home");
+  }
+
   return (
-    <View><Text>LoginScreen</Text></View>
-  )
-}
+    <View style={styles.body}>
+      <Image
+        style={styles.logo}
+        source={require("../assets/dusted.png")}
+      ></Image>
+      <View style={styles.form}>
+        <TextInput
+          style={styles.input}
+          outlineStyle={styles.inputOutline}
+          placeholder="Email"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+          mode="outlined"
+        />
+        <TextInput
+          style={styles.input}
+          outlineStyle={styles.inputOutline}
+          secureTextEntry
+          placeholder="Password"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+          mode="outlined"
+        />
+        <Button
+          style={styles.button}
+          labelStyle={styles.buttonLabel}
+          buttonColor="#000000"
+          mode="contained"
+          onPress={handleSubmit}
+        >
+          Log In
+        </Button>
+      </View>
+    </View>
+  );
+};
 
-export default LoginScreen
+const styles = StyleSheet.create({
+  body: {
+    // justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    padding: 32,
+  },
+  logo: {
+    marginTop: "40%",
+    resizeMode: "contain",
+    height: 42.72,
+    width: 181,
+  },
+  form: {
+    width: "100%",
+    paddingVertical: 24,
+  },
+  input: {
+    paddingVertical: 8,
+    marginVertical: 12,
+    fontSize: 20,
+    textAlign: "center",
+  },
+  inputOutline: {
+    borderRadius: 100,
+    borderColor: "#AAA",
+  },
+  button: {
+    marginVertical: 12,
+    paddingVertical: 8,
+    borderRadius: 100,
+    borderWidth: 0,
+  },
+  buttonLabel: {
+    fontSize: 24,
+    fontFamily: "Inter_700Bold",
+    lineHeight: 24,
+  },
+});
+
+export default LoginScreen;
