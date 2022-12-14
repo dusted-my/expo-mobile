@@ -5,8 +5,9 @@ import {
   Inter_900Black,
 } from "@expo-google-fonts/inter";
 import { useFonts } from "expo-font";
+import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Image, View, Text, StyleSheet } from "react-native";
+import { Image, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Button } from "react-native-paper";
 
 const HomeScreen = ({ navigation }) => {
@@ -26,21 +27,23 @@ const HomeScreen = ({ navigation }) => {
       <Image style={styles.logo} source={require("../assets/dusted.png")} />
       <Text style={styles.text}>We made cleaning service easier for you</Text>
       <View style={styles.container}>
+        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <LinearGradient
+            colors={["#FBD52D", "#EF3A7B"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0.6, y: 0.5 }}
+            style={[styles.button, styles.buttonLogIn]}
+          >
+            <Text style={styles.buttonLabelLogIn}>Log In</Text>
+          </LinearGradient>
+        </TouchableOpacity>
         <Button
-          style={styles.button}
-          labelStyle={styles.buttonLabel}
-          mode="contained"
-          onPress={() => navigation.navigate("Login")}
+          onPress={() => navigation.navigate("Register")}
+          mode="outlined"
+          style={[styles.button, styles.buttonRegister]}
+          textColor="#000000"
         >
-          Log In
-        </Button>
-        <Button
-          style={styles.button}
-          labelStyle={styles.buttonLabel}
-          mode="contained"
-          onPress={() => navigation.navigate("Login")}
-        >
-          Register
+          <Text style={styles.buttonLabelRegister}>Register</Text>
         </Button>
       </View>
     </View>
@@ -75,10 +78,26 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 100,
   },
-  buttonLabel: {
+  buttonLogIn: {
+    paddingVertical: 16,
+  },
+  buttonRegister: {
+    borderWidth: 2,
+    borderColor: "#000000",
+  },
+  buttonLabelLogIn: {
     fontSize: 24,
     lineHeight: 32,
     fontFamily: "Inter_500Medium",
+    textAlign: "center",
+    color: "#FFFFFF",
+  },
+  buttonLabelRegister: {
+    fontSize: 24,
+    lineHeight: 32,
+    fontFamily: "Inter_500Medium",
+    textAlign: "center",
+    color: "#00000",
   },
 });
 
