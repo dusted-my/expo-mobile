@@ -1,7 +1,7 @@
-import { Inter_700Bold } from "@expo-google-fonts/inter";
+import { Inter_500Medium, Inter_700Bold } from "@expo-google-fonts/inter";
 import { useFonts } from "expo-font";
 import React, { useState } from "react";
-import { View, Image, StyleSheet } from "react-native";
+import { Text, View, Image, StyleSheet } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 
 const LoginScreen = ({ navigation }) => {
@@ -9,6 +9,7 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   let [fontsLoaded] = useFonts({
     Inter_700Bold,
+    Inter_500Medium,
   });
 
   if (!fontsLoaded) {
@@ -21,49 +22,62 @@ const LoginScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.body}>
-      <Image
-        style={styles.logo}
-        source={require("../assets/dusted.png")}
-      ></Image>
-      <View style={styles.form}>
-        <TextInput
-          style={styles.input}
-          outlineStyle={styles.inputOutline}
-          placeholder="Email"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          mode="outlined"
-        />
-        <TextInput
-          style={styles.input}
-          outlineStyle={styles.inputOutline}
-          secureTextEntry
-          placeholder="Password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          mode="outlined"
-        />
-        <Button
-          style={styles.button}
-          labelStyle={styles.buttonLabel}
-          buttonColor="#000000"
-          mode="contained"
-          onPress={handleSubmit}
-        >
-          Log In
-        </Button>
+    <View style={styles.container}>
+      <View style={styles.body}>
+        <Image
+          style={styles.logo}
+          source={require("../assets/dusted.png")}
+        ></Image>
+        <View style={styles.form}>
+          <TextInput
+            style={styles.input}
+            outlineStyle={styles.inputOutline}
+            placeholder="Email"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            mode="outlined"
+          />
+          <TextInput
+            style={styles.input}
+            outlineStyle={styles.inputOutline}
+            secureTextEntry
+            placeholder="Password"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            mode="outlined"
+          />
+          <Button
+            style={styles.button}
+            labelStyle={styles.buttonLabel}
+            buttonColor="#000000"
+            mode="contained"
+            onPress={handleSubmit}
+          >
+            Log In
+          </Button>
+        </View>
       </View>
+      <Button
+        labelStyle={styles.text}
+        mode="text"
+        textColor="#000"
+        onPress={() => navigation.navigate("Forget Password")}
+      >
+        Forgot your Password?
+      </Button>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  body: {
-    // justifyContent: "center",
-    alignItems: "center",
+  container: {
+    justifyContent: "space-between",
     height: "100%",
     padding: 32,
+    paddingBottom: 50,
+  },
+  body: {
+    alignItems: "center",
   },
   logo: {
     marginTop: "40%",
@@ -95,6 +109,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: "Inter_700Bold",
     lineHeight: 24,
+  },
+  text: {
+    fontSize: 18,
+    fontFamily: "Inter_500Medium",
+    textAlign: "center",
   },
 });
 
