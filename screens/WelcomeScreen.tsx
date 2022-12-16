@@ -9,6 +9,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Image, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Button } from "react-native-paper";
+import Navbar from "../components/Navbar";
 
 const WelcomeScreen = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
@@ -46,6 +47,7 @@ const WelcomeScreen = ({ navigation }) => {
           <Text style={styles.buttonLabelRegister}>Register</Text>
         </Button>
       </View>
+      <Navbar></Navbar>
     </View>
   );
 };

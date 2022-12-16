@@ -48,7 +48,7 @@ const SettingsScreen = ({ navigation }) => {
         </View>
         <View>
           <Text style={styles.title}>Opportunities</Text>
-          <TouchableOpacity onPress={() => alert("Hello")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Request")}>
             <Text style={styles.options}>Clean with Dusted</Text>
             <Divider></Divider>
           </TouchableOpacity>
