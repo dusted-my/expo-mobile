@@ -38,7 +38,7 @@ const WelcomeScreen = ({ navigation }) => {
           </LinearGradient>
         </TouchableOpacity>
         <Button
-          onPress={() => navigation.navigate("Register")}
+          onPress={() => navigation.navigate("Settings")}
           mode="outlined"
           style={[styles.button, styles.buttonRegister]}
           textColor="#000000"
