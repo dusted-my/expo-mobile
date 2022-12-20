@@ -41,7 +41,7 @@ const SettingsScreen = ({ navigation }) => {
             <Text style={styles.options}>Help Center</Text>
           </TouchableOpacity>
           <Divider></Divider>
-          <TouchableOpacity onPress={() => alert("Hello")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Feedback")}>
             <Text style={styles.options}>Share Feedback</Text>
           </TouchableOpacity>
           <Divider></Divider>
