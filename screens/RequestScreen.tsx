@@ -111,25 +111,25 @@ const RequestScreen = ({ navigation }) => {
           <View style={styles.photo}>
             <View style={styles.rectangleBorder}>
               <View style={{ alignItems: "center", justifyContent: "center" }}>
-                <Button onPress={() => pickImage("front")}>NRIC Front</Button>
                 {nricFront && (
                   <Image
                     source={{ uri: nricFront }}
                     style={{ width: 200, height: 200 }}
                   />
                 )}
+                <Button onPress={() => pickImage("front")}>NRIC Front</Button>
               </View>
             </View>
           </View>
           <View style={styles.rectangleBorder}>
             <View style={{ alignItems: "center", justifyContent: "center" }}>
-              <Button onPress={() => pickImage("back")}>NRIC Back</Button>
               {nricBack && (
                 <Image
                   source={{ uri: nricBack }}
                   style={{ width: 200, height: 200 }}
                 />
               )}
+              <Button onPress={() => pickImage("back")}>NRIC Back</Button>
             </View>
           </View>
 
@@ -167,11 +167,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: "Inter_500Medium",
     padding: 10,
+    paddingTop: 30,
   },
   radioButton: {
     flexDirection: "row",
     alignItems: "center",
-    paddingLeft: 30,
+    // paddingLeft: 30,
   },
   radioButtonText: {
     fontSize: 16,
