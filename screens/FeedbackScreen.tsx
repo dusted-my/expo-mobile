@@ -5,9 +5,33 @@ import {
 } from "@expo-google-fonts/inter";
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
-import { Button } from "react-native-paper";
+import { Button, TextInput } from "react-native-paper";
 
-const LoginScreen = ({ navigation }) => {
+const options = [
+  "Did not show up",
+  "Cleaner seems unwell",
+  "Improper Handling",
+  "Attitude",
+  "No Face Mask",
+  "Missed Instructions",
+];
+
+const FeedbackScreen = ({ navigation }) => {
+  const [selected, setSelected] = useState<string[]>([]);
+
+  function select(value: string) {
+    if (selected.includes(value)) {
+      setSelected((selected) =>
+        selected.filter((selection) => selection !== value)
+      );
+      return;
+    }
+    setSelected((selected) => selected.concat(value));
+  }
+
+  function handleSubmit() {
+    alert(selected);
+  }
   const [feedback, setFeedback] = useState("");
   let [fontsLoaded] = useFonts({
     Inter_700Bold,
@@ -16,11 +40,6 @@ const LoginScreen = ({ navigation }) => {
 
   if (!fontsLoaded) {
     return null;
-  }
-};
-const FeedbackScreen = ({ navigation }) => {
-  function handleSubmit() {
-    alert("Submit successful!");
   }
   return (
     <View style={styles.container}>
@@ -34,60 +53,65 @@ const FeedbackScreen = ({ navigation }) => {
           style={styles.cleaner}
           source={require("../assets/cleaner.jpg")}
         ></Image>
-        <View style={styles.buttonStyle}>
-          <View style={styles.buttonRow}>
-            <Button
-              style={styles.complaintButton}
-              labelStyle={styles.complaintButtonLabel}
-              mode="outlined"
-            >
-              Did not show up
-            </Button>
-            <Button
-              style={styles.complaintButton}
-              labelStyle={styles.complaintButtonLabel}
-              mode="outlined"
-            >
-              Cleaner seems unwell
-            </Button>
-          </View>
-          <View style={[styles.buttonRow, styles.secondRow]}>
-            <Button
-              style={styles.complaintButton}
-              labelStyle={styles.complaintButtonLabel}
-              mode="outlined"
-            >
-              Improper Handling
-            </Button>
-            <Button
-              style={styles.complaintButton}
-              labelStyle={styles.complaintButtonLabel}
-              mode="outlined"
-            >
-              Attitude
-            </Button>
-          </View>
+        <Text style={styles.name}>Anna Jowel</Text>
 
-          <View style={styles.buttonRow}>
-            <Button
-              style={styles.complaintButton}
-              labelStyle={styles.complaintButtonLabel}
-              mode="outlined"
-            >
-              No Face Mask
-            </Button>
-            <Button
-              style={styles.complaintButton}
-              labelStyle={styles.complaintButtonLabel}
-              mode="outlined"
-            >
-              Missed Instructions
-            </Button>
-          </View>
+        <View style={styles.buttonsContainer}>
+          {options
+            .filter((_, index) => index % 2 === 0)
+            .map((option, index) => {
+              let nextOption = options[index + 1];
+              console.log("options:", options);
+              console.log("next option", nextOption);
+
+              return (
+                <View
+                  style={styles.buttonRow}
+                  key={option + options[index + 1]}
+                >
+                  <Button
+                    style={[
+                      styles.complaintButton,
+                      selected.includes(option) && styles.selectedButton,
+                    ]}
+                    labelStyle={[
+                      styles.complaintButtonLabel,
+                      selected.includes(option) && styles.selectedButtonLabel,
+                    ]}
+                    mode="outlined"
+                    onPress={() => select(option)}
+                  >
+                    {option}
+                  </Button>
+                  <Button
+                    style={[
+                      styles.complaintButton,
+                      selected.includes(nextOption) && styles.selectedButton,
+                    ]}
+                    labelStyle={[
+                      styles.complaintButtonLabel,
+                      selected.includes(nextOption) &&
+                        styles.selectedButtonLabel,
+                    ]}
+                    mode="outlined"
+                    onPress={() => select(nextOption)}
+                  >
+                    {nextOption}
+                  </Button>
+                </View>
+              );
+            })}
         </View>
-        <View style={styles.box}>
-          <Text style={styles.text}>Tell us more about it</Text>
-        </View>
+
+        <TextInput
+          multiline
+          numberOfLines={5}
+          style={styles.feedback}
+          outlineStyle={styles.feedbackOutline}
+          placeholder="Tell us more about it"
+          value={feedback}
+          onChangeText={(text) => setFeedback(text)}
+          mode="outlined"
+        />
         <View style={styles.buttomPadding}>
           <Button
             style={styles.button}
@@ -125,6 +149,11 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_700Bold",
     paddingVertical: 24,
   },
+  name: {
+    fontSize: 20,
+    fontFamily: "Inter_600SemiBold",
+    paddingVertical: 10,
+  },
   cleaner: {
     width: 111,
     height: 111,
@@ -136,21 +165,21 @@ const styles = StyleSheet.create({
   buttonRow: {
     flexDirection: "row",
     padding: 10,
+    justifyContent: "center",
   },
   complaintButton: {
     marginHorizontal: 10,
     borderColor: "#CCC",
   },
-  buttonStyle: {
-    padding: 10,
-  },
-  box: {
+  selectedButton: {
+    borderColor: "#000",
     borderWidth: 2,
-    borderColor: "#CCC",
-    width: 300,
-    height: 150,
-    borderRadius: 10,
-    margin: 20,
+  },
+  selectedButtonLabel: {
+    color: "#000",
+  },
+  buttonsContainer: {
+    padding: 10,
   },
   buttomPadding: {
     paddingTop: 10,
@@ -167,6 +196,18 @@ const styles = StyleSheet.create({
   text: {
     color: "#999",
     padding: 10,
+  },
+  feedback: {
+    marginVertical: 12,
+    fontSize: 20,
+    width: "100%",
+    height: 150,
+    textAlignVertical: "top",
+  },
+  feedbackOutline: {
+    borderWidth: 2,
+    borderColor: "#CCC",
+    borderRadius: 10,
   },
   buttonLabel: {
     fontSize: 24,
