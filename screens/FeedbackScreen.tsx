@@ -56,50 +56,50 @@ const FeedbackScreen = ({ navigation }) => {
         <Text style={styles.name}>Anna Jowel</Text>
 
         <View style={styles.buttonsContainer}>
-          {options
-            .filter((_, index) => index % 2 === 0)
-            .map((option, index) => {
-              let nextOption = options[index + 1];
-              console.log("options:", options);
-              console.log("next option", nextOption);
-
-              return (
-                <View
-                  style={styles.buttonRow}
-                  key={option + options[index + 1]}
+          {/*
+           * create fake arrays with the half length of options
+           *
+           * example:
+           * const options = ['a', 'b', 'c', 'e', 'f'];
+           * => [undefined, undefined, undefined]
+           *
+           * explanation:
+           * options has length of 5, and ceil(5 / 2) is 3,
+           * therefore create a fake array with the length of 3
+           */}
+          {[...Array(Math.ceil(options.length / 2))].map((_, index) => (
+            <View style={styles.buttonRow} key={`row-${index}`}>
+              {/*
+               * in each row, return 2 values based on current index * 2
+               * example:
+               * const index = 1;
+               * const options = ['a', 'b', 'c', 'e', 'f'];
+               * => ['c', 'e']
+               *
+               * explanation:
+               * if index is 1, then index * 2 is 2,
+               * therefore we slice options from index 2 and stop at index 4,
+               * hence ['c', 'e']
+               */}
+              {options.slice(index * 2, index * 2 + 2).map((option) => (
+                <Button
+                  key={option}
+                  style={[
+                    styles.complaintButton,
+                    selected.includes(option) && styles.selectedButton,
+                  ]}
+                  labelStyle={[
+                    styles.complaintButtonLabel,
+                    selected.includes(option) && styles.selectedButtonLabel,
+                  ]}
+                  mode="outlined"
+                  onPress={() => select(option)}
                 >
-                  <Button
-                    style={[
-                      styles.complaintButton,
-                      selected.includes(option) && styles.selectedButton,
-                    ]}
-                    labelStyle={[
-                      styles.complaintButtonLabel,
-                      selected.includes(option) && styles.selectedButtonLabel,
-                    ]}
-                    mode="outlined"
-                    onPress={() => select(option)}
-                  >
-                    {option}
-                  </Button>
-                  <Button
-                    style={[
-                      styles.complaintButton,
-                      selected.includes(nextOption) && styles.selectedButton,
-                    ]}
-                    labelStyle={[
-                      styles.complaintButtonLabel,
-                      selected.includes(nextOption) &&
-                        styles.selectedButtonLabel,
-                    ]}
-                    mode="outlined"
-                    onPress={() => select(nextOption)}
-                  >
-                    {nextOption}
-                  </Button>
-                </View>
-              );
-            })}
+                  {option}
+                </Button>
+              ))}
+            </View>
+          ))}
         </View>
 
         <TextInput
@@ -146,12 +146,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontFamily: "Inter_700Bold",
+    fontFamily: "Inter_500",
     paddingVertical: 24,
   },
   name: {
     fontSize: 20,
-    fontFamily: "Inter_600SemiBold",
+    fontFamily: "Inter_500",
     paddingVertical: 10,
   },
   cleaner: {
@@ -173,7 +173,6 @@ const styles = StyleSheet.create({
   },
   selectedButton: {
     borderColor: "#000",
-    borderWidth: 2,
   },
   selectedButtonLabel: {
     color: "#000",
