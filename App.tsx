@@ -10,6 +10,7 @@ import WelcomeScreen from "./screens/WelcomeScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import RequestScreen from "./screens/RequestScreen";
 import FeedbackScreen from "./screens/FeedbackScreen";
+import ChatScreen from "./screens/ChatScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,7 @@ export default function App() {
           <Stack.Screen name="Settings" component={SettingsScreen} />
           <Stack.Screen name="Request" component={RequestScreen} />
           <Stack.Screen name="Feedback" component={FeedbackScreen} />
+          <Stack.Screen name="Chat" component={ChatScreen} />
 
           <Stack.Screen
             name="Forget Password"
