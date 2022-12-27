@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { Icon } from "react-native-paper/lib/typescript/components/Avatar/Avatar";
+import Navbar from "../components/Navbar";
 
 const HomeScreen = () => {
   const [search, setSearch] = useState("");
