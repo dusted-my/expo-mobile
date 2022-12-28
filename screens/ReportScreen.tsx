@@ -16,7 +16,7 @@ const options = [
   "Missed Instructions",
 ];
 
-const FeedbackScreen = ({ navigation }) => {
+const ReportScreen = ({ navigation }) => {
   const [selected, setSelected] = useState<string[]>([]);
 
   function select(value: string) {
@@ -130,6 +130,7 @@ const FeedbackScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
+    // marginTop: 40,
     justifyContent: "space-between",
     height: "100%",
     padding: 32,
@@ -143,6 +144,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     height: 42.72,
     width: 181,
+    marginLeft: 20,
   },
   title: {
     fontSize: 24,
@@ -216,4 +218,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FeedbackScreen;
+export default ReportScreen;

@@ -41,7 +41,7 @@ const SettingsScreen = ({ navigation }) => {
             <Text style={styles.options}>Help Center</Text>
           </TouchableOpacity>
           <Divider></Divider>
-          <TouchableOpacity onPress={() => navigation.navigate("Feedback")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Report")}>
             <Text style={styles.options}>Share Feedback</Text>
           </TouchableOpacity>
           <Divider></Divider>
@@ -71,6 +71,7 @@ const SettingsScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 60,
     padding: 40,
     height: "100%",
     justifyContent: "space-between",
