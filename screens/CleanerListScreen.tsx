@@ -1,51 +1,61 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
-import { IconButton, MD3Colors } from "react-native-paper";
+import { IconButton, List, MD3Colors } from "react-native-paper";
 
 const cleaners = [
   {
     name: "Anna Jowel",
     job: "Cleaning",
+    star: 5,
   },
   {
     name: "Ben Carlson",
     job: "Cleaning",
+    star: 5,
   },
   {
     name: "Chris Evans",
     job: "Cleaning",
+    star: 4,
   },
   {
     name: "David Beckham",
     job: "Cleaning",
+    star: 4,
   },
   {
     name: "Eminem",
     job: "Cleaning",
+    star: 3,
   },
 ];
 
 const CleanerListScreen = () => {
   return (
     <View style={styles.container}>
-      <View style={styles.card}>
-        <View style={styles.body}>
-          <Image
-            style={styles.profile}
-            source={require("../assets/cleaner.jpg")}
-          ></Image>
-          <View style={styles.profileDescription}>
-            <Text style={styles.name}>Anna Jowel</Text>
-            <Text>Cleaning</Text>
-            <IconButton
-              icon={require("../assets/yellow-star.svg")}
-              iconColor={MD3Colors.error50}
-              size={20}
-              onPress={() => console.log("Pressed")}
-            />
+      {cleaners.map((cleaner) => (
+        <View style={styles.card} key={cleaner.name}>
+          <View style={styles.body}>
+            <Image
+              style={styles.profile}
+              source={require("../assets/cleaner.jpg")}
+            ></Image>
+            <View style={styles.profileDescription}>
+              <Text style={styles.name}>{cleaner.name}</Text>
+              <Text style={styles.job}>{cleaner.job}</Text>
+              <View style={styles.stars}>
+                {[...Array(cleaner.star)].map((_) => (
+                  <List.Icon
+                    icon="star"
+                    color="#ECC12A"
+                    style={{ margin: 0 }}
+                  />
+                ))}
+              </View>
+            </View>
           </View>
         </View>
-      </View>
+      ))}
     </View>
   );
 };
@@ -62,6 +72,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 20,
     backgroundColor: "#FFF",
+    padding: 20,
   },
   body: {
     alignItems: "center",
@@ -77,11 +88,19 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 20,
     fontFamily: "Inter_600SemiBold",
+    marginBottom: 5,
+  },
+  job: {
+    marginBottom: 5,
   },
   profileDescription: {
-    marginTop: 20,
+    marginTop: 5,
     display: "flex",
     flexDirection: "column",
+    margin: 10,
+  },
+  stars: {
+    flexDirection: "row",
   },
 });
 
