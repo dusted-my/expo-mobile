@@ -47,7 +47,6 @@ const WelcomeScreen = ({ navigation }) => {
           <Text style={styles.buttonLabelRegister}>Register</Text>
         </Button>
       </View>
-      <Navbar></Navbar>
     </View>
   );
 };
@@ -55,6 +54,7 @@ const WelcomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   body: {
     // justifyContent: "center",
+    marginTop: "20%",
     alignItems: "center",
     height: "100%",
     padding: 32,

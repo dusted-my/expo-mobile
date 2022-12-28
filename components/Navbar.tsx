@@ -1,53 +1,56 @@
-import React from "react";
-import { BottomNavigation, Text } from "react-native-paper";
-import ChatScreen from "../screens/ChatScreen";
+import * as React from "react";
+import { StyleSheet } from "react-native";
+import { Appbar, FAB, useTheme } from "react-native-paper";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HomeScreen from "../screens/HomeScreen";
-import SettingsScreen from "../screens/SettingsScreen";
 
-const MusicRoute = () => <Text>Music</Text>;
+const BOTTOM_APPBAR_HEIGHT = 80;
+const MEDIUM_FAB_HEIGHT = 56;
 
-const AlbumsRoute = () => <Text>Albums</Text>;
-
-const RecentsRoute = () => <Text>Recents</Text>;
-
-const NotificationsRoute = () => <Text>Notifications</Text>;
-
-const Navbar = () => {
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    {
-      key: "home",
-      title: "Home",
-      focusedIcon: "home",
-      unfocusedIcon: "home-outline",
-    },
-    {
-      key: "chat",
-      title: "Chat",
-      focusedIcon: "chat",
-      unfocusedIcon: "chat-outline",
-    },
-    {
-      key: "profile",
-      title: "Profile",
-      focusedIcon: "account",
-      unfocusedIcon: "account-outline",
-    },
-  ]);
-
-  const renderScene = BottomNavigation.SceneMap({
-    home: () => <Text>Home</Text>,
-    chat: () => <Text>Chat</Text>,
-    profile: () => <Text>Profile</Text>,
-  });
+const MyComponent = ({ navigation }) => {
+  const { bottom } = useSafeAreaInsets();
+  const theme = useTheme();
 
   return (
-    <BottomNavigation
-      navigationState={{ index, routes }}
-      onIndexChange={setIndex}
-      renderScene={renderScene}
-    />
+    <Appbar
+      style={[
+        styles.bottom,
+        {
+          height: BOTTOM_APPBAR_HEIGHT + bottom,
+          backgroundColor: "#000",
+        },
+      ]}
+      safeAreaInsets={{ bottom }}
+    >
+      <Appbar.Action
+        icon="home"
+        color="#FFF"
+        onPress={() => navigation.navigate("Home")}
+      />
+      <Appbar.Action
+        icon="message"
+        color="#FFF"
+        onPress={() => navigation.navigate("Chat")}
+      />
+      <Appbar.Action
+        icon="account"
+        color="#FFF"
+        onPress={() => navigation.navigate("Settings")}
+      />
+    </Appbar>
   );
 };
 
-export default Navbar;
+const styles = StyleSheet.create({
+  bottom: {
+    color: "#000",
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: "space-between",
+    paddingHorizontal: 40,
+  },
+});
+
+export default MyComponent;

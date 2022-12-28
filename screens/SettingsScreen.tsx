@@ -8,6 +8,7 @@ import {
 
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Button, Divider } from "react-native-paper";
+import Navbar from "../components/Navbar";
 
 const SettingsScreen = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
@@ -17,59 +18,66 @@ const SettingsScreen = ({ navigation }) => {
   });
 
   return (
-    <View style={styles.container}>
-      <View>
-        <View style={styles.details}>
-          <Image
-            style={styles.profile}
-            source={require("../assets/profile-pic.jpg")}
-          />
-          <View style={styles.profileDescription}>
-            <Text style={styles.name}>Jace Wayland</Text>
+    <View style={styles.outerContainer}>
+      <View style={styles.container}>
+        <View>
+          <View style={styles.details}>
+            <Image
+              style={styles.profile}
+              source={require("../assets/profile-pic.jpg")}
+            />
+            <View style={styles.profileDescription}>
+              <Text style={styles.name}>Jace Wayland</Text>
+              <TouchableOpacity onPress={() => alert("Hello")}>
+                <Text style={styles.editButton}>Edit Profile</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View>
+            <Text style={styles.title}>General</Text>
             <TouchableOpacity onPress={() => alert("Hello")}>
-              <Text style={styles.editButton}>Edit Profile</Text>
+              <Text style={styles.options}>Settings</Text>
+            </TouchableOpacity>
+            <Divider></Divider>
+            <TouchableOpacity onPress={() => alert("Hello")}>
+              <Text style={styles.options}>Help Center</Text>
+            </TouchableOpacity>
+            <Divider></Divider>
+            <TouchableOpacity onPress={() => navigation.navigate("Report")}>
+              <Text style={styles.options}>Report</Text>
+            </TouchableOpacity>
+            <Divider></Divider>
+          </View>
+          <View>
+            <Text style={styles.title}>Opportunities</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Request")}>
+              <Text style={styles.options}>Clean with Dusted</Text>
+              <Divider></Divider>
             </TouchableOpacity>
           </View>
         </View>
-        <View>
-          <Text style={styles.title}>General</Text>
-          <TouchableOpacity onPress={() => alert("Hello")}>
-            <Text style={styles.options}>Settings</Text>
-          </TouchableOpacity>
-          <Divider></Divider>
-          <TouchableOpacity onPress={() => alert("Hello")}>
-            <Text style={styles.options}>Help Center</Text>
-          </TouchableOpacity>
-          <Divider></Divider>
-          <TouchableOpacity onPress={() => navigation.navigate("Report")}>
-            <Text style={styles.options}>Share Feedback</Text>
-          </TouchableOpacity>
-          <Divider></Divider>
-        </View>
-        <View>
-          <Text style={styles.title}>Opportunities</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Request")}>
-            <Text style={styles.options}>Clean with Dusted</Text>
-            <Divider></Divider>
-          </TouchableOpacity>
+        <View style={styles.logOut}>
+          <Button
+            onPress={() => navigation.navigate("Welcome")}
+            style={styles.logOutButton}
+            labelStyle={styles.buttonLabel}
+            mode="outlined"
+            textColor="red"
+          >
+            Log Out
+          </Button>
         </View>
       </View>
-      <View style={styles.logOut}>
-        <Button
-          onPress={() => navigation.navigate("Welcome")}
-          style={styles.logOutButton}
-          labelStyle={styles.buttonLabel}
-          mode="outlined"
-          textColor="red"
-        >
-          Log Out
-        </Button>
-      </View>
+      <Navbar navigation={navigation}></Navbar>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  outerContainer: {
+    position: "relative",
+    height: "100%",
+  },
   container: {
     marginTop: 60,
     padding: 40,
@@ -118,6 +126,7 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     padding: 8,
     borderRadius: 100,
+    marginBottom: 140,
   },
   buttonLabel: {
     fontSize: 22,
