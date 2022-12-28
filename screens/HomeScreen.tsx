@@ -7,9 +7,16 @@ import {
   ImageBackground,
   ScrollView,
 } from "react-native";
-import { Button, TextInput } from "react-native-paper";
-import { Icon } from "react-native-paper/lib/typescript/components/Avatar/Avatar";
+import { Button, Chip, TextInput } from "react-native-paper";
 import Navbar from "../components/Navbar";
+
+const categories = [
+  "Cleaning",
+  "Laundry",
+  "Repair",
+  "Vacuuming",
+  "Babysitting",
+];
 
 const HomeScreen = ({ navigation }) => {
   const [search, setSearch] = useState("");
@@ -41,30 +48,44 @@ const HomeScreen = ({ navigation }) => {
             </View>
           </ImageBackground>
         </View>
-        <View>
-          <Text style={styles.title}>Categories</Text>
+        <View style={styles.main}>
           <View>
-            <Button style={styles.categoriesButton}>Cleaning</Button>
-            <Button style={styles.categoriesButton}>Laundry</Button>
-            <Button style={styles.categoriesButton}>Repair</Button>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.title}>Categories</Text>
+              <Button mode="text" textColor="gray">
+                View all
+              </Button>
+            </View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {categories.map((category) => (
+                <Chip
+                  style={styles.categoryChip}
+                  textStyle={styles.categoryChipText}
+                  mode="outlined"
+                  key={category}
+                >
+                  {category}
+                </Chip>
+              ))}
+            </ScrollView>
           </View>
+          <Text>Browse by Person</Text>
+          <Text>View all</Text>
+          <View>
+            <Text>Anna Jowel</Text>
+            <Text>Cleaning</Text>
+            {/* <Image
+              style={styles.starSvg}
+              source={require("../assets/yellow-star.svg")}
+            ></Image>
+            <Image source={require("../assets/grey-star.svg")}></Image> */}
+            <Image
+              style={styles.cleanerJpg}
+              source={require("../assets/cleaner.jpg")}
+            ></Image>
+          </View>
+          <Image source={require("../assets/banner.png")}></Image>
         </View>
-        <Text>Browse by Person</Text>
-        <Text>View all</Text>
-        <View>
-          <Text>Anna Jowel</Text>
-          <Text>Cleaning</Text>
-          {/* <Image
-            style={styles.starSvg}
-            source={require("../assets/yellow-star.svg")}
-          ></Image>
-          <Image source={require("../assets/grey-star.svg")}></Image> */}
-          <Image
-            style={styles.cleanerJpg}
-            source={require("../assets/cleaner.jpg")}
-          ></Image>
-        </View>
-        <Image source={require("../assets/banner.png")}></Image>
       </ScrollView>
       <Navbar navigation={navigation}></Navbar>
     </View>
@@ -91,12 +112,24 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontFamily: "Inter_600SemiBold",
-    paddingTop: 40,
-    paddingBottom: 20,
   },
-  categoriesButton: {
-    borderWidth: 1,
+  main: {
+    padding: 18,
+    paddingTop: 36,
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  categoryChip: {
+    marginHorizontal: 8,
+    borderRadius: 50,
     borderColor: "#000",
+    backgroundColor: "#0000",
+  },
+  categoryChipText: {
+    color: "#000",
   },
   starSvg: {
     width: 500,
