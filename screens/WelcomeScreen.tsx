@@ -1,28 +1,9 @@
-import {
-  Inter_500Medium,
-  Inter_700Bold,
-  Inter_800ExtraBold,
-  Inter_900Black,
-} from "@expo-google-fonts/inter";
-import { useFonts } from "expo-font";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Image, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Button } from "react-native-paper";
-import Navbar from "../components/Navbar";
 
 const WelcomeScreen = ({ navigation }) => {
-  let [fontsLoaded] = useFonts({
-    Inter_700Bold,
-    Inter_900Black,
-    Inter_500Medium,
-    Inter_800ExtraBold,
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
   return (
     <View style={styles.body}>
       <Image style={styles.logo} source={require("../assets/dusted.png")} />

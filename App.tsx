@@ -12,11 +12,16 @@ import RequestScreen from "./screens/RequestScreen";
 import ChatScreen from "./screens/ChatScreen";
 import CleanerListScreen from "./screens/CleanerListScreen";
 import ReportScreen from "./screens/ReportScreen";
+import { useLoadFonts } from "./hooks";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const options = { headerShown: false };
+
+  const fontsLoaded = useLoadFonts();
+  if (!fontsLoaded) return null;
+
   return (
     <NavigationContainer>
       <PaperProvider>

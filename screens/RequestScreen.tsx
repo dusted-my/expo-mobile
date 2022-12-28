@@ -1,9 +1,3 @@
-import {
-  Inter_500Medium,
-  Inter_600SemiBold,
-  Inter_700Bold,
-} from "@expo-google-fonts/inter";
-import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import { Button, RadioButton, TextInput } from "react-native-paper";
@@ -17,14 +11,6 @@ const RequestScreen = ({ navigation }) => {
   const [address, setAddress] = useState("");
   const [nricFront, setNricFront] = useState(null);
   const [nricBack, setNricBack] = useState(null);
-
-  let [fontsLoaded] = useFonts({
-    Inter_700Bold,
-    Inter_500Medium,
-  });
-  if (!fontsLoaded) {
-    return null;
-  }
 
   const pickImage = async (type: "front" | "back") => {
     // No permissions request is necessary for launching the image library

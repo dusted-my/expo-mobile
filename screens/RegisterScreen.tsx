@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { useFonts } from "expo-font";
-import { Inter_500Medium, Inter_700Bold } from "@expo-google-fonts/inter";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 
@@ -8,14 +6,6 @@ const RegisterScreen = ({ navigation }) => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  let [fontsLoaded] = useFonts({
-    Inter_700Bold,
-    Inter_500Medium,
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
 
   function handleSubmit() {
     // TODO: INTEGRATE LOG IN

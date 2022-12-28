@@ -1,22 +1,9 @@
 import React from "react";
-import {
-  Inter_500Medium,
-  Inter_700Bold,
-  Inter_600SemiBold,
-  useFonts,
-} from "@expo-google-fonts/inter";
-
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Button, Divider } from "react-native-paper";
 import Navbar from "../components/Navbar";
 
 const SettingsScreen = ({ navigation }) => {
-  let [fontsLoaded] = useFonts({
-    Inter_700Bold,
-    Inter_500Medium,
-    Inter_600SemiBold,
-  });
-
   return (
     <View style={styles.outerContainer}>
       <View style={styles.container}>
