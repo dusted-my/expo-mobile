@@ -11,18 +11,23 @@ import { Button, TextInput } from "react-native-paper";
 import { Icon } from "react-native-paper/lib/typescript/components/Avatar/Avatar";
 import Navbar from "../components/Navbar";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const [search, setSearch] = useState("");
 
   return (
     <ScrollView>
-      <View style={{ height: "60%" }}>
+      <View style={{ height: "35%" }}>
         <ImageBackground
           style={styles.banner}
           resizeMode="cover"
           source={require("../assets/background.png")}
         >
-          <Text style={styles.bannerTitle}>Services to suite your needs</Text>
+          <Text
+            style={styles.bannerTitle}
+            onPress={() => navigation.navigate("Cleaner List")}
+          >
+            Services to suite your needs
+          </Text>
           <View style={styles.searchContainer}>
             <TextInput
               outlineStyle={styles.search}
@@ -36,7 +41,7 @@ const HomeScreen = () => {
         </ImageBackground>
       </View>
       <View>
-        <Text>Categories</Text>
+        <Text style={styles.title}>Categories</Text>
         <View>
           <Button style={styles.categoriesButton}>Cleaning</Button>
           <Button style={styles.categoriesButton}>Laundry</Button>
@@ -67,7 +72,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     position: "absolute",
     left: "50%",
-    bottom: -10,
+    bottom: -25,
     transform: [{ translateX: -150 }],
   },
   search: {
@@ -75,6 +80,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 50,
     width: 300,
+  },
+  title: {
+    fontSize: 18,
+    fontFamily: "Inter_600SemiBold",
+    paddingTop: 40,
+    paddingBottom: 20,
   },
   categoriesButton: {
     borderWidth: 1,
