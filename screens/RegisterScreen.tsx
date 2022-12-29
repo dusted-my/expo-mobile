@@ -12,6 +12,7 @@ import {
 } from "react-native-paper";
 import { auth } from "../firebase/config";
 import * as yup from "yup";
+import MySnackbar from "../components/MySnackbar";
 
 interface Form {
   fullName: string;
@@ -165,18 +166,13 @@ const RegisterScreen = ({ navigation }) => {
           )}
         </Formik>
       </View>
-      <Snackbar
-        wrapperStyle={styles.snackbarWrapper}
-        style={styles.snackbar}
+      <MySnackbar
+        variant="error"
         visible={Boolean(toast)}
         onDismiss={dismissToast}
-        action={{
-          label: "OK",
-          textColor: MD3Colors.error95,
-        }}
       >
         {toast}
-      </Snackbar>
+      </MySnackbar>
     </View>
   );
 };
@@ -227,14 +223,6 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_500Medium",
     textAlign: "center",
     paddingTop: 30,
-  },
-  snackbarWrapper: {
-    position: "absolute",
-    marginHorizontal: 32,
-    width: "100%",
-  },
-  snackbar: {
-    backgroundColor: MD3Colors.error50,
   },
 });
 
