@@ -1,15 +1,75 @@
+import { FirebaseError } from "firebase/app";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { Formik } from "formik";
 import React, { useState } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
-import { Button, TextInput } from "react-native-paper";
+import {
+  Button,
+  HelperText,
+  MD3Colors,
+  Snackbar,
+  TextInput,
+} from "react-native-paper";
+import { auth } from "../firebase/config";
+import * as yup from "yup";
+
+interface Form {
+  fullName: string;
+  email: string;
+  password: string;
+}
+
+const initialValues: Form = {
+  fullName: "",
+  email: "",
+  password: "",
+};
+
+const validationSchema = yup.object({
+  fullName: yup
+    .string()
+    .required("Full Name is Required")
+    .min(3, "Full Name must have at least 3 characters")
+    .max(100, "Full Name must have at most 100 characters"),
+  email: yup
+    .string()
+    .email("Email format must be correct")
+    .required("Email is required")
+    .min(3, "Email must have at least 3 characters")
+    .max(100, "Email must have at most 100 characters"),
+  password: yup
+    .string()
+    .required("Password is Required")
+    .min(6, "Password must have at least 6 characters")
+    .max(100, "Password must have at most 100 characters"),
+});
 
 const RegisterScreen = ({ navigation }) => {
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [toast, setToast] = useState("");
+  const openToast = (msg: string) => setToast(msg);
+  const dismissToast = () => setToast("");
 
-  function handleSubmit() {
-    // TODO: INTEGRATE LOG IN
-    navigation.navigate("Home");
+  async function handleSubmitForm(form: Form) {
+    const { fullName, email, password } = form;
+
+    try {
+      const userCred = await createUserWithEmailAndPassword(
+        auth,
+        email.trim(),
+        password.trim()
+      );
+      await updateProfile(userCred.user, { displayName: fullName.trim() });
+      navigation.navigate("Home");
+      openToast("Registration Successful!");
+    } catch (e) {
+      if (!(e instanceof FirebaseError)) {
+        return openToast("Something went wrong");
+      }
+      if (e.code === "auth/email-already-in-use") {
+        return openToast("Email is Used");
+      }
+      openToast(e.code);
+    }
   }
 
   return (
@@ -19,46 +79,104 @@ const RegisterScreen = ({ navigation }) => {
           style={styles.logo}
           source={require("../assets/dusted.png")}
         ></Image>
-        <View style={styles.form}>
-          <TextInput
-            style={styles.input}
-            outlineStyle={styles.inputOutline}
-            placeholder="Full Name"
-            value={fullName}
-            onChangeText={(text) => setFullName(text)}
-            mode="outlined"
-          />
-          <TextInput
-            style={styles.input}
-            outlineStyle={styles.inputOutline}
-            placeholder="Email"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-            mode="outlined"
-          />
-          <TextInput
-            style={styles.input}
-            outlineStyle={styles.inputOutline}
-            secureTextEntry
-            placeholder="Password"
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-            mode="outlined"
-          />
-          <Button
-            style={styles.button}
-            labelStyle={styles.buttonLabel}
-            buttonColor="#000000"
-            mode="contained"
-            onPress={handleSubmit}
-          >
-            Register
-          </Button>
-          <Text style={styles.text}>
-            By registering, I agree upon all the terms and conditions
-          </Text>
-        </View>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={handleSubmitForm}
+          validationSchema={validationSchema}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+            dirty,
+            isValid,
+            isSubmitting,
+          }) => (
+            <View style={styles.form}>
+              <TextInput
+                mode="outlined"
+                style={styles.input}
+                outlineStyle={styles.inputOutline}
+                activeOutlineColor="#000"
+                placeholder="Full Name"
+                value={values.fullName}
+                onChangeText={handleChange("fullName")}
+                onBlur={handleBlur("fullName")}
+                error={Boolean(errors.fullName && touched.fullName)}
+              />
+              <HelperText
+                type="error"
+                visible={Boolean(errors.fullName && touched.fullName)}
+              >
+                {errors.fullName}
+              </HelperText>
+              <TextInput
+                mode="outlined"
+                style={styles.input}
+                outlineStyle={styles.inputOutline}
+                activeOutlineColor="#000"
+                placeholder="Email"
+                value={values.email}
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                error={Boolean(errors.email && touched.email)}
+              />
+              <HelperText
+                type="error"
+                visible={Boolean(errors.email && touched.email)}
+              >
+                {errors.email}
+              </HelperText>
+              <TextInput
+                mode="outlined"
+                style={styles.input}
+                outlineStyle={styles.inputOutline}
+                activeOutlineColor="#000"
+                secureTextEntry
+                placeholder="Password"
+                value={values.password}
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                error={Boolean(errors.password && touched.password)}
+              />
+              <HelperText
+                type="error"
+                visible={Boolean(errors.password && touched.password)}
+              >
+                {errors.password}
+              </HelperText>
+              <Button
+                style={styles.button}
+                labelStyle={styles.buttonLabel}
+                buttonColor="#000000"
+                mode="contained"
+                disabled={!dirty || !isValid || isSubmitting}
+                onPress={() => handleSubmit()}
+              >
+                Register
+              </Button>
+              <Text style={styles.text}>
+                By registering, I agree upon all the terms and conditions
+              </Text>
+            </View>
+          )}
+        </Formik>
       </View>
+      <Snackbar
+        wrapperStyle={styles.snackbarWrapper}
+        style={styles.snackbar}
+        visible={Boolean(toast)}
+        onDismiss={dismissToast}
+        action={{
+          label: "OK",
+          textColor: MD3Colors.error95,
+        }}
+      >
+        {toast}
+      </Snackbar>
     </View>
   );
 };
@@ -69,6 +187,7 @@ const styles = StyleSheet.create({
     height: "100%",
     padding: 32,
     paddingBottom: 50,
+    position: "relative",
   },
   body: {
     alignItems: "center",
@@ -96,19 +215,26 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingVertical: 8,
-    marginVertical: 12,
+    marginTop: 12,
     fontSize: 20,
     textAlign: "center",
   },
   inputOutline: {
     borderRadius: 100,
-    borderColor: "#AAA",
   },
   text: {
     fontSize: 16,
     fontFamily: "Inter_500Medium",
     textAlign: "center",
     paddingTop: 30,
+  },
+  snackbarWrapper: {
+    position: "absolute",
+    marginHorizontal: 32,
+    width: "100%",
+  },
+  snackbar: {
+    backgroundColor: MD3Colors.error50,
   },
 });
 
