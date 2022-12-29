@@ -1,11 +1,18 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { Button, Divider, List, TextInput } from "react-native-paper";
 
 const options = ["Cleaning", "Laundry", "Repair"];
 
-const BookingScreen = () => {
+const BookingScreen = ({ navigation }) => {
   const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
 
@@ -133,20 +140,16 @@ const BookingScreen = () => {
               mode="outlined"
             />
           </View>
-          <View style={styles.buttomPadding}>
-            <TouchableOpacity>
+          <TouchableOpacity onPress={() => alert("Booked")}>
             <LinearGradient
-            colors={["#FBD52D", "#EF3A7B"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0.6, y: 0.5 }}
-            style={[styles.button, styles.buttonLogIn]}
+              colors={["#FF70AF", "#5F48F5"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0.9, y: 0.5 }}
+              style={[styles.button, styles.buttonBook]}
             >
-            <Text style={styles.buttonLabelLogIn}>Log In</Text>
+              <Text style={styles.buttonLabelBook}>Book</Text>
             </LinearGradient>
-            </TouchableOpacity>
-              onPress={handleSubmit}
-            </View>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
@@ -255,6 +258,7 @@ const styles = StyleSheet.create({
   },
   schduleChosen: {
     marginBottom: 5,
+    color: "#006AFF",
   },
   scheduleDivider: {
     width: "80%",
@@ -266,16 +270,15 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   button: {
-    marginVertical: 12,
+    marginVertical: 20,
     paddingVertical: 8,
     borderRadius: 100,
     borderWidth: 0,
   },
-
-  buttonLogIn: {
+  buttonBook: {
     paddingVertical: 16,
   },
-  buttonLabelLogIn: {
+  buttonLabelBook: {
     fontSize: 24,
     lineHeight: 32,
     fontFamily: "Inter_500Medium",
