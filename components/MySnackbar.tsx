@@ -7,8 +7,10 @@ import {
   SnackbarProps,
 } from "react-native-paper";
 
+export type MySnackbarVariant = "error" | "success";
+
 interface Props extends Omit<SnackbarProps, "theme"> {
-  variant: "error" | "success";
+  variant: MySnackbarVariant;
 }
 const MySnackbar = (props: Props) => {
   const { variant, children } = props;

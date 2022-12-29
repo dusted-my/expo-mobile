@@ -3,13 +3,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { Formik } from "formik";
 import React, { useState } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
-import {
-  Button,
-  HelperText,
-  MD3Colors,
-  Snackbar,
-  TextInput,
-} from "react-native-paper";
+import { Button, HelperText, TextInput } from "react-native-paper";
 import { auth } from "../firebase/config";
 import * as yup from "yup";
 import MySnackbar from "../components/MySnackbar";
