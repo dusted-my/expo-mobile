@@ -140,7 +140,7 @@ const BookingScreen = ({ navigation }) => {
               mode="outlined"
             />
           </View>
-          <TouchableOpacity onPress={() => alert("Booked")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Payment")}>
             <LinearGradient
               colors={["#FF70AF", "#5F48F5"]}
               start={{ x: 0, y: 0 }}
