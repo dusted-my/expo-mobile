@@ -10,15 +10,7 @@ import {
 import { Button, Chip, TextInput } from "react-native-paper";
 import Cleaner from "../components/Cleaner";
 import Navbar from "../components/Navbar";
-import { mockCleaners } from "../mocks";
-
-const categories = [
-  "Cleaning",
-  "Laundry",
-  "Repair",
-  "Vacuuming",
-  "Babysitting",
-];
+import { mockCategories, mockCleaners } from "../mocks";
 
 const HomeScreen = ({ navigation }) => {
   const [search, setSearch] = useState("");
@@ -62,11 +54,14 @@ const HomeScreen = ({ navigation }) => {
               horizontal
               showsHorizontalScrollIndicator={false}
             >
-              {categories.map((category, index) => (
+              {mockCategories.map((category, index) => (
                 <Chip
                   style={[
                     styles.categoryChip,
-                    { marginRight: index === categories.length - 1 ? 40 : 16 },
+                    {
+                      marginRight:
+                        index === mockCategories.length - 1 ? 40 : 16,
+                    },
                   ]}
                   textStyle={styles.categoryChipText}
                   mode="outlined"
@@ -97,7 +92,9 @@ const HomeScreen = ({ navigation }) => {
                 <View
                   style={[
                     styles.cleanerContainer,
-                    { marginRight: index === categories.length - 1 ? 40 : 16 },
+                    {
+                      marginRight: index === mockCleaners.length - 1 ? 40 : 16,
+                    },
                   ]}
                   key={cleaner.name}
                 >
