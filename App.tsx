@@ -12,6 +12,7 @@ import RequestScreen from "./screens/RequestScreen";
 import ChatScreen from "./screens/ChatScreen";
 import CleanerListScreen from "./screens/CleanerListScreen";
 import ReportScreen from "./screens/ReportScreen";
+import BookingScreen from "./screens/BookingScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -38,6 +39,7 @@ export default function App() {
           <Stack.Screen name="Report" component={ReportScreen} />
           <Stack.Screen name="Chat" component={ChatScreen} options={options} />
           <Stack.Screen name="Cleaner List" component={CleanerListScreen} />
+          <Stack.Screen name="Booking" component={BookingScreen} />
 
           <Stack.Screen
             name="Forget Password"

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { IconButton, List, MD3Colors } from "react-native-paper";
 
 const cleaners = [
@@ -30,31 +30,33 @@ const cleaners = [
   },
 ];
 
-const CleanerListScreen = () => {
+const CleanerListScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {cleaners.map((cleaner) => (
-        <View style={styles.card} key={cleaner.name}>
-          <View style={styles.body}>
-            <Image
-              style={styles.profile}
-              source={require("../assets/cleaner.jpg")}
-            ></Image>
-            <View style={styles.profileDescription}>
-              <Text style={styles.name}>{cleaner.name}</Text>
-              <Text style={styles.job}>{cleaner.job}</Text>
-              <View style={styles.stars}>
-                {[...Array(cleaner.star)].map((_) => (
-                  <List.Icon
-                    icon="star"
-                    color="#ECC12A"
-                    style={{ margin: 0 }}
-                  />
-                ))}
+        <TouchableOpacity onPress={() => navigation.navigate("Booking")}>
+          <View style={styles.card} key={cleaner.name}>
+            <View style={styles.body}>
+              <Image
+                style={styles.profile}
+                source={require("../assets/cleaner.jpg")}
+              ></Image>
+              <View style={styles.profileDescription}>
+                <Text style={styles.name}>{cleaner.name}</Text>
+                <Text style={styles.job}>{cleaner.job}</Text>
+                <View style={styles.stars}>
+                  {[...Array(cleaner.star)].map((_) => (
+                    <List.Icon
+                      icon="star"
+                      color="#ECC12A"
+                      style={{ margin: 0 }}
+                    />
+                  ))}
+                </View>
               </View>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
       ))}
     </View>
   );
