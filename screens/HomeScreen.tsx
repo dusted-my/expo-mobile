@@ -8,7 +8,9 @@ import {
   ScrollView,
 } from "react-native";
 import { Button, Chip, TextInput } from "react-native-paper";
+import Cleaner from "../components/Cleaner";
 import Navbar from "../components/Navbar";
+import { mockCleaners } from "../mocks";
 
 const categories = [
   "Cleaning",
@@ -24,18 +26,13 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View style={{ height: "35%" }}>
+        <View style={{ height: "24%" }}>
           <ImageBackground
             style={styles.banner}
             resizeMode="cover"
             source={require("../assets/background.png")}
           >
-            <Text
-              style={styles.bannerTitle}
-              onPress={() => navigation.navigate("Cleaner List")}
-            >
-              Services to suite your needs
-            </Text>
+            <Text style={styles.bannerTitle}>Services to suite your needs</Text>
             <View style={styles.searchContainer}>
               <TextInput
                 outlineStyle={styles.search}
@@ -52,14 +49,25 @@ const HomeScreen = ({ navigation }) => {
           <View>
             <View style={styles.sectionHeader}>
               <Text style={styles.title}>Categories</Text>
-              <Button mode="text" textColor="gray">
+              <Button
+                mode="text"
+                textColor="gray"
+                onPress={() => navigation.navigate("Cleaner List")}
+              >
                 View all
               </Button>
             </View>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {categories.map((category) => (
+            <ScrollView
+              style={styles.horizontalScroll}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            >
+              {categories.map((category, index) => (
                 <Chip
-                  style={styles.categoryChip}
+                  style={[
+                    styles.categoryChip,
+                    { marginRight: index === categories.length - 1 ? 40 : 16 },
+                  ]}
                   textStyle={styles.categoryChipText}
                   mode="outlined"
                   key={category}
@@ -69,22 +77,42 @@ const HomeScreen = ({ navigation }) => {
               ))}
             </ScrollView>
           </View>
-          <Text>Browse by Person</Text>
-          <Text>View all</Text>
           <View>
-            <Text>Anna Jowel</Text>
-            <Text>Cleaning</Text>
-            {/* <Image
-              style={styles.starSvg}
-              source={require("../assets/yellow-star.svg")}
-            ></Image>
-            <Image source={require("../assets/grey-star.svg")}></Image> */}
-            <Image
-              style={styles.cleanerJpg}
-              source={require("../assets/cleaner.jpg")}
-            ></Image>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.title}>Browse by Person</Text>
+              <Button
+                mode="text"
+                textColor="gray"
+                onPress={() => navigation.navigate("Cleaner List")}
+              >
+                View all
+              </Button>
+            </View>
+            <ScrollView
+              style={styles.horizontalScroll}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            >
+              {mockCleaners.map((cleaner, index) => (
+                <View
+                  style={[
+                    styles.cleanerContainer,
+                    { marginRight: index === categories.length - 1 ? 40 : 16 },
+                  ]}
+                  key={cleaner.name}
+                >
+                  <Cleaner cleaner={cleaner} />
+                </View>
+              ))}
+            </ScrollView>
           </View>
-          <Image source={require("../assets/banner.png")}></Image>
+
+          <View style={styles.poster}>
+            <Image
+              style={{ width: "100%" }}
+              source={require("../assets/banner.png")}
+            />
+          </View>
         </View>
       </ScrollView>
       <Navbar navigation={navigation}></Navbar>
@@ -114,22 +142,30 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_600SemiBold",
   },
   main: {
-    padding: 18,
-    paddingTop: 36,
+    padding: 24,
   },
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginTop: 24,
+  },
+  horizontalScroll: {
+    marginTop: 8,
+    marginHorizontal: -24,
+    paddingHorizontal: 24,
   },
   categoryChip: {
-    marginHorizontal: 8,
+    marginRight: 16,
     borderRadius: 50,
     borderColor: "#000",
     backgroundColor: "#0000",
   },
   categoryChipText: {
     color: "#000",
+  },
+  cleanerContainer: {
+    marginRight: 16,
   },
   starSvg: {
     width: 500,
@@ -144,16 +180,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     position: "relative",
-    width: "100%",
   },
   bannerTitle: {
     padding: 32,
     fontSize: 28,
     fontWeight: "bold",
     color: "white",
-    maxWidth: "70%",
+    maxWidth: "80%",
   },
-  top: {},
+  poster: {
+    paddingVertical: 32,
+    marginBottom: 150,
+  },
 });
 
 export default HomeScreen;
