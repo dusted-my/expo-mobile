@@ -1,12 +1,12 @@
 import { FirebaseError } from "firebase/app";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { Button, HelperText, TextInput } from "react-native-paper";
 import { auth } from "../firebase/config";
 import * as yup from "yup";
-import MySnackbar from "../components/MySnackbar";
+import { SnackbarProviderActionType, useSnackbar } from "../providers";
 
 interface Form {
   fullName: string;
@@ -40,9 +40,7 @@ const validationSchema = yup.object({
 });
 
 const RegisterScreen = ({ navigation }) => {
-  const [toast, setToast] = useState("");
-  const openToast = (msg: string) => setToast(msg);
-  const dismissToast = () => setToast("");
+  const { dispatchSnackbar } = useSnackbar();
 
   async function handleSubmitForm(form: Form) {
     const { fullName, email, password } = form;
@@ -54,16 +52,32 @@ const RegisterScreen = ({ navigation }) => {
         password.trim()
       );
       await updateProfile(userCred.user, { displayName: fullName.trim() });
+      dispatchSnackbar({
+        message: "Registration Successful!",
+        variant: "success",
+        type: SnackbarProviderActionType.OPEN,
+      });
       navigation.navigate("Home");
-      openToast("Registration Successful!");
     } catch (e) {
       if (!(e instanceof FirebaseError)) {
-        return openToast("Something went wrong");
+        return dispatchSnackbar({
+          message: "Something went wrong",
+          variant: "error",
+          type: SnackbarProviderActionType.OPEN,
+        });
       }
       if (e.code === "auth/email-already-in-use") {
-        return openToast("Email is Used");
+        return dispatchSnackbar({
+          message: "Email is Used",
+          variant: "error",
+          type: SnackbarProviderActionType.OPEN,
+        });
       }
-      openToast(e.code);
+      dispatchSnackbar({
+        message: e.code,
+        variant: "error",
+        type: SnackbarProviderActionType.OPEN,
+      });
     }
   }
 
@@ -160,13 +174,6 @@ const RegisterScreen = ({ navigation }) => {
           )}
         </Formik>
       </View>
-      <MySnackbar
-        variant="error"
-        visible={Boolean(toast)}
-        onDismiss={dismissToast}
-      >
-        {toast}
-      </MySnackbar>
     </View>
   );
 };

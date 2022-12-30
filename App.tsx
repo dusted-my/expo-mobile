@@ -16,6 +16,7 @@ import BookingScreen from "./screens/BookingScreen";
 import PaymentScreen from "./screens/PaymentScreen";
 import BookingConfirmedScreen from "./screens/BookingConfirmedScreen";
 import { useLoadFonts } from "./hooks";
+import { ContextProvider } from "./providers";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,36 +29,45 @@ export default function App() {
   return (
     <NavigationContainer>
       <PaperProvider>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Welcome"
-            component={WelcomeScreen}
-            options={options}
-          />
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Register" component={RegisterScreen} />
-          <Stack.Screen name="Home" component={HomeScreen} options={options} />
-          <Stack.Screen
-            name="Settings"
-            component={SettingsScreen}
-            options={options}
-          />
-          <Stack.Screen name="Request" component={RequestScreen} />
-          <Stack.Screen name="Report" component={ReportScreen} />
-          <Stack.Screen name="Chat" component={ChatScreen} options={options} />
-          <Stack.Screen name="Cleaner List" component={CleanerListScreen} />
-          <Stack.Screen name="Booking" component={BookingScreen} />
-          <Stack.Screen name="Payment" component={PaymentScreen} />
-
-          <Stack.Screen
-            name="Forget Password"
-            component={ForgetPasswordScreen}
-          />
-          <Stack.Screen
-            name="Booking Confirmed"
-            component={BookingConfirmedScreen}
-          />
-        </Stack.Navigator>
+        <ContextProvider>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Welcome"
+              component={WelcomeScreen}
+              options={options}
+            />
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Register" component={RegisterScreen} />
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={options}
+            />
+            <Stack.Screen
+              name="Settings"
+              component={SettingsScreen}
+              options={options}
+            />
+            <Stack.Screen name="Request" component={RequestScreen} />
+            <Stack.Screen name="Report" component={ReportScreen} />
+            <Stack.Screen
+              name="Chat"
+              component={ChatScreen}
+              options={options}
+            />
+            <Stack.Screen name="Cleaner List" component={CleanerListScreen} />
+            <Stack.Screen name="Booking" component={BookingScreen} />
+            <Stack.Screen name="Payment" component={PaymentScreen} />
+            <Stack.Screen
+              name="Booking Confirmed"
+              component={BookingConfirmedScreen}
+            />
+            <Stack.Screen
+              name="Forget Password"
+              component={ForgetPasswordScreen}
+            />
+          </Stack.Navigator>
+        </ContextProvider>
       </PaperProvider>
     </NavigationContainer>
   );

@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
-import { IconButton, List, MD3Colors } from "react-native-paper";
+import { List } from "react-native-paper";
 import { ICleaner } from "../interfaces";
 
 interface Props {
@@ -10,18 +10,26 @@ const Cleaner = (props: Props) => {
   const { cleaner } = props;
 
   return (
-    <View style={styles.card} key={cleaner.name}>
+    <View style={styles.card}>
       <View style={styles.body}>
         <Image
           style={styles.profile}
           source={require("../assets/cleaner.jpg")}
         ></Image>
         <View style={styles.profileDescription}>
-          <Text style={styles.name}>{cleaner.name}</Text>
-          <Text style={styles.job}>{cleaner.job}</Text>
+          <Text style={styles.name}>{cleaner.fullName}</Text>
+          <Text style={styles.job}>
+            {cleaner.categories?.length ? cleaner.categories[0] : "-"}
+            {cleaner.categories?.length > 1 ? "..." : ""}
+          </Text>
           <View style={styles.stars}>
-            {[...Array(cleaner.star)].map((_) => (
-              <List.Icon icon="star" color="#ECC12A" style={{ margin: 0 }} />
+            {[...Array(cleaner.stars)].map((_, index) => (
+              <List.Icon
+                icon="star"
+                color="#ECC12A"
+                style={{ margin: 0 }}
+                key={`${cleaner.id}-star-${index}`}
+              />
             ))}
           </View>
         </View>
@@ -56,6 +64,7 @@ const styles = StyleSheet.create({
   },
   job: {
     marginBottom: 5,
+    textTransform: "capitalize",
   },
   profileDescription: {
     marginTop: 5,
