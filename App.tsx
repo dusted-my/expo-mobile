@@ -14,6 +14,7 @@ import CleanerListScreen from "./screens/CleanerListScreen";
 import ReportScreen from "./screens/ReportScreen";
 import BookingScreen from "./screens/BookingScreen";
 import PaymentScreen from "./screens/PaymentScreen";
+import BookingConfirmedScreen from "./screens/BookingConfirmedScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -46,6 +47,10 @@ export default function App() {
           <Stack.Screen
             name="Forget Password"
             component={ForgetPasswordScreen}
+          />
+          <Stack.Screen
+            name="Booking Confirmed"
+            component={BookingConfirmedScreen}
           />
         </Stack.Navigator>
       </PaperProvider>

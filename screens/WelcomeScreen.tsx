@@ -83,16 +83,16 @@ const styles = StyleSheet.create({
   buttonLogIn: {
     paddingVertical: 16,
   },
-  buttonRegister: {
-    borderWidth: 2,
-    borderColor: "#000000",
-  },
   buttonLabelLogIn: {
     fontSize: 24,
     lineHeight: 32,
     fontFamily: "Inter_500Medium",
     textAlign: "center",
     color: "#FFFFFF",
+  },
+  buttonRegister: {
+    borderWidth: 2,
+    borderColor: "#000000",
   },
   buttonLabelRegister: {
     fontSize: 24,

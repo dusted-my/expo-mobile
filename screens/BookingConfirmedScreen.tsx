@@ -12,7 +12,7 @@ import { Button } from "react-native-paper";
 
 const options = ["Credit/Debit", "Cash", "E-wallet"];
 
-const PaymentScreen = ({ navigation }) => {
+const BookingConfirmedScreen = ({ navigation }) => {
   const [selected, setSelected] = useState("");
 
   function select(value: string) {
@@ -21,67 +21,49 @@ const PaymentScreen = ({ navigation }) => {
 
   return (
     <ScrollView>
-      <View style={styles.body}>
-        <Image
-          style={styles.logo}
-          source={require("../assets/dusted.png")}
-        ></Image>
-        <View style={styles.card}>
-          <Text style={styles.page}>Booking Details</Text>
+      <View style={styles.container}>
+        <View style={styles.body}>
           <Image
-            style={styles.profile}
-            source={require("../assets/cleaner.jpg")}
-          />
-          <Text style={styles.name}>Anna Jowel</Text>
-          <Text>Fair:</Text>
-          <Text style={styles.price}>RM 80</Text>
-          <View>
-            <View style={styles.buttonRow}>
-              {options.map((option) => (
+            style={styles.logo}
+            source={require("../assets/dusted.png")}
+          ></Image>
+          <View style={styles.card}>
+            <Text style={styles.page}>Booking Details</Text>
+            <Image
+              style={styles.profile}
+              source={require("../assets/cleaner.jpg")}
+            />
+            <Text style={styles.name}>Anna Jowel</Text>
+            <Text>Fair:</Text>
+            <Text style={styles.price}>RM 80</Text>
+            <View>
+              <View>
                 <Button
-                  key={option}
-                  style={[
-                    styles.complaintButton,
-                    selected === option && styles.selectedButton,
-                  ]}
+                  style={[styles.complaintButton, styles.selectedButton]}
                   labelStyle={[
                     styles.complaintButtonLabel,
-                    selected === option && styles.selectedButtonLabel,
+                    styles.selectedButtonLabel,
                   ]}
                   mode="outlined"
-                  onPress={() => select(option)}
                 >
-                  {option}
+                  Credit
                 </Button>
-              ))}
+              </View>
+              <View>
+                <Text style={styles.title}>Location: </Text>
+                <Text style={styles.details}>
+                  Jalan 29 Pandan Indah Wilayah Persekutuan 56200 Malaysia
+                </Text>
+              </View>
+              <View>
+                <Text style={styles.title}>Contact No.: </Text>
+                <Text style={styles.details}>03-9274-3421</Text>
+              </View>
+              <View>
+                <Text style={styles.title}>Date: </Text>
+                <Text style={styles.details}>14 Nov 2022 14:30 - 15:30</Text>
+              </View>
             </View>
-            <View>
-              <Text style={styles.title}>Location: </Text>
-              <Text style={styles.details}>
-                Jalan 29 Pandan Indah Wilayah Persekutuan 56200 Malaysia
-              </Text>
-            </View>
-            <View>
-              <Text style={styles.title}>Contact No.: </Text>
-              <Text style={styles.details}>03-9274-3421</Text>
-            </View>
-            <View>
-              <Text style={styles.title}>Date: </Text>
-              <Text style={styles.details}>14 Nov 2022 14:30 - 15:30</Text>
-            </View>
-
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Booking Confirmed")}
-            >
-              <LinearGradient
-                colors={["#CF91FF", "#5782F5"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 0.9, y: 0.5 }}
-                style={[styles.button, styles.buttonBook]}
-              >
-                <Text style={styles.buttonLabelBook}>Pay</Text>
-              </LinearGradient>
-            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -90,6 +72,11 @@ const PaymentScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    // alignItems: "center",
+    justifyContent: "center",
+    minHeight: "100%",
+  },
   body: {
     alignItems: "center",
     margin: 20,
@@ -100,6 +87,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     paddingHorizontal: 50,
     paddingVertical: 20,
+    paddingBottom: 40,
+    justifyContent: "center",
   },
   logo: {
     // marginTop: "10%",
@@ -139,7 +128,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   complaintButton: {
-    marginHorizontal: 10,
+    marginHorizontal: 50,
     borderColor: "#CCC",
   },
   selectedButton: {
@@ -186,4 +175,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PaymentScreen;
+export default BookingConfirmedScreen;
