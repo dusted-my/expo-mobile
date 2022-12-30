@@ -10,7 +10,7 @@ const HomeScreenCleaners = ({ navigation }) => {
   const { dispatchSnackbar } = useSnackbar();
 
   const { data: cleaners, isLoading } = useQuery({
-    queryFn: getCleaners,
+    queryFn: () => getCleaners(3),
     onError: () =>
       dispatchSnackbar({
         type: SnackbarProviderActionType.OPEN,
@@ -26,7 +26,7 @@ const HomeScreenCleaners = ({ navigation }) => {
         <Button
           mode="text"
           textColor="gray"
-          onPress={() => navigation.navigate("Cleaner List")}
+          onPress={() => navigation.navigate("Cleaner List", {})}
         >
           View all
         </Button>
