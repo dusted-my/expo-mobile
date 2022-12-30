@@ -15,11 +15,16 @@ import ReportScreen from "./screens/ReportScreen";
 import BookingScreen from "./screens/BookingScreen";
 import PaymentScreen from "./screens/PaymentScreen";
 import BookingConfirmedScreen from "./screens/BookingConfirmedScreen";
+import { useLoadFonts } from "./hooks";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const options = { headerShown: false };
+
+  const fontsLoaded = useLoadFonts();
+  if (!fontsLoaded) return null;
+
   return (
     <NavigationContainer>
       <PaperProvider>

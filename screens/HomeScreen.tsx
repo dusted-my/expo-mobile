@@ -7,9 +7,10 @@ import {
   ImageBackground,
   ScrollView,
 } from "react-native";
-import { Button, TextInput } from "react-native-paper";
-import { Icon } from "react-native-paper/lib/typescript/components/Avatar/Avatar";
+import { Button, Chip, TextInput } from "react-native-paper";
+import Cleaner from "../components/Cleaner";
 import Navbar from "../components/Navbar";
+import { mockCategories, mockCleaners } from "../mocks";
 
 const HomeScreen = ({ navigation }) => {
   const [search, setSearch] = useState("");
@@ -17,18 +18,13 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View style={{ height: "35%" }}>
+        <View style={{ height: "24%" }}>
           <ImageBackground
             style={styles.banner}
             resizeMode="cover"
             source={require("../assets/background.png")}
           >
-            <Text
-              style={styles.bannerTitle}
-              onPress={() => navigation.navigate("Cleaner List")}
-            >
-              Services to suite your needs
-            </Text>
+            <Text style={styles.bannerTitle}>Services to suite your needs</Text>
             <View style={styles.searchContainer}>
               <TextInput
                 outlineStyle={styles.search}
@@ -41,30 +37,80 @@ const HomeScreen = ({ navigation }) => {
             </View>
           </ImageBackground>
         </View>
-        <View>
-          <Text style={styles.title}>Categories</Text>
+        <View style={styles.main}>
           <View>
-            <Button style={styles.categoriesButton}>Cleaning</Button>
-            <Button style={styles.categoriesButton}>Laundry</Button>
-            <Button style={styles.categoriesButton}>Repair</Button>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.title}>Categories</Text>
+              <Button
+                mode="text"
+                textColor="gray"
+                onPress={() => navigation.navigate("Cleaner List")}
+              >
+                View all
+              </Button>
+            </View>
+            <ScrollView
+              style={styles.horizontalScroll}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            >
+              {mockCategories.map((category, index) => (
+                <Chip
+                  style={[
+                    styles.categoryChip,
+                    {
+                      marginRight:
+                        index === mockCategories.length - 1 ? 40 : 16,
+                    },
+                  ]}
+                  textStyle={styles.categoryChipText}
+                  mode="outlined"
+                  key={category}
+                >
+                  {category}
+                </Chip>
+              ))}
+            </ScrollView>
+          </View>
+          <View>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.title}>Browse by Person</Text>
+              <Button
+                mode="text"
+                textColor="gray"
+                onPress={() => navigation.navigate("Cleaner List")}
+              >
+                View all
+              </Button>
+            </View>
+            <ScrollView
+              style={styles.horizontalScroll}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            >
+              {mockCleaners.map((cleaner, index) => (
+                <View
+                  style={[
+                    styles.cleanerContainer,
+                    {
+                      marginRight: index === mockCleaners.length - 1 ? 40 : 16,
+                    },
+                  ]}
+                  key={cleaner.name}
+                >
+                  <Cleaner cleaner={cleaner} />
+                </View>
+              ))}
+            </ScrollView>
+          </View>
+
+          <View style={styles.poster}>
+            <Image
+              style={{ width: "100%" }}
+              source={require("../assets/banner.png")}
+            />
           </View>
         </View>
-        <Text>Browse by Person</Text>
-        <Text>View all</Text>
-        <View>
-          <Text>Anna Jowel</Text>
-          <Text>Cleaning</Text>
-          {/* <Image
-            style={styles.starSvg}
-            source={require("../assets/yellow-star.svg")}
-          ></Image>
-          <Image source={require("../assets/grey-star.svg")}></Image> */}
-          <Image
-            style={styles.cleanerJpg}
-            source={require("../assets/cleaner.jpg")}
-          ></Image>
-        </View>
-        <Image source={require("../assets/banner.png")}></Image>
       </ScrollView>
       <Navbar navigation={navigation}></Navbar>
     </View>
@@ -91,12 +137,32 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontFamily: "Inter_600SemiBold",
-    paddingTop: 40,
-    paddingBottom: 20,
   },
-  categoriesButton: {
-    borderWidth: 1,
+  main: {
+    padding: 24,
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 24,
+  },
+  horizontalScroll: {
+    marginTop: 8,
+    marginHorizontal: -24,
+    paddingHorizontal: 24,
+  },
+  categoryChip: {
+    marginRight: 16,
+    borderRadius: 50,
     borderColor: "#000",
+    backgroundColor: "#0000",
+  },
+  categoryChipText: {
+    color: "#000",
+  },
+  cleanerContainer: {
+    marginRight: 16,
   },
   starSvg: {
     width: 500,
@@ -111,16 +177,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     position: "relative",
-    width: "100%",
   },
   bannerTitle: {
     padding: 32,
     fontSize: 28,
     fontWeight: "bold",
     color: "white",
-    maxWidth: "70%",
+    maxWidth: "80%",
   },
-  top: {},
+  poster: {
+    paddingVertical: 32,
+    marginBottom: 150,
+  },
 });
 
 export default HomeScreen;

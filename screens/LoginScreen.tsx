@@ -1,24 +1,64 @@
-import { Inter_500Medium, Inter_700Bold } from "@expo-google-fonts/inter";
-import { useFonts } from "expo-font";
+import { FirebaseError } from "firebase/app";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { Formik } from "formik";
 import React, { useState } from "react";
-import { Text, View, Image, StyleSheet } from "react-native";
-import { Button, TextInput } from "react-native-paper";
+import { View, Image, StyleSheet } from "react-native";
+import { Button, HelperText, TextInput } from "react-native-paper";
+import * as yup from "yup";
+import MySnackbar, { MySnackbarVariant } from "../components/MySnackbar";
+import { auth } from "../firebase/config";
+
+interface Form {
+  email: string;
+  password: string;
+}
+const initialValues: Form = {
+  email: "",
+  password: "",
+};
+const validationSchema = yup.object({
+  email: yup
+    .string()
+    .email("Email format must be correct")
+    .required("Email is required"),
+  password: yup.string().required("Password is Required"),
+});
+
+interface Toast {
+  msg: string;
+  variant: MySnackbarVariant;
+}
+const initialToast: Toast = {
+  msg: "",
+  variant: "success",
+};
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  let [fontsLoaded] = useFonts({
-    Inter_700Bold,
-    Inter_500Medium,
-  });
+  const [toast, setToast] = useState<Toast>(initialToast);
 
-  if (!fontsLoaded) {
-    return null;
-  }
+  const openToast = (msg: string, variant: MySnackbarVariant) =>
+    setToast({ msg, variant });
+  const dismissToast = () => setToast(initialToast);
 
-  function handleSubmit() {
-    // TODO: INTEGRATE LOG IN
-    navigation.navigate("Home");
+  async function handleSubmitForm(form: Form) {
+    const { email, password } = form;
+
+    try {
+      await signInWithEmailAndPassword(auth, email.trim(), password.trim());
+      navigation.navigate("Home");
+      openToast("Login Successful!", "success");
+    } catch (e) {
+      if (!(e instanceof FirebaseError)) {
+        return openToast("Something went wrong", "error");
+      }
+      if (e.code === "auth/wrong-password") {
+        return openToast("Wrong Password", "error");
+      }
+      if (e.code === "auth/user-not-found") {
+        return openToast("Email Not Found", "error");
+      }
+      openToast(e.message, "error");
+    }
   }
 
   return (
@@ -28,34 +68,71 @@ const LoginScreen = ({ navigation }) => {
           style={styles.logo}
           source={require("../assets/dusted.png")}
         ></Image>
-        <View style={styles.form}>
-          <TextInput
-            style={styles.input}
-            outlineStyle={styles.inputOutline}
-            placeholder="Email"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-            mode="outlined"
-          />
-          <TextInput
-            style={styles.input}
-            outlineStyle={styles.inputOutline}
-            secureTextEntry
-            placeholder="Password"
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-            mode="outlined"
-          />
-          <Button
-            style={styles.button}
-            labelStyle={styles.buttonLabel}
-            buttonColor="#000000"
-            mode="contained"
-            onPress={handleSubmit}
-          >
-            Log In
-          </Button>
-        </View>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={handleSubmitForm}
+          validationSchema={validationSchema}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+            dirty,
+            isValid,
+            isSubmitting,
+          }) => (
+            <View style={styles.form}>
+              <TextInput
+                mode="outlined"
+                style={styles.input}
+                outlineStyle={styles.inputOutline}
+                activeOutlineColor="#000"
+                placeholder="Email"
+                value={values.email}
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                error={Boolean(errors.email && touched.email)}
+              />
+              <HelperText
+                type="error"
+                visible={Boolean(errors.email && touched.email)}
+              >
+                {errors.email}
+              </HelperText>
+              <TextInput
+                mode="outlined"
+                style={styles.input}
+                outlineStyle={styles.inputOutline}
+                activeOutlineColor="#000"
+                secureTextEntry
+                placeholder="Password"
+                value={values.password}
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                error={Boolean(errors.password && touched.password)}
+              />
+              <HelperText
+                type="error"
+                visible={Boolean(errors.password && touched.password)}
+              >
+                {errors.password}
+              </HelperText>
+              <Button
+                style={styles.button}
+                labelStyle={styles.buttonLabel}
+                buttonColor="#000000"
+                mode="contained"
+                disabled={!dirty || !isValid || isSubmitting}
+                onPress={() => handleSubmit()}
+              >
+                Log In
+              </Button>
+            </View>
+          )}
+        </Formik>
       </View>
       <Button
         labelStyle={styles.text}
@@ -65,6 +142,13 @@ const LoginScreen = ({ navigation }) => {
       >
         Forgot your Password?
       </Button>
+      <MySnackbar
+        variant={toast.variant}
+        visible={Boolean(toast.msg)}
+        onDismiss={dismissToast}
+      >
+        {toast.msg}
+      </MySnackbar>
     </View>
   );
 };
@@ -91,7 +175,7 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingVertical: 8,
-    marginVertical: 12,
+    marginTop: 12,
     fontSize: 20,
     textAlign: "center",
   },

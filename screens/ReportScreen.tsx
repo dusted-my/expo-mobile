@@ -1,8 +1,3 @@
-import {
-  Inter_500Medium,
-  Inter_700Bold,
-  useFonts,
-} from "@expo-google-fonts/inter";
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { Button, TextInput } from "react-native-paper";
@@ -33,14 +28,7 @@ const ReportScreen = ({ navigation }) => {
     alert(selected);
   }
   const [feedback, setFeedback] = useState("");
-  let [fontsLoaded] = useFonts({
-    Inter_700Bold,
-    Inter_500Medium,
-  });
 
-  if (!fontsLoaded) {
-    return null;
-  }
   return (
     <View style={styles.container}>
       <View style={styles.body}>
