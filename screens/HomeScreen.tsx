@@ -24,7 +24,9 @@ const HomeScreen = ({ navigation }) => {
             resizeMode="cover"
             source={require("../assets/background.png")}
           >
-            <Text style={styles.bannerTitle}>Services to suite your needs</Text>
+            <Text style={styles.bannerTitle}>
+              Services that suits your needs
+            </Text>
             <View style={styles.searchContainer}>
               <TextInput
                 outlineStyle={styles.search}

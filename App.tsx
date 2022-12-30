@@ -13,6 +13,7 @@ import ChatScreen from "./screens/ChatScreen";
 import CleanerListScreen from "./screens/CleanerListScreen";
 import ReportScreen from "./screens/ReportScreen";
 import { useLoadFonts } from "./hooks";
+import { ContextProvider } from "./providers";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,30 +26,39 @@ export default function App() {
   return (
     <NavigationContainer>
       <PaperProvider>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Welcome"
-            component={WelcomeScreen}
-            options={options}
-          />
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Register" component={RegisterScreen} />
-          <Stack.Screen name="Home" component={HomeScreen} options={options} />
-          <Stack.Screen
-            name="Settings"
-            component={SettingsScreen}
-            options={options}
-          />
-          <Stack.Screen name="Request" component={RequestScreen} />
-          <Stack.Screen name="Report" component={ReportScreen} />
-          <Stack.Screen name="Chat" component={ChatScreen} options={options} />
-          <Stack.Screen name="Cleaner List" component={CleanerListScreen} />
-
-          <Stack.Screen
-            name="Forget Password"
-            component={ForgetPasswordScreen}
-          />
-        </Stack.Navigator>
+        <ContextProvider>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Welcome"
+              component={WelcomeScreen}
+              options={options}
+            />
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Register" component={RegisterScreen} />
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={options}
+            />
+            <Stack.Screen
+              name="Settings"
+              component={SettingsScreen}
+              options={options}
+            />
+            <Stack.Screen name="Request" component={RequestScreen} />
+            <Stack.Screen name="Report" component={ReportScreen} />
+            <Stack.Screen
+              name="Chat"
+              component={ChatScreen}
+              options={options}
+            />
+            <Stack.Screen name="Cleaner List" component={CleanerListScreen} />
+            <Stack.Screen
+              name="Forget Password"
+              component={ForgetPasswordScreen}
+            />
+          </Stack.Navigator>
+        </ContextProvider>
       </PaperProvider>
     </NavigationContainer>
   );
