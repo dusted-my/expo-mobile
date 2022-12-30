@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, ScrollView, StyleSheet } from "react-native";
+import { Text, View, ScrollView, StyleSheet, Pressable } from "react-native";
 import { Button } from "react-native-paper";
 import { useQuery } from "react-query";
 import Cleaner from "../Cleaner";
@@ -36,9 +36,10 @@ const HomeScreenCleaners = ({ navigation }) => {
         horizontal
         showsHorizontalScrollIndicator={false}
       >
-        {!isLoading && cleaners.length
-          ? cleaners.map((cleaner, index) => (
-              <View
+        {!isLoading ? (
+          cleaners.length ? (
+            cleaners.map((cleaner, index) => (
+              <Pressable
                 style={[
                   styles.cleanerContainer,
                   {
@@ -46,11 +47,17 @@ const HomeScreenCleaners = ({ navigation }) => {
                   },
                 ]}
                 key={cleaner.id}
+                onPress={() => navigation.navigate("Cleaner", { cleaner })}
               >
                 <Cleaner cleaner={cleaner} />
-              </View>
+              </Pressable>
             ))
-          : null}
+          ) : (
+            <Text>No Cleaners Found</Text>
+          )
+        ) : (
+          <Text>Loading...</Text>
+        )}
       </ScrollView>
     </View>
   );

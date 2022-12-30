@@ -1,6 +1,6 @@
 import { useRoute } from "@react-navigation/native";
 import React, { useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Pressable } from "react-native";
 import { useQuery } from "react-query";
 import CategoryChips from "../components/CategoryChips";
 import Cleaner from "../components/Cleaner";
@@ -52,9 +52,13 @@ const CleanerListScreen = ({ navigation }) => {
         {!isLoading ? (
           filteredCleaners.length ? (
             filteredCleaners.map((cleaner) => (
-              <View style={styles.cleanerContainer} key={cleaner.id}>
+              <Pressable
+                style={styles.cleanerContainer}
+                key={cleaner.id}
+                onPress={() => navigation.navigate("Cleaner", { cleaner })}
+              >
                 <Cleaner cleaner={cleaner} />
-              </View>
+              </Pressable>
             ))
           ) : (
             <Text>No Cleaners Found</Text>

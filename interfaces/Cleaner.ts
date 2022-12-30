@@ -6,6 +6,7 @@ export interface ICleaner {
   createdAt: Timestamp;
   email: string;
   fullName: string;
+  hourlyRate?: number;
   imageUrl?: string;
   isCleaner?: string;
   phoneNo?: string;

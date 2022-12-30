@@ -12,11 +12,12 @@ import RequestScreen from "./screens/RequestScreen";
 import ChatScreen from "./screens/ChatScreen";
 import CleanerListScreen from "./screens/CleanerListScreen";
 import ReportScreen from "./screens/ReportScreen";
-import BookingScreen from "./screens/BookingScreen";
+import BookingScreen from "./screens/CleanerScreen";
 import PaymentScreen from "./screens/PaymentScreen";
 import BookingConfirmedScreen from "./screens/BookingConfirmedScreen";
 import { useLoadFonts } from "./hooks";
 import { ContextProvider } from "./providers";
+import CleanerScreen from "./screens/CleanerScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -56,7 +57,7 @@ export default function App() {
               options={options}
             />
             <Stack.Screen name="Cleaner List" component={CleanerListScreen} />
-            <Stack.Screen name="Booking" component={BookingScreen} />
+            <Stack.Screen name="Cleaner" component={CleanerScreen} />
             <Stack.Screen name="Payment" component={PaymentScreen} />
             <Stack.Screen
               name="Booking Confirmed"
