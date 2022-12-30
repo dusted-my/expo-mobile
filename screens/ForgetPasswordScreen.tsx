@@ -2,12 +2,12 @@ import { useNavigation } from "@react-navigation/native";
 import { FirebaseError } from "firebase/app";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React from "react";
 import { View, StyleSheet, Image } from "react-native";
 import { Button, HelperText, TextInput } from "react-native-paper";
 import * as yup from "yup";
-import MySnackbar, { MySnackbarVariant } from "../components/MySnackbar";
 import { auth } from "../firebase/config";
+import { SnackbarProviderActionType, useSnackbar } from "../providers";
 
 interface Form {
   email: string;
@@ -22,38 +22,41 @@ const validationSchema = yup.object({
     .required("Email is required"),
 });
 
-interface Toast {
-  msg: string;
-  variant: MySnackbarVariant;
-}
-const initialToast: Toast = {
-  msg: "",
-  variant: "success",
-};
-
 const ForgetPasswordScreen = () => {
-  const [toast, setToast] = useState<Toast>(initialToast);
   const navigation = useNavigation();
-
-  const openToast = (msg: string, variant: MySnackbarVariant) =>
-    setToast({ msg, variant });
-  const dismissToast = () => setToast(initialToast);
+  const { dispatchSnackbar } = useSnackbar();
 
   async function handleSubmitForm(form: Form) {
     const { email } = form;
 
     try {
       await sendPasswordResetEmail(auth, email.trim());
-      openToast("Password Reset Email Sent!", "success");
+      dispatchSnackbar({
+        message: "Password Reset Email Sent!",
+        variant: "success",
+        type: SnackbarProviderActionType.OPEN,
+      });
       navigation.canGoBack() && navigation.goBack();
     } catch (e) {
       if (!(e instanceof FirebaseError)) {
-        return openToast("Something went wrong", "error");
+        return dispatchSnackbar({
+          message: "Something went wrong",
+          variant: "error",
+          type: SnackbarProviderActionType.OPEN,
+        });
       }
       if (e.code === "auth/user-not-found") {
-        return openToast("Email Not Found", "error");
+        return dispatchSnackbar({
+          message: "Email Not Found",
+          variant: "error",
+          type: SnackbarProviderActionType.OPEN,
+        });
       }
-      openToast(e.message, "error");
+      dispatchSnackbar({
+        message: e.message,
+        variant: "error",
+        type: SnackbarProviderActionType.OPEN,
+      });
     }
   }
 
@@ -109,13 +112,6 @@ const ForgetPasswordScreen = () => {
           )}
         </Formik>
       </View>
-      <MySnackbar
-        variant={toast.variant}
-        visible={Boolean(toast.msg)}
-        onDismiss={dismissToast}
-      >
-        {toast.msg}
-      </MySnackbar>
     </View>
   );
 };

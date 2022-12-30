@@ -5,8 +5,8 @@ import React, { useState } from "react";
 import { View, Image, StyleSheet } from "react-native";
 import { Button, HelperText, TextInput } from "react-native-paper";
 import * as yup from "yup";
-import MySnackbar, { MySnackbarVariant } from "../components/MySnackbar";
 import { auth } from "../firebase/config";
+import { SnackbarProviderActionType, useSnackbar } from "../providers";
 
 interface Form {
   email: string;
@@ -24,40 +24,47 @@ const validationSchema = yup.object({
   password: yup.string().required("Password is Required"),
 });
 
-interface Toast {
-  msg: string;
-  variant: MySnackbarVariant;
-}
-const initialToast: Toast = {
-  msg: "",
-  variant: "success",
-};
-
 const LoginScreen = ({ navigation }) => {
-  const [toast, setToast] = useState<Toast>(initialToast);
-
-  const openToast = (msg: string, variant: MySnackbarVariant) =>
-    setToast({ msg, variant });
-  const dismissToast = () => setToast(initialToast);
+  const { dispatchSnackbar } = useSnackbar();
 
   async function handleSubmitForm(form: Form) {
     const { email, password } = form;
 
     try {
       await signInWithEmailAndPassword(auth, email.trim(), password.trim());
+      dispatchSnackbar({
+        type: SnackbarProviderActionType.OPEN,
+        variant: "success",
+        message: "Successfully Logged In!",
+      });
       navigation.navigate("Home");
-      openToast("Login Successful!", "success");
     } catch (e) {
       if (!(e instanceof FirebaseError)) {
-        return openToast("Something went wrong", "error");
+        return dispatchSnackbar({
+          type: SnackbarProviderActionType.OPEN,
+          variant: "error",
+          message: "Something went wrong",
+        });
       }
       if (e.code === "auth/wrong-password") {
-        return openToast("Wrong Password", "error");
+        return dispatchSnackbar({
+          type: SnackbarProviderActionType.OPEN,
+          variant: "error",
+          message: "Wrong Password",
+        });
       }
       if (e.code === "auth/user-not-found") {
-        return openToast("Email Not Found", "error");
+        return dispatchSnackbar({
+          type: SnackbarProviderActionType.OPEN,
+          variant: "error",
+          message: "Email Not Found",
+        });
       }
-      openToast(e.message, "error");
+      dispatchSnackbar({
+        type: SnackbarProviderActionType.OPEN,
+        variant: "error",
+        message: e.message,
+      });
     }
   }
 
@@ -142,13 +149,6 @@ const LoginScreen = ({ navigation }) => {
       >
         Forgot your Password?
       </Button>
-      <MySnackbar
-        variant={toast.variant}
-        visible={Boolean(toast.msg)}
-        onDismiss={dismissToast}
-      >
-        {toast.msg}
-      </MySnackbar>
     </View>
   );
 };
