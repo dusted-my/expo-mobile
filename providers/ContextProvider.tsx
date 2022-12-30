@@ -1,4 +1,6 @@
 import * as React from "react";
+import { QueryClientProvider } from "react-query";
+import { queryClient } from "./QueryClientProvider/queryClient";
 import { SnackbarProvider } from "./SnackbarProvider";
 
 interface ProviderComposerProps {
@@ -24,7 +26,12 @@ export function ContextProvider(props: ContextProviderProps) {
   const { children } = props;
 
   return (
-    <ProviderComposer contexts={[<SnackbarProvider children={children} />]}>
+    <ProviderComposer
+      contexts={[
+        <SnackbarProvider children={children} />,
+        <QueryClientProvider client={queryClient} />,
+      ]}
+    >
       {children}
     </ProviderComposer>
   );

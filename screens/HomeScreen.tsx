@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -8,9 +9,14 @@ import {
   ScrollView,
 } from "react-native";
 import { Button, Chip, TextInput } from "react-native-paper";
+import { useQuery } from "react-query";
 import Cleaner from "../components/Cleaner";
+import HomeScreenCategories from "../components/HomeScreen/Categories";
+import HomeScreenCleaners from "../components/HomeScreen/Cleaners";
 import Navbar from "../components/Navbar";
-import { mockCategories, mockCleaners } from "../mocks";
+import { mockCategories } from "../mocks";
+import { SnackbarProviderActionType, useSnackbar } from "../providers";
+import { getCleaners } from "../queries";
 
 const HomeScreen = ({ navigation }) => {
   const [search, setSearch] = useState("");
@@ -18,7 +24,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View style={{ height: "24%" }}>
+        <View style={{ height: "30%" }}>
           <ImageBackground
             style={styles.banner}
             resizeMode="cover"
@@ -40,72 +46,8 @@ const HomeScreen = ({ navigation }) => {
           </ImageBackground>
         </View>
         <View style={styles.main}>
-          <View>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.title}>Categories</Text>
-              <Button
-                mode="text"
-                textColor="gray"
-                onPress={() => navigation.navigate("Cleaner List")}
-              >
-                View all
-              </Button>
-            </View>
-            <ScrollView
-              style={styles.horizontalScroll}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-            >
-              {mockCategories.map((category, index) => (
-                <Chip
-                  style={[
-                    styles.categoryChip,
-                    {
-                      marginRight:
-                        index === mockCategories.length - 1 ? 40 : 16,
-                    },
-                  ]}
-                  textStyle={styles.categoryChipText}
-                  mode="outlined"
-                  key={category}
-                >
-                  {category}
-                </Chip>
-              ))}
-            </ScrollView>
-          </View>
-          <View>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.title}>Browse by Person</Text>
-              <Button
-                mode="text"
-                textColor="gray"
-                onPress={() => navigation.navigate("Cleaner List")}
-              >
-                View all
-              </Button>
-            </View>
-            <ScrollView
-              style={styles.horizontalScroll}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-            >
-              {mockCleaners.map((cleaner, index) => (
-                <View
-                  style={[
-                    styles.cleanerContainer,
-                    {
-                      marginRight: index === mockCleaners.length - 1 ? 40 : 16,
-                    },
-                  ]}
-                  key={cleaner.name}
-                >
-                  <Cleaner cleaner={cleaner} />
-                </View>
-              ))}
-            </ScrollView>
-          </View>
-
+          <HomeScreenCategories navigation={navigation} />
+          <HomeScreenCleaners navigation={navigation} />
           <View style={styles.poster}>
             <Image
               style={{ width: "100%" }}
@@ -163,9 +105,6 @@ const styles = StyleSheet.create({
   categoryChipText: {
     color: "#000",
   },
-  cleanerContainer: {
-    marginRight: 16,
-  },
   starSvg: {
     width: 500,
     height: 500,
@@ -189,7 +128,7 @@ const styles = StyleSheet.create({
   },
   poster: {
     paddingVertical: 32,
-    marginBottom: 150,
+    marginBottom: 220,
   },
 });
 
