@@ -45,7 +45,7 @@ const HomeScreenCleaners = ({ navigation }) => {
                     marginRight: index === cleaners.length - 1 ? 40 : 16,
                   },
                 ]}
-                key={cleaner.fullName}
+                key={cleaner.id}
               >
                 <Cleaner cleaner={cleaner} />
               </View>

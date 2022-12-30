@@ -1,7 +1,8 @@
 export const mockCategories = [
-  "Cleaning",
-  "Laundry",
-  "Repair",
-  "Vacuuming",
-  "Babysitting",
+  "residential",
+  "commercial",
+  "laundry",
+  "sanitization",
+  "lawning",
+  "pressure washing",
 ];

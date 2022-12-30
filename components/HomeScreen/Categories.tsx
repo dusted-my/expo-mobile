@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
   },
   categoryChipText: {
     color: "#000",
+    textTransform: "capitalize",
   },
 });
 

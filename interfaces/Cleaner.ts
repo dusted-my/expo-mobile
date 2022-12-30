@@ -9,7 +9,7 @@ export interface ICleaner {
   imageUrl?: string;
   isCleaner?: string;
   phoneNo?: string;
-  skills?: string[];
+  categories?: string[];
   stars: number;
   status: "active" | "inactive";
   updatedAt: Timestamp;
