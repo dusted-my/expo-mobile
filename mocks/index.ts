@@ -1,2 +1,2 @@
 export * from "./cleaner";
-export * from "./category";
+export * from "./service";

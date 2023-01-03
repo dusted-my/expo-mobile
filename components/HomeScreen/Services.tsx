@@ -1,17 +1,16 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { Button } from "react-native-paper";
-import CategoryChips from "../CategoryChips";
+import ServiceChips from "../ServiceChips";
 
-const HomeScreenCategories = ({ navigation }) => {
+const HomeScreenServices = ({ navigation }) => {
   return (
     <View>
       <View style={styles.sectionHeader}>
-        <Text style={styles.title}>Categories</Text>
+        <Text style={styles.title}>Services</Text>
       </View>
-      <CategoryChips
-        handlePress={(category) =>
-          navigation.navigate("Cleaner List", { category })
+      <ServiceChips
+        handlePress={(service) =>
+          navigation.navigate("Cleaner List", { service })
         }
       />
     </View>
@@ -31,4 +30,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreenCategories;
+export default HomeScreenServices;

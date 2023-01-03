@@ -19,8 +19,8 @@ const Cleaner = (props: Props) => {
         <View style={styles.profileDescription}>
           <Text style={styles.name}>{cleaner.fullName}</Text>
           <Text style={styles.job}>
-            {cleaner.categories?.length ? cleaner.categories[0] : "-"}
-            {cleaner.categories?.length > 1 ? "..." : ""}
+            {cleaner.services?.length ? cleaner.services[0] : "-"}
+            {cleaner.services?.length > 1 ? "..." : ""}
           </Text>
           <View style={styles.stars}>
             {[...Array(cleaner.stars)].map((_, index) => (

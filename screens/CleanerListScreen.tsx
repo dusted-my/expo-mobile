@@ -2,9 +2,9 @@ import { useRoute } from "@react-navigation/native";
 import React, { useState } from "react";
 import { View, StyleSheet, Text, Pressable } from "react-native";
 import { useQuery } from "react-query";
-import CategoryChips from "../components/CategoryChips";
+import ServiceChips from "../components/ServiceChips";
 import Cleaner from "../components/Cleaner";
-import { mockCategories } from "../mocks";
+import { mockServices } from "../mocks";
 import { SnackbarProviderActionType, useSnackbar } from "../providers";
 import { PrivateRoute } from "../providers";
 import { getCleaners } from "../queries";
@@ -23,19 +23,19 @@ const CleanerListScreen = ({ navigation }) => {
       }),
   });
 
-  const { category }: any = route.params;
-  const [selected, setSelected] = useState<string>(category || "");
-  const handleSelect = (category: string) =>
+  const { service }: any = route.params;
+  const [selected, setSelected] = useState<string>(service || "");
+  const handleSelect = (service: string) =>
     setSelected((selected) => {
-      if (selected === category) return "";
-      if (!mockCategories.includes(category)) return "";
-      return category;
+      if (selected === service) return "";
+      if (!mockServices.includes(service)) return "";
+      return service;
     });
 
   const filteredCleaners = selected
     ? cleaners.filter((cleaner) => {
-        if (!cleaner.categories) return false;
-        if (!cleaner.categories.includes(selected)) return false;
+        if (!cleaner.services) return false;
+        if (!cleaner.services.includes(selected)) return false;
         return true;
       })
     : cleaners;
@@ -45,9 +45,9 @@ const CleanerListScreen = ({ navigation }) => {
       <View style={styles.container}>
         <View>
           <View style={styles.sectionHeader}>
-            <Text style={styles.title}>Filter by Category</Text>
+            <Text style={styles.title}>Filter by Service</Text>
           </View>
-          <CategoryChips selected={selected} handlePress={handleSelect} />
+          <ServiceChips selected={selected} handlePress={handleSelect} />
         </View>
         <View style={styles.cleaners}>
           {!isLoading ? (

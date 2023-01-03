@@ -26,6 +26,7 @@ import { createContract } from "../mutations";
 import {
   PrivateRoute,
   SnackbarProviderActionType,
+  useAuthState,
   useSnackbar,
 } from "../providers";
 
@@ -59,6 +60,7 @@ const CleanerScreen = ({ navigation }) => {
   const route = useRoute();
   const { cleaner }: { cleaner: ICleaner } = route.params as any;
   const { dispatchSnackbar } = useSnackbar();
+  const { user } = useAuthState();
 
   const { mutate, isLoading } = useMutation({
     mutationFn: createContract,
@@ -98,7 +100,7 @@ const CleanerScreen = ({ navigation }) => {
       serviceRequired,
       total: parseFloat(parseFloat(total).toFixed(2)),
       cleanerDoc: `/users/${cleaner.id}`,
-      clientDoc: `/users/${""}`,
+      clientDoc: `/users/${user.uid}`,
       startAt: startAtTs,
       endAt: endAtTs,
       paymentStatus: "not_applicable",
@@ -147,7 +149,7 @@ const CleanerScreen = ({ navigation }) => {
                     touched={touched.address}
                   />
                   <Services
-                    cleanerServices={cleaner.categories}
+                    cleanerServices={cleaner.services}
                     serviceSelected={values.serviceRequired}
                     setSelected={(value) => {
                       const selected = values.serviceRequired;

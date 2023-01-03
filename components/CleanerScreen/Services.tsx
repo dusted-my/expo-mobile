@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { HelperText, MD2Colors, Text } from "react-native-paper";
-import CategoryChips from "../CategoryChips";
+import ServiceChips from "../ServiceChips";
 
 interface Props {
   cleanerServices: string[];
@@ -26,10 +26,10 @@ const Services = (props: Props) => {
       <Text style={styles.title}>
         Services <Text style={styles.description}>Select 1</Text>
       </Text>
-      <CategoryChips
+      <ServiceChips
         selected={serviceSelected}
         handlePress={setSelected}
-        filteredCategories={cleanerServices}
+        filteredServices={cleanerServices}
       />
       <HelperText type="error" visible={error && touched}>
         {error}

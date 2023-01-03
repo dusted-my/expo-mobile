@@ -1,4 +1,4 @@
-export const mockCategories = [
+export const mockServices = [
   "residential",
   "commercial",
   "laundry",

@@ -1,17 +1,17 @@
 import React from "react";
 import { StyleSheet, ScrollView } from "react-native";
 import { Chip } from "react-native-paper";
-import { mockCategories } from "../mocks";
+import { mockServices } from "../mocks";
 
 interface Props {
-  handlePress: (category: string) => void;
+  handlePress: (service: string) => void;
   selected?: string;
-  filteredCategories?: string[];
+  filteredServices?: string[];
 }
-const CategoryChips = (props: Props) => {
-  const { handlePress, selected, filteredCategories } = props;
+const ServiceChips = (props: Props) => {
+  const { handlePress, selected, filteredServices } = props;
 
-  const categories = filteredCategories || mockCategories;
+  const services = filteredServices || mockServices;
 
   return (
     <ScrollView
@@ -19,26 +19,26 @@ const CategoryChips = (props: Props) => {
       horizontal
       showsHorizontalScrollIndicator={false}
     >
-      {categories.map((category, index) => (
+      {services.map((service, index) => (
         <Chip
           style={[
-            selected === category
-              ? styles.selectedCategoryChip
-              : styles.categoryChip,
+            selected === service
+              ? styles.selectedServiceChip
+              : styles.serviceChip,
             {
-              marginRight: index === mockCategories.length - 1 ? 40 : 16,
+              marginRight: index === mockServices.length - 1 ? 40 : 16,
             },
           ]}
           textStyle={
-            selected === category
-              ? styles.selectedCategoryChipText
-              : styles.categoryChipText
+            selected === service
+              ? styles.selectedServiceChipText
+              : styles.serviceChipText
           }
           mode="outlined"
-          key={category}
-          onPress={() => handlePress(category)}
+          key={service}
+          onPress={() => handlePress(service)}
         >
-          {category}
+          {service}
         </Chip>
       ))}
     </ScrollView>
@@ -51,26 +51,26 @@ const styles = StyleSheet.create({
     marginHorizontal: -24,
     paddingHorizontal: 24,
   },
-  categoryChip: {
+  serviceChip: {
     marginRight: 16,
     borderRadius: 50,
     borderColor: "#000",
     backgroundColor: "#0000",
   },
-  categoryChipText: {
+  serviceChipText: {
     color: "#000",
     textTransform: "capitalize",
   },
-  selectedCategoryChip: {
+  selectedServiceChip: {
     marginRight: 16,
     borderRadius: 50,
     borderColor: "#000",
     backgroundColor: "#000",
   },
-  selectedCategoryChipText: {
+  selectedServiceChipText: {
     color: "#FFF",
     textTransform: "capitalize",
   },
 });
 
-export default CategoryChips;
+export default ServiceChips;

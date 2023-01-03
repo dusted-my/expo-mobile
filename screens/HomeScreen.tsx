@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from "react-native";
 import { TextInput } from "react-native-paper";
-import HomeScreenCategories from "../components/HomeScreen/Categories";
+import HomeScreenServices from "../components/HomeScreen/Services";
 import HomeScreenCleaners from "../components/HomeScreen/Cleaners";
 import Navbar from "../components/Navbar";
 import { PrivateRoute } from "../providers";
@@ -42,7 +42,7 @@ const HomeScreen = ({ navigation }) => {
             </ImageBackground>
           </View>
           <View style={styles.main}>
-            <HomeScreenCategories navigation={navigation} />
+            <HomeScreenServices navigation={navigation} />
             <HomeScreenCleaners navigation={navigation} />
             <View style={styles.poster}>
               <Image
@@ -93,13 +93,13 @@ const styles = StyleSheet.create({
     marginHorizontal: -24,
     paddingHorizontal: 24,
   },
-  categoryChip: {
+  serviceChip: {
     marginRight: 16,
     borderRadius: 50,
     borderColor: "#000",
     backgroundColor: "#0000",
   },
-  categoryChipText: {
+  serviceChipText: {
     color: "#000",
   },
   starSvg: {
