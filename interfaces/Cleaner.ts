@@ -12,6 +12,6 @@ export interface ICleaner {
   phoneNo?: string;
   categories?: string[];
   stars: number;
-  status: "active" | "inactive";
+  status: "active" | "pending_cleaner";
   updatedAt: Timestamp;
 }

@@ -1,29 +1,108 @@
-import React from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useState } from "react";
+import { Platform, Pressable, StyleSheet, View } from "react-native";
 import { Divider, List, Text } from "react-native-paper";
+import DateTimePicker, {
+  DateTimePickerAndroid,
+} from "@react-native-community/datetimepicker";
+import dayjs from "dayjs";
 
-const Schedule = () => {
+type Field = "date" | "startAt" | "endAt";
+
+interface Props {
+  date: number;
+  startAt: number;
+  endAt: number;
+  setFieldValue: (field: Field, value: number) => void;
+}
+const Schedule = (props: Props) => {
+  const { date, startAt, endAt, setFieldValue } = props;
+
+  const handleChange = (field: Field, newValue: Date) =>
+    setFieldValue(field, dayjs(newValue).valueOf());
+
+  const handleToggle = (field: Field, value: number, mode: "date" | "time") => {
+    DateTimePickerAndroid.open({
+      mode,
+      value: dayjs(value).toDate(),
+      onChange: (e, newValue) => handleChange(field, newValue),
+    });
+  };
+
+  const isAndroid = Platform.OS === "android";
+
   return (
     <View>
       <Text style={styles.title}>Schedule</Text>
       <View style={styles.schedule}>
         <View style={styles.section}>
           <List.Icon style={styles.icon} color="#000" icon="calendar" />
-          <View>
+          <View
+            style={{ flexDirection: isAndroid ? "column" : "row", flex: 1 }}
+          >
             <Text style={styles.scheduleName}>Date</Text>
-            <Text style={styles.scheduleChosen}>Wednesday, 18 Dec 2022</Text>
+            {isAndroid ? (
+              <Pressable onPress={() => handleToggle("date", date, "date")}>
+                <Text style={styles.scheduleChosen}>
+                  {dayjs(date).format("ddd, D MMM YYYY")}
+                </Text>
+              </Pressable>
+            ) : (
+              <DateTimePicker
+                style={styles.iosDateTimePicker}
+                value={dayjs(date).toDate()}
+                mode="date"
+                minimumDate={dayjs().toDate()}
+                onChange={(e, newValue) => handleChange("date", newValue)}
+              />
+            )}
           </View>
         </View>
         <Divider style={styles.scheduleDivider}></Divider>
         <View style={styles.section}>
-          <List.Icon
-            style={styles.icon}
-            color="#000"
-            icon="clock-time-four-outline"
-          />
-          <View>
-            <Text style={styles.scheduleName}>Time</Text>
-            <Text style={styles.scheduleChosen}>08:00am - 15:00pm</Text>
+          <List.Icon style={styles.icon} color="#000" icon="clock-in" />
+          <View
+            style={{ flexDirection: isAndroid ? "column" : "row", flex: 1 }}
+          >
+            <Text style={styles.scheduleName}>Start At</Text>
+            {isAndroid ? (
+              <Pressable
+                onPress={() => handleToggle("startAt", startAt, "time")}
+              >
+                <Text style={styles.scheduleChosen}>
+                  {dayjs(startAt).format("hh:mm a")}
+                </Text>
+              </Pressable>
+            ) : (
+              <DateTimePicker
+                style={styles.iosDateTimePicker}
+                value={dayjs(startAt).toDate()}
+                mode="time"
+                onChange={(e, newValue) => handleChange("startAt", newValue)}
+              />
+            )}
+          </View>
+        </View>
+        <Divider style={styles.scheduleDivider}></Divider>
+        <View style={styles.section}>
+          <List.Icon style={styles.icon} color="#000" icon="clock-out" />
+          <View
+            style={{ flexDirection: isAndroid ? "column" : "row", flex: 1 }}
+          >
+            <Text style={styles.scheduleName}>End At</Text>
+            {isAndroid ? (
+              <Pressable onPress={() => handleToggle("endAt", endAt, "time")}>
+                <Text style={styles.scheduleChosen}>
+                  {dayjs(endAt).format("hh:mm a")}
+                </Text>
+              </Pressable>
+            ) : (
+              <DateTimePicker
+                style={styles.iosDateTimePicker}
+                value={dayjs(endAt).toDate()}
+                mode="time"
+                onChange={(e, newValue) => handleChange("endAt", newValue)}
+              />
+            )}
           </View>
         </View>
       </View>
@@ -47,6 +126,7 @@ const styles = StyleSheet.create({
   },
   section: {
     flexDirection: "row",
+    alignItems: "center",
   },
   icon: {
     paddingLeft: 8,
@@ -65,6 +145,9 @@ const styles = StyleSheet.create({
     marginLeft: 54,
     borderColor: "#DADADA",
     marginVertical: 8,
+  },
+  iosDateTimePicker: {
+    flex: 1,
   },
 });
 

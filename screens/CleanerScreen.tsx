@@ -1,64 +1,165 @@
 import { useRoute } from "@react-navigation/native";
+import dayjs from "dayjs";
 import { LinearGradient } from "expo-linear-gradient";
+import { startAt, Timestamp } from "firebase/firestore";
+import { Formik } from "formik";
 import React, { useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  Image,
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { Button, Divider, List, TextInput } from "react-native-paper";
-import CategoryChips from "../components/CategoryChips";
+import { Divider, MD2Colors } from "react-native-paper";
 import Address from "../components/CleanerScreen/Address";
 import Notes from "../components/CleanerScreen/Notes";
 import Profile from "../components/CleanerScreen/Profile";
 import Schedule from "../components/CleanerScreen/Schedule";
 import Services from "../components/CleanerScreen/Services";
-import { ICleaner } from "../interfaces";
-import { mockCategories } from "../mocks";
+import { Contract, ICleaner } from "../interfaces";
+import { trimObjectStrings } from "../utils";
+import * as yup from "yup";
+
+interface Form {
+  address: string;
+  notes: string;
+  total: number;
+  serviceRequired: string;
+  date: number;
+  startAt: number;
+  endAt: number;
+}
+
+const initialValues: Form = {
+  address: "",
+  notes: "",
+  total: 0.0,
+  serviceRequired: "",
+  date: dayjs().valueOf(),
+  startAt: dayjs().valueOf(),
+  endAt: dayjs().valueOf(),
+};
+
+const validationSchema = yup.object({
+  address: yup.string().required("Address is required"),
+  serviceRequired: yup.string().required("Service is required"),
+  total: yup.number().required(),
+});
 
 const CleanerScreen = ({ navigation }) => {
   const route = useRoute();
   const { cleaner }: { cleaner: ICleaner } = route.params as any;
 
-  const [address, setAddress] = useState("");
-  const [notes, setNotes] = useState("");
+  function handleSubmit(values: Form) {
+    const trimmedValues = trimObjectStrings(values);
+    const { address, notes, total, serviceRequired, date, startAt, endAt } =
+      trimmedValues;
 
-  const [selected, setSelected] = useState<string[]>([]);
+    const s = dayjs(startAt);
+    const e = dayjs(endAt);
+    const startAtTs = Timestamp.fromDate(
+      dayjs(date).set("hour", s.hour()).set("minute", s.minute()).toDate()
+    );
+    const endAtTs = Timestamp.fromDate(
+      dayjs(date).set("hour", e.hour()).set("minute", e.minute()).toDate()
+    );
 
-  function select(value: string) {
-    if (selected.includes(value)) {
-      setSelected((selected) =>
-        selected.filter((selection) => selection !== value)
-      );
-      return;
-    }
-    setSelected((selected) => selected.concat(value));
+    const newContract: Contract = {
+      address,
+      notes,
+      total,
+      serviceRequired,
+      cleanerDoc: `/users/${cleaner.id}`,
+      clientDoc: `/users/${""}`,
+      startAt: startAtTs,
+      endAt: endAtTs,
+      paymentStatus: "not_applicable",
+      status: "client_submitting",
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    };
+
+    console.log(newContract);
   }
-  function handleSubmit() {
-    alert(selected);
-  }
+
   return (
     <ScrollView>
       <View style={styles.container}>
         <Profile cleaner={cleaner} />
         <Divider style={styles.divider}></Divider>
-        <Address value={address} onChangeText={(text) => setAddress(text)} />
-        <Services />
-        <Schedule />
-        <Notes value={notes} onChangeText={(text) => setNotes(text)} />
-        <TouchableOpacity onPress={() => navigation.navigate("Payment")}>
-          <LinearGradient
-            colors={["#FF70AF", "#5F48F5"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0.9, y: 0.5 }}
-            style={[styles.button, styles.buttonBook]}
-          >
-            <Text style={styles.buttonLabelBook}>Book</Text>
-          </LinearGradient>
-        </TouchableOpacity>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({
+            handleBlur,
+            handleChange,
+            handleSubmit,
+            setFieldValue,
+            errors,
+            touched,
+            values,
+            dirty,
+            isValid,
+            isSubmitting,
+          }) => {
+            const disableSubmit = !dirty || !isValid || isSubmitting;
+            return (
+              <>
+                <Address
+                  value={values.address}
+                  onChangeText={handleChange("address")}
+                  onBlur={handleBlur("email")}
+                  error={errors.address}
+                  touched={touched.address}
+                />
+                <Services
+                  cleanerServices={cleaner.categories}
+                  serviceSelected={values.serviceRequired}
+                  setSelected={(value) => {
+                    const selected = values.serviceRequired;
+                    if (selected === value) {
+                      return setFieldValue("serviceRequired", "");
+                    }
+                    setFieldValue("serviceRequired", value);
+                  }}
+                  onTouched={handleBlur("serviceRequired")}
+                  error={errors.serviceRequired}
+                  touched={touched.serviceRequired}
+                />
+                <Schedule
+                  date={values.date}
+                  startAt={values.startAt}
+                  endAt={values.endAt}
+                  setFieldValue={setFieldValue}
+                />
+                <Notes
+                  value={values.notes}
+                  onChangeText={handleChange("notes")}
+                />
+                <TouchableOpacity
+                  onPress={() => handleSubmit()}
+                  disabled={disableSubmit}
+                >
+                  <LinearGradient
+                    colors={
+                      disableSubmit
+                        ? [MD2Colors.grey300, MD2Colors.grey300]
+                        : ["#FF70AF", "#5F48F5"]
+                    }
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0.9, y: 0.5 }}
+                    style={[styles.button, styles.buttonBook]}
+                  >
+                    <Text style={styles.buttonLabelBook}>Book</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </>
+            );
+          }}
+        </Formik>
       </View>
     </ScrollView>
   );

@@ -6,9 +6,12 @@ import { mockCategories } from "../mocks";
 interface Props {
   handlePress: (category: string) => void;
   selected?: string;
+  filteredCategories?: string[];
 }
 const CategoryChips = (props: Props) => {
-  const { handlePress, selected } = props;
+  const { handlePress, selected, filteredCategories } = props;
+
+  const categories = filteredCategories || mockCategories;
 
   return (
     <ScrollView
@@ -16,7 +19,7 @@ const CategoryChips = (props: Props) => {
       horizontal
       showsHorizontalScrollIndicator={false}
     >
-      {mockCategories.map((category, index) => (
+      {categories.map((category, index) => (
         <Chip
           style={[
             selected === category
