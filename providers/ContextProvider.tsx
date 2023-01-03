@@ -1,5 +1,6 @@
 import * as React from "react";
 import { QueryClientProvider } from "react-query";
+import { AuthProvider } from "./AuthProvider/AuthProvider";
 import { queryClient } from "./QueryClientProvider/queryClient";
 import { SnackbarProvider } from "./SnackbarProvider";
 
@@ -30,6 +31,7 @@ export function ContextProvider(props: ContextProviderProps) {
       contexts={[
         <SnackbarProvider children={children} />,
         <QueryClientProvider client={queryClient} />,
+        <AuthProvider />,
       ]}
     >
       {children}
