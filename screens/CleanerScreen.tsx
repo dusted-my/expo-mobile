@@ -1,9 +1,9 @@
 import { useRoute } from "@react-navigation/native";
 import dayjs from "dayjs";
 import { LinearGradient } from "expo-linear-gradient";
-import { startAt, Timestamp } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -17,15 +17,18 @@ import Notes from "../components/CleanerScreen/Notes";
 import Profile from "../components/CleanerScreen/Profile";
 import Schedule from "../components/CleanerScreen/Schedule";
 import Services from "../components/CleanerScreen/Services";
-import { Contract, ICleaner } from "../interfaces";
+import { IContract, ICleaner } from "../interfaces";
 import { trimObjectStrings } from "../utils";
 import * as yup from "yup";
 import Total from "../components/CleanerScreen/Total";
+import { useMutation } from "react-query";
+import { createContract } from "../mutations";
+import { SnackbarProviderActionType, useSnackbar } from "../providers";
 
 interface Form {
   address: string;
   notes: string;
-  total: number;
+  total: string;
   serviceRequired: string;
   date: number;
   startAt: number;
@@ -35,7 +38,7 @@ interface Form {
 const initialValues: Form = {
   address: "",
   notes: "",
-  total: 0.0,
+  total: "0.00",
   serviceRequired: "",
   date: dayjs().valueOf(),
   startAt: dayjs().valueOf(),
@@ -51,6 +54,25 @@ const validationSchema = yup.object({
 const CleanerScreen = ({ navigation }) => {
   const route = useRoute();
   const { cleaner }: { cleaner: ICleaner } = route.params as any;
+  const { dispatchSnackbar } = useSnackbar();
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: createContract,
+    onError: (e: any) =>
+      dispatchSnackbar({
+        type: SnackbarProviderActionType.OPEN,
+        variant: "error",
+        message: e,
+      }),
+    onSuccess: () => {
+      dispatchSnackbar({
+        type: SnackbarProviderActionType.OPEN,
+        variant: "success",
+        message: "Contract Proposed",
+      });
+      navigation.navigate("Payment");
+    },
+  });
 
   function handleSubmit(values: Form) {
     const trimmedValues = trimObjectStrings(values);
@@ -66,11 +88,11 @@ const CleanerScreen = ({ navigation }) => {
       dayjs(date).set("hour", e.hour()).set("minute", e.minute()).toDate()
     );
 
-    const newContract: Contract = {
+    const newContract: IContract = {
       address,
       notes,
-      total,
       serviceRequired,
+      total: parseFloat(parseFloat(total).toFixed(2)),
       cleanerDoc: `/users/${cleaner.id}`,
       clientDoc: `/users/${""}`,
       startAt: startAtTs,
@@ -81,7 +103,7 @@ const CleanerScreen = ({ navigation }) => {
       updatedAt: Timestamp.now(),
     };
 
-    console.log(newContract);
+    mutate(newContract);
   }
 
   return (
@@ -104,9 +126,8 @@ const CleanerScreen = ({ navigation }) => {
             values,
             dirty,
             isValid,
-            isSubmitting,
           }) => {
-            const disableSubmit = !dirty || !isValid || isSubmitting;
+            const disableSubmit = !dirty || !isValid || isLoading;
             const suggestedTotal =
               (dayjs(values.endAt).diff(dayjs(values.startAt), "minutes") /
                 60) *

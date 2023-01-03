@@ -1,6 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 
-export interface Contract {
+export interface IContract {
   address: string;
   cleanerDoc: string;
   clientDoc: string;
