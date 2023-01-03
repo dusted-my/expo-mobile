@@ -6,6 +6,7 @@ import CategoryChips from "../components/CategoryChips";
 import Cleaner from "../components/Cleaner";
 import { mockCategories } from "../mocks";
 import { SnackbarProviderActionType, useSnackbar } from "../providers";
+import { PrivateRoute } from "../providers";
 import { getCleaners } from "../queries";
 
 const CleanerListScreen = ({ navigation }) => {
@@ -40,34 +41,35 @@ const CleanerListScreen = ({ navigation }) => {
     : cleaners;
 
   return (
-    <View style={styles.container}>
-      <View>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.title}>Filter by Category</Text>
+    <PrivateRoute navigation={navigation}>
+      <View style={styles.container}>
+        <View>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.title}>Filter by Category</Text>
+          </View>
+          <CategoryChips selected={selected} handlePress={handleSelect} />
         </View>
-        <CategoryChips selected={selected} handlePress={handleSelect} />
-      </View>
-
-      <View style={styles.cleaners}>
-        {!isLoading ? (
-          filteredCleaners.length ? (
-            filteredCleaners.map((cleaner) => (
-              <Pressable
-                style={styles.cleanerContainer}
-                key={cleaner.id}
-                onPress={() => navigation.navigate("Cleaner", { cleaner })}
-              >
-                <Cleaner cleaner={cleaner} />
-              </Pressable>
-            ))
+        <View style={styles.cleaners}>
+          {!isLoading ? (
+            filteredCleaners.length ? (
+              filteredCleaners.map((cleaner) => (
+                <Pressable
+                  style={styles.cleanerContainer}
+                  key={cleaner.id}
+                  onPress={() => navigation.navigate("Cleaner", { cleaner })}
+                >
+                  <Cleaner cleaner={cleaner} />
+                </Pressable>
+              ))
+            ) : (
+              <Text>No Cleaners Found</Text>
+            )
           ) : (
-            <Text>No Cleaners Found</Text>
-          )
-        ) : (
-          <Text>Loading...</Text>
-        )}
+            <Text>Loading...</Text>
+          )}
+        </View>
       </View>
-    </View>
+    </PrivateRoute>
   );
 };
 

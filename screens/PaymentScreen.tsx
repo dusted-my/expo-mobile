@@ -9,6 +9,7 @@ import {
   ScrollView,
 } from "react-native";
 import { Button } from "react-native-paper";
+import { PrivateRoute } from "../providers";
 
 const options = ["Credit/Debit", "Cash", "E-wallet"];
 
@@ -20,72 +21,73 @@ const PaymentScreen = ({ navigation }) => {
   }
 
   return (
-    <ScrollView>
-      <View style={styles.body}>
-        <Image
-          style={styles.logo}
-          source={require("../assets/dusted.png")}
-        ></Image>
-        <View style={styles.card}>
-          <Text style={styles.page}>Booking Details</Text>
+    <PrivateRoute navigation={navigation}>
+      <ScrollView>
+        <View style={styles.body}>
           <Image
-            style={styles.profile}
-            source={require("../assets/cleaner.jpg")}
-          />
-          <Text style={styles.name}>Anna Jowel</Text>
-          <Text>Fair:</Text>
-          <Text style={styles.price}>RM 80</Text>
-          <View>
-            <View style={styles.buttonRow}>
-              {options.map((option) => (
-                <Button
-                  key={option}
-                  style={[
-                    styles.complaintButton,
-                    selected === option && styles.selectedButton,
-                  ]}
-                  labelStyle={[
-                    styles.complaintButtonLabel,
-                    selected === option && styles.selectedButtonLabel,
-                  ]}
-                  mode="outlined"
-                  onPress={() => select(option)}
-                >
-                  {option}
-                </Button>
-              ))}
-            </View>
+            style={styles.logo}
+            source={require("../assets/dusted.png")}
+          ></Image>
+          <View style={styles.card}>
+            <Text style={styles.page}>Booking Details</Text>
+            <Image
+              style={styles.profile}
+              source={require("../assets/cleaner.jpg")}
+            />
+            <Text style={styles.name}>Anna Jowel</Text>
+            <Text>Fair:</Text>
+            <Text style={styles.price}>RM 80</Text>
             <View>
-              <Text style={styles.title}>Location: </Text>
-              <Text style={styles.details}>
-                Jalan 29 Pandan Indah Wilayah Persekutuan 56200 Malaysia
-              </Text>
-            </View>
-            <View>
-              <Text style={styles.title}>Contact No.: </Text>
-              <Text style={styles.details}>03-9274-3421</Text>
-            </View>
-            <View>
-              <Text style={styles.title}>Date: </Text>
-              <Text style={styles.details}>14 Nov 2022 14:30 - 15:30</Text>
-            </View>
-
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Booking Confirmed")}
-            >
-              <LinearGradient
-                colors={["#CF91FF", "#5782F5"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 0.9, y: 0.5 }}
-                style={[styles.button, styles.buttonBook]}
+              <View style={styles.buttonRow}>
+                {options.map((option) => (
+                  <Button
+                    key={option}
+                    style={[
+                      styles.complaintButton,
+                      selected === option && styles.selectedButton,
+                    ]}
+                    labelStyle={[
+                      styles.complaintButtonLabel,
+                      selected === option && styles.selectedButtonLabel,
+                    ]}
+                    mode="outlined"
+                    onPress={() => select(option)}
+                  >
+                    {option}
+                  </Button>
+                ))}
+              </View>
+              <View>
+                <Text style={styles.title}>Location: </Text>
+                <Text style={styles.details}>
+                  Jalan 29 Pandan Indah Wilayah Persekutuan 56200 Malaysia
+                </Text>
+              </View>
+              <View>
+                <Text style={styles.title}>Contact No.: </Text>
+                <Text style={styles.details}>03-9274-3421</Text>
+              </View>
+              <View>
+                <Text style={styles.title}>Date: </Text>
+                <Text style={styles.details}>14 Nov 2022 14:30 - 15:30</Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Booking Confirmed")}
               >
-                <Text style={styles.buttonLabelBook}>Pay</Text>
-              </LinearGradient>
-            </TouchableOpacity>
+                <LinearGradient
+                  colors={["#CF91FF", "#5782F5"]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 0.9, y: 0.5 }}
+                  style={[styles.button, styles.buttonBook]}
+                >
+                  <Text style={styles.buttonLabelBook}>Pay</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </PrivateRoute>
   );
 };
 

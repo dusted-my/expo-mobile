@@ -4,6 +4,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Button, Divider } from "react-native-paper";
 import Navbar from "../components/Navbar";
 import { auth } from "../firebase/config";
+import { PrivateRoute } from "../providers";
 
 const SettingsScreen = ({ navigation }) => {
   function handleLogout() {
@@ -12,58 +13,60 @@ const SettingsScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.outerContainer}>
-      <View style={styles.container}>
-        <View>
-          <View style={styles.details}>
-            <Image
-              style={styles.profile}
-              source={require("../assets/profile-pic.jpg")}
-            />
-            <View style={styles.profileDescription}>
-              <Text style={styles.name}>Jace Wayland</Text>
+    <PrivateRoute navigation={navigation}>
+      <View style={styles.outerContainer}>
+        <View style={styles.container}>
+          <View>
+            <View style={styles.details}>
+              <Image
+                style={styles.profile}
+                source={require("../assets/profile-pic.jpg")}
+              />
+              <View style={styles.profileDescription}>
+                <Text style={styles.name}>Jace Wayland</Text>
+                <TouchableOpacity onPress={() => alert("Hello")}>
+                  <Text style={styles.editButton}>Edit Profile</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View>
+              <Text style={styles.title}>General</Text>
               <TouchableOpacity onPress={() => alert("Hello")}>
-                <Text style={styles.editButton}>Edit Profile</Text>
+                <Text style={styles.options}>Settings</Text>
+              </TouchableOpacity>
+              <Divider></Divider>
+              <TouchableOpacity onPress={() => alert("Hello")}>
+                <Text style={styles.options}>Help Center</Text>
+              </TouchableOpacity>
+              <Divider></Divider>
+              <TouchableOpacity onPress={() => navigation.navigate("Report")}>
+                <Text style={styles.options}>Report</Text>
+              </TouchableOpacity>
+              <Divider></Divider>
+            </View>
+            <View>
+              <Text style={styles.title}>Opportunities</Text>
+              <TouchableOpacity onPress={() => navigation.navigate("Request")}>
+                <Text style={styles.options}>Clean with Dusted</Text>
+                <Divider></Divider>
               </TouchableOpacity>
             </View>
           </View>
-          <View>
-            <Text style={styles.title}>General</Text>
-            <TouchableOpacity onPress={() => alert("Hello")}>
-              <Text style={styles.options}>Settings</Text>
-            </TouchableOpacity>
-            <Divider></Divider>
-            <TouchableOpacity onPress={() => alert("Hello")}>
-              <Text style={styles.options}>Help Center</Text>
-            </TouchableOpacity>
-            <Divider></Divider>
-            <TouchableOpacity onPress={() => navigation.navigate("Report")}>
-              <Text style={styles.options}>Report</Text>
-            </TouchableOpacity>
-            <Divider></Divider>
-          </View>
-          <View>
-            <Text style={styles.title}>Opportunities</Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Request")}>
-              <Text style={styles.options}>Clean with Dusted</Text>
-              <Divider></Divider>
-            </TouchableOpacity>
+          <View style={styles.logOut}>
+            <Button
+              style={styles.logOutButton}
+              labelStyle={styles.buttonLabel}
+              mode="outlined"
+              textColor="red"
+              onPress={handleLogout}
+            >
+              Log Out
+            </Button>
           </View>
         </View>
-        <View style={styles.logOut}>
-          <Button
-            style={styles.logOutButton}
-            labelStyle={styles.buttonLabel}
-            mode="outlined"
-            textColor="red"
-            onPress={handleLogout}
-          >
-            Log Out
-          </Button>
-        </View>
+        <Navbar navigation={navigation}></Navbar>
       </View>
-      <Navbar navigation={navigation}></Navbar>
-    </View>
+    </PrivateRoute>
   );
 };
 

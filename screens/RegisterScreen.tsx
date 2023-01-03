@@ -7,6 +7,7 @@ import { Button, HelperText, TextInput } from "react-native-paper";
 import { auth } from "../firebase/config";
 import * as yup from "yup";
 import { SnackbarProviderActionType, useSnackbar } from "../providers";
+import { PublicRoute } from "../providers";
 
 interface Form {
   fullName: string;
@@ -82,99 +83,101 @@ const RegisterScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.body}>
-        <Image
-          style={styles.logo}
-          source={require("../assets/dusted.png")}
-        ></Image>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={handleSubmitForm}
-          validationSchema={validationSchema}
-        >
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-            dirty,
-            isValid,
-            isSubmitting,
-          }) => (
-            <View style={styles.form}>
-              <TextInput
-                mode="outlined"
-                style={styles.input}
-                outlineStyle={styles.inputOutline}
-                activeOutlineColor="#000"
-                placeholder="Full Name"
-                value={values.fullName}
-                onChangeText={handleChange("fullName")}
-                onBlur={handleBlur("fullName")}
-                error={Boolean(errors.fullName && touched.fullName)}
-              />
-              <HelperText
-                type="error"
-                visible={Boolean(errors.fullName && touched.fullName)}
-              >
-                {errors.fullName}
-              </HelperText>
-              <TextInput
-                mode="outlined"
-                style={styles.input}
-                outlineStyle={styles.inputOutline}
-                activeOutlineColor="#000"
-                placeholder="Email"
-                value={values.email}
-                onChangeText={handleChange("email")}
-                onBlur={handleBlur("email")}
-                error={Boolean(errors.email && touched.email)}
-              />
-              <HelperText
-                type="error"
-                visible={Boolean(errors.email && touched.email)}
-              >
-                {errors.email}
-              </HelperText>
-              <TextInput
-                mode="outlined"
-                style={styles.input}
-                outlineStyle={styles.inputOutline}
-                activeOutlineColor="#000"
-                secureTextEntry
-                placeholder="Password"
-                value={values.password}
-                onChangeText={handleChange("password")}
-                onBlur={handleBlur("password")}
-                error={Boolean(errors.password && touched.password)}
-              />
-              <HelperText
-                type="error"
-                visible={Boolean(errors.password && touched.password)}
-              >
-                {errors.password}
-              </HelperText>
-              <Button
-                style={styles.button}
-                labelStyle={styles.buttonLabel}
-                buttonColor="#000000"
-                mode="contained"
-                disabled={!dirty || !isValid || isSubmitting}
-                onPress={() => handleSubmit()}
-              >
-                Register
-              </Button>
-              <Text style={styles.text}>
-                By registering, I agree upon all the terms and conditions
-              </Text>
-            </View>
-          )}
-        </Formik>
+    <PublicRoute navigation={navigation}>
+      <View style={styles.container}>
+        <View style={styles.body}>
+          <Image
+            style={styles.logo}
+            source={require("../assets/dusted.png")}
+          ></Image>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={handleSubmitForm}
+            validationSchema={validationSchema}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              touched,
+              dirty,
+              isValid,
+              isSubmitting,
+            }) => (
+              <View style={styles.form}>
+                <TextInput
+                  mode="outlined"
+                  style={styles.input}
+                  outlineStyle={styles.inputOutline}
+                  activeOutlineColor="#000"
+                  placeholder="Full Name"
+                  value={values.fullName}
+                  onChangeText={handleChange("fullName")}
+                  onBlur={handleBlur("fullName")}
+                  error={Boolean(errors.fullName && touched.fullName)}
+                />
+                <HelperText
+                  type="error"
+                  visible={Boolean(errors.fullName && touched.fullName)}
+                >
+                  {errors.fullName}
+                </HelperText>
+                <TextInput
+                  mode="outlined"
+                  style={styles.input}
+                  outlineStyle={styles.inputOutline}
+                  activeOutlineColor="#000"
+                  placeholder="Email"
+                  value={values.email}
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  error={Boolean(errors.email && touched.email)}
+                />
+                <HelperText
+                  type="error"
+                  visible={Boolean(errors.email && touched.email)}
+                >
+                  {errors.email}
+                </HelperText>
+                <TextInput
+                  mode="outlined"
+                  style={styles.input}
+                  outlineStyle={styles.inputOutline}
+                  activeOutlineColor="#000"
+                  secureTextEntry
+                  placeholder="Password"
+                  value={values.password}
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  error={Boolean(errors.password && touched.password)}
+                />
+                <HelperText
+                  type="error"
+                  visible={Boolean(errors.password && touched.password)}
+                >
+                  {errors.password}
+                </HelperText>
+                <Button
+                  style={styles.button}
+                  labelStyle={styles.buttonLabel}
+                  buttonColor="#000000"
+                  mode="contained"
+                  disabled={!dirty || !isValid || isSubmitting}
+                  onPress={() => handleSubmit()}
+                >
+                  Register
+                </Button>
+                <Text style={styles.text}>
+                  By registering, I agree upon all the terms and conditions
+                </Text>
+              </View>
+            )}
+          </Formik>
+        </View>
       </View>
-    </View>
+    </PublicRoute>
   );
 };
 

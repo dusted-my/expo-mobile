@@ -5,7 +5,8 @@ interface Props {
   navigation: any;
   children: JSX.Element;
 }
-const PrivateRoute = (props: Props) => {
+
+export const PrivateRoute = (props: Props) => {
   const { navigation, children } = props;
 
   const { isAuthenticated, loading } = useAuthState();
@@ -19,5 +20,3 @@ const PrivateRoute = (props: Props) => {
 
   return loading ? null : children;
 };
-
-export default PrivateRoute;

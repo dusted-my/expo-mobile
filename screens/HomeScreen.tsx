@@ -1,5 +1,4 @@
-import { collection, getDocs } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Text,
   View,
@@ -8,56 +7,54 @@ import {
   ImageBackground,
   ScrollView,
 } from "react-native";
-import { Button, Chip, TextInput } from "react-native-paper";
-import { useQuery } from "react-query";
-import Cleaner from "../components/Cleaner";
+import { TextInput } from "react-native-paper";
 import HomeScreenCategories from "../components/HomeScreen/Categories";
 import HomeScreenCleaners from "../components/HomeScreen/Cleaners";
 import Navbar from "../components/Navbar";
-import { mockCategories } from "../mocks";
-import { SnackbarProviderActionType, useSnackbar } from "../providers";
-import { getCleaners } from "../queries";
+import { PrivateRoute } from "../providers";
 
 const HomeScreen = ({ navigation }) => {
   const [search, setSearch] = useState("");
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        <View style={{ height: "30%" }}>
-          <ImageBackground
-            style={styles.banner}
-            resizeMode="cover"
-            source={require("../assets/background.png")}
-          >
-            <Text style={styles.bannerTitle}>
-              Services that suits your needs
-            </Text>
-            <View style={styles.searchContainer}>
-              <TextInput
-                outlineStyle={styles.search}
-                mode="outlined"
-                placeholder="Search"
-                left={<TextInput.Icon icon="magnify" />}
-                value={search}
-                onChangeText={(text) => setSearch(text)}
+    <PrivateRoute navigation={navigation}>
+      <View style={styles.container}>
+        <ScrollView>
+          <View style={{ height: "30%" }}>
+            <ImageBackground
+              style={styles.banner}
+              resizeMode="cover"
+              source={require("../assets/background.png")}
+            >
+              <Text style={styles.bannerTitle}>
+                Services that suits your needs
+              </Text>
+              <View style={styles.searchContainer}>
+                <TextInput
+                  outlineStyle={styles.search}
+                  mode="outlined"
+                  placeholder="Search"
+                  left={<TextInput.Icon icon="magnify" />}
+                  value={search}
+                  onChangeText={(text) => setSearch(text)}
+                />
+              </View>
+            </ImageBackground>
+          </View>
+          <View style={styles.main}>
+            <HomeScreenCategories navigation={navigation} />
+            <HomeScreenCleaners navigation={navigation} />
+            <View style={styles.poster}>
+              <Image
+                style={{ width: "100%" }}
+                source={require("../assets/banner.png")}
               />
             </View>
-          </ImageBackground>
-        </View>
-        <View style={styles.main}>
-          <HomeScreenCategories navigation={navigation} />
-          <HomeScreenCleaners navigation={navigation} />
-          <View style={styles.poster}>
-            <Image
-              style={{ width: "100%" }}
-              source={require("../assets/banner.png")}
-            />
           </View>
-        </View>
-      </ScrollView>
-      <Navbar navigation={navigation}></Navbar>
-    </View>
+        </ScrollView>
+        <Navbar navigation={navigation}></Navbar>
+      </View>
+    </PrivateRoute>
   );
 };
 

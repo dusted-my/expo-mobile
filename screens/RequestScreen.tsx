@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import { Button, RadioButton, TextInput } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
+import { PrivateRoute } from "../providers";
 
 const RequestScreen = ({ navigation }) => {
   const [nric, setNric] = useState("");
@@ -40,99 +41,101 @@ const RequestScreen = ({ navigation }) => {
     navigation.navigate("Home");
   }
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <Text style={styles.title}>Application to Become Cleaner</Text>
-        <View style={styles.form}>
-          <TextInput
-            style={styles.input}
-            outlineStyle={styles.inputOutline}
-            placeholder="NRIC Name"
-            value={name}
-            onChangeText={(text) => setName(text)}
-            mode="outlined"
-          />
-          <TextInput
-            style={styles.input}
-            outlineStyle={styles.inputOutline}
-            placeholder="Date of Birth"
-            value={dob}
-            onChangeText={(text) => setDob(text)}
-            mode="outlined"
-          />
-          <TextInput
-            style={styles.input}
-            outlineStyle={styles.inputOutline}
-            placeholder="NRIC Number"
-            value={nric}
-            onChangeText={(text) => setNric(text)}
-            mode="outlined"
-          />
-          <TextInput
-            style={styles.input}
-            outlineStyle={styles.inputOutline}
-            placeholder="Address"
-            value={address}
-            onChangeText={(text) => setAddress(text)}
-            mode="outlined"
-          />
-          <Text style={styles.textGender}>Gender:</Text>
-          <View style={styles.radioButton}>
-            <RadioButton.Group
-              onValueChange={(newValue) => setValue(newValue)}
-              value={value}
-            >
-              <View style={styles.radioButton}>
-                <RadioButton.Android value="first" />
-                <Text style={styles.radioButtonText}>Male</Text>
+    <PrivateRoute navigation={navigation}>
+      <ScrollView>
+        <View style={styles.container}>
+          <Text style={styles.title}>Application to Become Cleaner</Text>
+          <View style={styles.form}>
+            <TextInput
+              style={styles.input}
+              outlineStyle={styles.inputOutline}
+              placeholder="NRIC Name"
+              value={name}
+              onChangeText={(text) => setName(text)}
+              mode="outlined"
+            />
+            <TextInput
+              style={styles.input}
+              outlineStyle={styles.inputOutline}
+              placeholder="Date of Birth"
+              value={dob}
+              onChangeText={(text) => setDob(text)}
+              mode="outlined"
+            />
+            <TextInput
+              style={styles.input}
+              outlineStyle={styles.inputOutline}
+              placeholder="NRIC Number"
+              value={nric}
+              onChangeText={(text) => setNric(text)}
+              mode="outlined"
+            />
+            <TextInput
+              style={styles.input}
+              outlineStyle={styles.inputOutline}
+              placeholder="Address"
+              value={address}
+              onChangeText={(text) => setAddress(text)}
+              mode="outlined"
+            />
+            <Text style={styles.textGender}>Gender:</Text>
+            <View style={styles.radioButton}>
+              <RadioButton.Group
+                onValueChange={(newValue) => setValue(newValue)}
+                value={value}
+              >
+                <View style={styles.radioButton}>
+                  <RadioButton.Android value="first" />
+                  <Text style={styles.radioButtonText}>Male</Text>
+                </View>
+                <View style={styles.radioButton}>
+                  <RadioButton.Android value="second" />
+                  <Text style={styles.radioButtonText}>Female</Text>
+                </View>
+              </RadioButton.Group>
+            </View>
+            <Text style={styles.textGender}>Photocopy of NRIC: </Text>
+            <View style={styles.photo}>
+              <View style={styles.rectangleBorder}>
+                <View
+                  style={{ alignItems: "center", justifyContent: "center" }}
+                >
+                  {nricFront && (
+                    <Image
+                      source={{ uri: nricFront }}
+                      style={{ width: 200, height: 200 }}
+                    />
+                  )}
+                  <Button onPress={() => pickImage("front")}>NRIC Front</Button>
+                </View>
               </View>
-              <View style={styles.radioButton}>
-                <RadioButton.Android value="second" />
-                <Text style={styles.radioButtonText}>Female</Text>
-              </View>
-            </RadioButton.Group>
-          </View>
-          <Text style={styles.textGender}>Photocopy of NRIC: </Text>
-
-          <View style={styles.photo}>
+            </View>
             <View style={styles.rectangleBorder}>
               <View style={{ alignItems: "center", justifyContent: "center" }}>
-                {nricFront && (
+                {nricBack && (
                   <Image
-                    source={{ uri: nricFront }}
+                    source={{ uri: nricBack }}
                     style={{ width: 200, height: 200 }}
                   />
                 )}
-                <Button onPress={() => pickImage("front")}>NRIC Front</Button>
+                <Button onPress={() => pickImage("back")}>NRIC Back</Button>
               </View>
             </View>
-          </View>
-          <View style={styles.rectangleBorder}>
-            <View style={{ alignItems: "center", justifyContent: "center" }}>
-              {nricBack && (
-                <Image
-                  source={{ uri: nricBack }}
-                  style={{ width: 200, height: 200 }}
-                />
-              )}
-              <Button onPress={() => pickImage("back")}>NRIC Back</Button>
+            <View style={styles.buttomPadding}>
+              <Button
+                style={styles.button}
+                labelStyle={styles.buttonLabel}
+                buttonColor="#000000"
+                mode="contained"
+                onPress={handleSubmit}
+              >
+                Submit
+              </Button>
             </View>
           </View>
-
-          <View style={styles.buttomPadding}>
-            <Button
-              style={styles.button}
-              labelStyle={styles.buttonLabel}
-              buttonColor="#000000"
-              mode="contained"
-              onPress={handleSubmit}
-            >
-              Submit
-            </Button>
-          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </PrivateRoute>
   );
 };
 

@@ -7,6 +7,7 @@ import { Button, HelperText, TextInput } from "react-native-paper";
 import * as yup from "yup";
 import { auth } from "../firebase/config";
 import { SnackbarProviderActionType, useSnackbar } from "../providers";
+import { PublicRoute } from "../providers";
 
 interface Form {
   email: string;
@@ -69,87 +70,89 @@ const LoginScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.body}>
-        <Image
-          style={styles.logo}
-          source={require("../assets/dusted.png")}
-        ></Image>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={handleSubmitForm}
-          validationSchema={validationSchema}
+    <PublicRoute navigation={navigation}>
+      <View style={styles.container}>
+        <View style={styles.body}>
+          <Image
+            style={styles.logo}
+            source={require("../assets/dusted.png")}
+          ></Image>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={handleSubmitForm}
+            validationSchema={validationSchema}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              touched,
+              dirty,
+              isValid,
+              isSubmitting,
+            }) => (
+              <View style={styles.form}>
+                <TextInput
+                  mode="outlined"
+                  style={styles.input}
+                  outlineStyle={styles.inputOutline}
+                  activeOutlineColor="#000"
+                  placeholder="Email"
+                  value={values.email}
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  error={Boolean(errors.email && touched.email)}
+                />
+                <HelperText
+                  type="error"
+                  visible={Boolean(errors.email && touched.email)}
+                >
+                  {errors.email}
+                </HelperText>
+                <TextInput
+                  mode="outlined"
+                  style={styles.input}
+                  outlineStyle={styles.inputOutline}
+                  activeOutlineColor="#000"
+                  secureTextEntry
+                  placeholder="Password"
+                  value={values.password}
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  error={Boolean(errors.password && touched.password)}
+                />
+                <HelperText
+                  type="error"
+                  visible={Boolean(errors.password && touched.password)}
+                >
+                  {errors.password}
+                </HelperText>
+                <Button
+                  style={styles.button}
+                  labelStyle={styles.buttonLabel}
+                  buttonColor="#000000"
+                  mode="contained"
+                  disabled={!dirty || !isValid || isSubmitting}
+                  onPress={() => handleSubmit()}
+                >
+                  Log In
+                </Button>
+              </View>
+            )}
+          </Formik>
+        </View>
+        <Button
+          labelStyle={styles.text}
+          mode="text"
+          textColor="#000"
+          onPress={() => navigation.navigate("Forget Password")}
         >
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-            dirty,
-            isValid,
-            isSubmitting,
-          }) => (
-            <View style={styles.form}>
-              <TextInput
-                mode="outlined"
-                style={styles.input}
-                outlineStyle={styles.inputOutline}
-                activeOutlineColor="#000"
-                placeholder="Email"
-                value={values.email}
-                onChangeText={handleChange("email")}
-                onBlur={handleBlur("email")}
-                error={Boolean(errors.email && touched.email)}
-              />
-              <HelperText
-                type="error"
-                visible={Boolean(errors.email && touched.email)}
-              >
-                {errors.email}
-              </HelperText>
-              <TextInput
-                mode="outlined"
-                style={styles.input}
-                outlineStyle={styles.inputOutline}
-                activeOutlineColor="#000"
-                secureTextEntry
-                placeholder="Password"
-                value={values.password}
-                onChangeText={handleChange("password")}
-                onBlur={handleBlur("password")}
-                error={Boolean(errors.password && touched.password)}
-              />
-              <HelperText
-                type="error"
-                visible={Boolean(errors.password && touched.password)}
-              >
-                {errors.password}
-              </HelperText>
-              <Button
-                style={styles.button}
-                labelStyle={styles.buttonLabel}
-                buttonColor="#000000"
-                mode="contained"
-                disabled={!dirty || !isValid || isSubmitting}
-                onPress={() => handleSubmit()}
-              >
-                Log In
-              </Button>
-            </View>
-          )}
-        </Formik>
+          Forgot your Password?
+        </Button>
       </View>
-      <Button
-        labelStyle={styles.text}
-        mode="text"
-        textColor="#000"
-        onPress={() => navigation.navigate("Forget Password")}
-      >
-        Forgot your Password?
-      </Button>
-    </View>
+    </PublicRoute>
   );
 };
 

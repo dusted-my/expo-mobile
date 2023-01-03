@@ -2,33 +2,36 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Image, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Button } from "react-native-paper";
+import { PublicRoute } from "../providers";
 
 const WelcomeScreen = ({ navigation }) => {
   return (
-    <View style={styles.body}>
-      <Image style={styles.logo} source={require("../assets/dusted.png")} />
-      <Text style={styles.text}>We made cleaning service easier for you</Text>
-      <View style={styles.container}>
-        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-          <LinearGradient
-            colors={["#FBD52D", "#EF3A7B"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0.6, y: 0.5 }}
-            style={[styles.button, styles.buttonLogIn]}
+    <PublicRoute navigation={navigation}>
+      <View style={styles.body}>
+        <Image style={styles.logo} source={require("../assets/dusted.png")} />
+        <Text style={styles.text}>We made cleaning service easier for you</Text>
+        <View style={styles.container}>
+          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+            <LinearGradient
+              colors={["#FBD52D", "#EF3A7B"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0.6, y: 0.5 }}
+              style={[styles.button, styles.buttonLogIn]}
+            >
+              <Text style={styles.buttonLabelLogIn}>Log In</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+          <Button
+            onPress={() => navigation.navigate("Register")}
+            mode="outlined"
+            style={[styles.button, styles.buttonRegister]}
+            textColor="#000000"
           >
-            <Text style={styles.buttonLabelLogIn}>Log In</Text>
-          </LinearGradient>
-        </TouchableOpacity>
-        <Button
-          onPress={() => navigation.navigate("Register")}
-          mode="outlined"
-          style={[styles.button, styles.buttonRegister]}
-          textColor="#000000"
-        >
-          <Text style={styles.buttonLabelRegister}>Register</Text>
-        </Button>
+            <Text style={styles.buttonLabelRegister}>Register</Text>
+          </Button>
+        </View>
       </View>
-    </View>
+    </PublicRoute>
   );
 };
 

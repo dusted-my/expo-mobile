@@ -8,6 +8,7 @@ import { Button, HelperText, TextInput } from "react-native-paper";
 import * as yup from "yup";
 import { auth } from "../firebase/config";
 import { SnackbarProviderActionType, useSnackbar } from "../providers";
+import { PublicRoute } from "../providers";
 
 interface Form {
   email: string;
@@ -61,58 +62,60 @@ const ForgetPasswordScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.body}>
-        <Image style={styles.logo} source={require("../assets/dusted.png")} />
-        <Formik
-          initialValues={initialValues}
-          onSubmit={handleSubmitForm}
-          validationSchema={validationSchema}
-        >
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-            dirty,
-            isValid,
-            isSubmitting,
-          }) => (
-            <View style={styles.form}>
-              <TextInput
-                mode="outlined"
-                style={styles.input}
-                outlineStyle={styles.inputOutline}
-                activeOutlineColor="#000"
-                placeholder="Email"
-                value={values.email}
-                onChangeText={handleChange("email")}
-                onBlur={handleBlur("email")}
-                error={Boolean(errors.email && touched.email)}
-              />
-              <HelperText
-                type="error"
-                visible={Boolean(errors.email && touched.email)}
-              >
-                {errors.email}
-              </HelperText>
-              <Button
-                style={styles.button}
-                labelStyle={styles.buttonLabel}
-                buttonColor="#000000"
-                mode="contained"
-                disabled={!dirty || !isValid || isSubmitting}
-                onPress={() => handleSubmit()}
-              >
-                Send Reset Password Email
-              </Button>
-            </View>
-          )}
-        </Formik>
+    <PublicRoute navigation={navigation}>
+      <View style={styles.container}>
+        <View style={styles.body}>
+          <Image style={styles.logo} source={require("../assets/dusted.png")} />
+          <Formik
+            initialValues={initialValues}
+            onSubmit={handleSubmitForm}
+            validationSchema={validationSchema}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              touched,
+              dirty,
+              isValid,
+              isSubmitting,
+            }) => (
+              <View style={styles.form}>
+                <TextInput
+                  mode="outlined"
+                  style={styles.input}
+                  outlineStyle={styles.inputOutline}
+                  activeOutlineColor="#000"
+                  placeholder="Email"
+                  value={values.email}
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  error={Boolean(errors.email && touched.email)}
+                />
+                <HelperText
+                  type="error"
+                  visible={Boolean(errors.email && touched.email)}
+                >
+                  {errors.email}
+                </HelperText>
+                <Button
+                  style={styles.button}
+                  labelStyle={styles.buttonLabel}
+                  buttonColor="#000000"
+                  mode="contained"
+                  disabled={!dirty || !isValid || isSubmitting}
+                  onPress={() => handleSubmit()}
+                >
+                  Send Reset Password Email
+                </Button>
+              </View>
+            )}
+          </Formik>
+        </View>
       </View>
-    </View>
+    </PublicRoute>
   );
 };
 

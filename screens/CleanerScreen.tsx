@@ -23,7 +23,11 @@ import * as yup from "yup";
 import Total from "../components/CleanerScreen/Total";
 import { useMutation } from "react-query";
 import { createContract } from "../mutations";
-import { SnackbarProviderActionType, useSnackbar } from "../providers";
+import {
+  PrivateRoute,
+  SnackbarProviderActionType,
+  useSnackbar,
+} from "../providers";
 
 interface Form {
   address: string;
@@ -107,96 +111,99 @@ const CleanerScreen = ({ navigation }) => {
   }
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <Profile cleaner={cleaner} />
-        <Divider style={styles.divider}></Divider>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-        >
-          {({
-            handleBlur,
-            handleChange,
-            handleSubmit,
-            setFieldValue,
-            errors,
-            touched,
-            values,
-            dirty,
-            isValid,
-          }) => {
-            const disableSubmit = !dirty || !isValid || isLoading;
-            const suggestedTotal =
-              (dayjs(values.endAt).diff(dayjs(values.startAt), "minutes") /
-                60) *
-              cleaner.hourlyRate;
-
-            return (
-              <>
-                <Address
-                  value={values.address}
-                  onChangeText={handleChange("address")}
-                  onBlur={handleBlur("email")}
-                  error={errors.address}
-                  touched={touched.address}
-                />
-                <Services
-                  cleanerServices={cleaner.categories}
-                  serviceSelected={values.serviceRequired}
-                  setSelected={(value) => {
-                    const selected = values.serviceRequired;
-                    if (selected === value) {
-                      return setFieldValue("serviceRequired", "");
-                    }
-                    setFieldValue("serviceRequired", value);
-                  }}
-                  onTouched={handleBlur("serviceRequired")}
-                  error={errors.serviceRequired}
-                  touched={touched.serviceRequired}
-                />
-                <Schedule
-                  date={values.date}
-                  startAt={values.startAt}
-                  endAt={values.endAt}
-                  setFieldValue={setFieldValue}
-                />
-                <Notes
-                  value={values.notes}
-                  onChangeText={handleChange("notes")}
-                />
-                <Total
-                  value={values.total.toString()}
-                  onChangeText={handleChange("total")}
-                  onBlur={handleBlur("total")}
-                  error={errors.total}
-                  touched={touched.total}
-                  suggestedTotal={suggestedTotal}
-                />
-                <TouchableOpacity
-                  onPress={() => handleSubmit()}
-                  disabled={disableSubmit}
-                >
-                  <LinearGradient
-                    colors={
-                      disableSubmit
-                        ? [MD2Colors.grey300, MD2Colors.grey300]
-                        : ["#FF70AF", "#5F48F5"]
-                    }
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 0.9, y: 0.5 }}
-                    style={[styles.button, styles.buttonBook]}
+    <PrivateRoute navigation={navigation}>
+      <ScrollView>
+        <View style={styles.container}>
+          <Profile cleaner={cleaner} />
+          <Divider style={styles.divider}></Divider>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {({
+              handleBlur,
+              handleChange,
+              handleSubmit,
+              setFieldValue,
+              errors,
+              touched,
+              values,
+              dirty,
+              isValid,
+            }) => {
+              const disableSubmit = !dirty || !isValid || isLoading;
+              const suggestedTotal =
+                (dayjs(values.endAt).diff(dayjs(values.startAt), "minutes") /
+                  60) *
+                cleaner.hourlyRate;
+              return (
+                <>
+                  <Address
+                    value={values.address}
+                    onChangeText={handleChange("address")}
+                    onBlur={handleBlur("email")}
+                    error={errors.address}
+                    touched={touched.address}
+                  />
+                  <Services
+                    cleanerServices={cleaner.categories}
+                    serviceSelected={values.serviceRequired}
+                    setSelected={(value) => {
+                      const selected = values.serviceRequired;
+                      if (selected === value) {
+                        return setFieldValue("serviceRequired", "");
+                      }
+                      setFieldValue("serviceRequired", value);
+                    }}
+                    onTouched={handleBlur("serviceRequired")}
+                    error={errors.serviceRequired}
+                    touched={touched.serviceRequired}
+                  />
+                  <Schedule
+                    date={values.date}
+                    startAt={values.startAt}
+                    endAt={values.endAt}
+                    setFieldValue={setFieldValue}
+                  />
+                  <Notes
+                    value={values.notes}
+                    onChangeText={handleChange("notes")}
+                  />
+                  <Total
+                    value={values.total.toString()}
+                    onChangeText={handleChange("total")}
+                    onBlur={handleBlur("total")}
+                    error={errors.total}
+                    touched={touched.total}
+                    suggestedTotal={suggestedTotal}
+                  />
+                  <TouchableOpacity
+                    onPress={() => handleSubmit()}
+                    disabled={disableSubmit}
                   >
-                    <Text style={styles.buttonLabelBook}>Propose Contract</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-              </>
-            );
-          }}
-        </Formik>
-      </View>
-    </ScrollView>
+                    <LinearGradient
+                      colors={
+                        disableSubmit
+                          ? [MD2Colors.grey300, MD2Colors.grey300]
+                          : ["#FF70AF", "#5F48F5"]
+                      }
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 0.9, y: 0.5 }}
+                      style={[styles.button, styles.buttonBook]}
+                    >
+                      <Text style={styles.buttonLabelBook}>
+                        Propose Contract
+                      </Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </>
+              );
+            }}
+          </Formik>
+        </View>
+      </ScrollView>
+    </PrivateRoute>
   );
 };
 

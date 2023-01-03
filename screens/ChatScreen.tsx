@@ -1,13 +1,16 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Navbar from "../components/Navbar";
+import { PrivateRoute } from "../providers";
 
 const ChatScreen = ({ navigation }) => {
   return (
-    <View style={styles.container}>
-      <Text>ChatScreen</Text>
-      <Navbar navigation={navigation}></Navbar>
-    </View>
+    <PrivateRoute navigation={navigation}>
+      <View style={styles.container}>
+        <Text>ChatScreen</Text>
+        <Navbar navigation={navigation}></Navbar>
+      </View>
+    </PrivateRoute>
   );
 };
 
