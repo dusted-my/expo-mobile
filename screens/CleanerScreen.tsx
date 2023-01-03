@@ -20,6 +20,7 @@ import Services from "../components/CleanerScreen/Services";
 import { Contract, ICleaner } from "../interfaces";
 import { trimObjectStrings } from "../utils";
 import * as yup from "yup";
+import Total from "../components/CleanerScreen/Total";
 
 interface Form {
   address: string;
@@ -44,7 +45,7 @@ const initialValues: Form = {
 const validationSchema = yup.object({
   address: yup.string().required("Address is required"),
   serviceRequired: yup.string().required("Service is required"),
-  total: yup.number().required(),
+  total: yup.number().required("Total is required"),
 });
 
 const CleanerScreen = ({ navigation }) => {
@@ -106,6 +107,11 @@ const CleanerScreen = ({ navigation }) => {
             isSubmitting,
           }) => {
             const disableSubmit = !dirty || !isValid || isSubmitting;
+            const suggestedTotal =
+              (dayjs(values.endAt).diff(dayjs(values.startAt), "minutes") /
+                60) *
+              cleaner.hourlyRate;
+
             return (
               <>
                 <Address
@@ -139,6 +145,14 @@ const CleanerScreen = ({ navigation }) => {
                   value={values.notes}
                   onChangeText={handleChange("notes")}
                 />
+                <Total
+                  value={values.total.toString()}
+                  onChangeText={handleChange("total")}
+                  onBlur={handleBlur("total")}
+                  error={errors.total}
+                  touched={touched.total}
+                  suggestedTotal={suggestedTotal}
+                />
                 <TouchableOpacity
                   onPress={() => handleSubmit()}
                   disabled={disableSubmit}
@@ -153,7 +167,7 @@ const CleanerScreen = ({ navigation }) => {
                     end={{ x: 0.9, y: 0.5 }}
                     style={[styles.button, styles.buttonBook]}
                   >
-                    <Text style={styles.buttonLabelBook}>Book</Text>
+                    <Text style={styles.buttonLabelBook}>Propose Contract</Text>
                   </LinearGradient>
                 </TouchableOpacity>
               </>

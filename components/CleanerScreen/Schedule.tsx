@@ -36,9 +36,7 @@ const Schedule = (props: Props) => {
       <View style={styles.schedule}>
         <View style={styles.section}>
           <List.Icon style={styles.icon} color="#000" icon="calendar" />
-          <View
-            style={{ flexDirection: isAndroid ? "column" : "row", flex: 1 }}
-          >
+          <View style={isAndroid ? {} : styles.sectionIos}>
             <Text style={styles.scheduleName}>Date</Text>
             {isAndroid ? (
               <Pressable onPress={() => handleToggle("date", date, "date")}>
@@ -60,9 +58,7 @@ const Schedule = (props: Props) => {
         <Divider style={styles.scheduleDivider}></Divider>
         <View style={styles.section}>
           <List.Icon style={styles.icon} color="#000" icon="clock-in" />
-          <View
-            style={{ flexDirection: isAndroid ? "column" : "row", flex: 1 }}
-          >
+          <View style={isAndroid ? {} : styles.sectionIos}>
             <Text style={styles.scheduleName}>Start At</Text>
             {isAndroid ? (
               <Pressable
@@ -85,9 +81,7 @@ const Schedule = (props: Props) => {
         <Divider style={styles.scheduleDivider}></Divider>
         <View style={styles.section}>
           <List.Icon style={styles.icon} color="#000" icon="clock-out" />
-          <View
-            style={{ flexDirection: isAndroid ? "column" : "row", flex: 1 }}
-          >
+          <View style={isAndroid ? {} : styles.sectionIos}>
             <Text style={styles.scheduleName}>End At</Text>
             {isAndroid ? (
               <Pressable onPress={() => handleToggle("endAt", endAt, "time")}>
@@ -131,6 +125,11 @@ const styles = StyleSheet.create({
   icon: {
     paddingLeft: 8,
     paddingRight: 24,
+  },
+  sectionIos: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
   },
   scheduleName: {
     fontSize: 18,
