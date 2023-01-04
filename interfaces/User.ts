@@ -21,3 +21,17 @@ export interface ICleaner extends ICustomer {
   services: string[];
   stars: number;
 }
+
+export interface IApplyCleanerForm {
+  uid: string;
+  fullName: string;
+  nric: string;
+  address: string;
+  hourlyRate: string;
+  gender: string;
+  imageUrl: string;
+  nricFrontImageUrl: string;
+  nricBackImageUrl: string;
+  services: string[];
+  status: "pending_cleaner";
+}

@@ -5,7 +5,7 @@ import { mockServices } from "../mocks";
 
 interface Props {
   handlePress: (service: string) => void;
-  selected?: string;
+  selected?: string[];
   filteredServices?: string[];
 }
 const ServiceChips = (props: Props) => {
@@ -22,7 +22,7 @@ const ServiceChips = (props: Props) => {
       {services.map((service, index) => (
         <Chip
           style={[
-            selected === service
+            selected?.includes(service)
               ? styles.selectedServiceChip
               : styles.serviceChip,
             {
@@ -30,7 +30,7 @@ const ServiceChips = (props: Props) => {
             },
           ]}
           textStyle={
-            selected === service
+            selected?.includes(service)
               ? styles.selectedServiceChipText
               : styles.serviceChipText
           }

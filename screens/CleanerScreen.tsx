@@ -144,7 +144,7 @@ const CleanerScreen = ({ navigation }) => {
                   <Address
                     value={values.address}
                     onChangeText={handleChange("address")}
-                    onBlur={handleBlur("email")}
+                    onBlur={handleBlur("address")}
                     error={errors.address}
                     touched={touched.address}
                   />

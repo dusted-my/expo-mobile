@@ -47,7 +47,7 @@ const CleanerListScreen = ({ navigation }) => {
           <View style={styles.sectionHeader}>
             <Text style={styles.title}>Filter by Service</Text>
           </View>
-          <ServiceChips selected={selected} handlePress={handleSelect} />
+          <ServiceChips selected={[selected]} handlePress={handleSelect} />
         </View>
         <View style={styles.cleaners}>
           {!isLoading ? (

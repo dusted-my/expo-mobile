@@ -27,7 +27,7 @@ const Services = (props: Props) => {
         Services <Text style={styles.description}>Select 1</Text>
       </Text>
       <ServiceChips
-        selected={serviceSelected}
+        selected={[serviceSelected]}
         handlePress={setSelected}
         filteredServices={cleanerServices}
       />
