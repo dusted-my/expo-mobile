@@ -52,7 +52,7 @@ export default function App() {
               options={options}
             />
             <Stack.Screen name="Request" component={RequestScreen} />
-            <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+            <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
             <Stack.Screen name="Report" component={ReportScreen} />
             <Stack.Screen
               name="Chat"

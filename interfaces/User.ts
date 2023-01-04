@@ -32,5 +32,17 @@ export interface IApplyCleanerForm {
   nricFrontImageUrl: string;
   nricBackImageUrl: string;
   services: string[];
-  status: "pending_cleaner";
+}
+
+export interface IEditCustomerForm {
+  uid: string;
+  fullName: string;
+  nric: string;
+  address: string;
+  hourlyRate: string;
+  gender: string;
+  imageUrl: string;
+  nricFrontImageUrl: string;
+  nricBackImageUrl: string;
+  services: string[];
 }

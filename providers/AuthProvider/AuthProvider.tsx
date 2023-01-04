@@ -28,10 +28,12 @@ export const AuthProvider = (props: any) => {
           (doc) => {
             const details = doc.data() as ICustomer;
             setDetails(details);
+            setLoading(false);
           }
         );
+      } else {
+        setLoading(false);
       }
-      setLoading(false);
     });
 
     return () => {

@@ -26,7 +26,9 @@ const SettingsScreen = ({ navigation }) => {
               />
               <View style={styles.profileDescription}>
                 <Text style={styles.name}>{details.fullName}</Text>
-                <TouchableOpacity onPress={() => alert("Hello")}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Edit Profile")}
+                >
                   <Text style={styles.editButton}>Edit Profile</Text>
                 </TouchableOpacity>
               </View>
@@ -51,7 +53,7 @@ const SettingsScreen = ({ navigation }) => {
               {details.status === "pending_cleaner" ? (
                 <View>
                   <Text style={[styles.options, styles.disabledOption]}>
-                    Clean with Dusted
+                    Be a Cleaner
                   </Text>
                   <Text style={styles.appliedText}>You have applied</Text>
                   <Divider></Divider>

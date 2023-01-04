@@ -18,7 +18,7 @@ import Profile from "../components/CleanerScreen/Profile";
 import Schedule from "../components/CleanerScreen/Schedule";
 import Services from "../components/CleanerScreen/Services";
 import { IContract, ICustomer } from "../interfaces";
-import { trimObjectStrings } from "../utils";
+import { convertStringToFloat, trimObjectStrings } from "../utils";
 import * as yup from "yup";
 import Total from "../components/CleanerScreen/Total";
 import { useMutation } from "react-query";
@@ -98,7 +98,7 @@ const CleanerScreen = ({ navigation }) => {
       address,
       notes,
       serviceRequired,
-      total: parseFloat(parseFloat(total).toFixed(2)),
+      total: convertStringToFloat(total, 2),
       cleanerDoc: `/users/${cleaner.id}`,
       clientDoc: `/users/${user.uid}`,
       startAt: startAtTs,
