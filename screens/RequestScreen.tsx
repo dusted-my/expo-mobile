@@ -24,19 +24,12 @@ import {
 import ServiceChips from "../components/ServiceChips";
 import { Formik } from "formik";
 import * as yup from "yup";
-import {
-  getDownloadURL,
-  ref,
-  StorageError,
-  uploadBytes,
-  uploadBytesResumable,
-  uploadString,
-} from "firebase/storage";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../firebase/config";
 import { useMutation } from "react-query";
 import { applyCleaner } from "../mutations";
 import { trimObjectStrings } from "../utils";
-import { IApplyCleanerForm, ICleaner } from "../interfaces";
+import { IApplyCleanerForm } from "../interfaces";
 
 const initialValues: IApplyCleanerForm = {
   uid: "",
@@ -61,7 +54,7 @@ const validationSchema = yup.object({
     .string()
     .required("NRIC Number is required")
     .matches(/[0-9]{12}/, "Must be numbers")
-    .test("length", "Must be 12 numbers", (val: string) => val.length === 12),
+    .test("length", "Must be 12 numbers", (val: string) => val?.length === 12),
   address: yup
     .string()
     .required("Address is required")
@@ -206,12 +199,9 @@ const RequestScreen = ({ navigation }) => {
                   placeholder="NRIC Name"
                   value={values.fullName}
                   onChangeText={handleChange("fullName")}
-                  onBlur={(e: any) => {
-                    handleBlur("fullName")(e);
-                    console.log("errors", values.fullName);
-                  }}
-                  mode="outlined"
+                  onBlur={handleBlur("fullName")}
                   error={Boolean(errors.fullName && touched.fullName)}
+                  mode="outlined"
                 />
                 <HelperText
                   type="error"

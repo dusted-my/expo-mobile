@@ -17,7 +17,7 @@ import Notes from "../components/CleanerScreen/Notes";
 import Profile from "../components/CleanerScreen/Profile";
 import Schedule from "../components/CleanerScreen/Schedule";
 import Services from "../components/CleanerScreen/Services";
-import { IContract, ICleaner } from "../interfaces";
+import { IContract, ICustomer } from "../interfaces";
 import { trimObjectStrings } from "../utils";
 import * as yup from "yup";
 import Total from "../components/CleanerScreen/Total";
@@ -58,7 +58,7 @@ const validationSchema = yup.object({
 
 const CleanerScreen = ({ navigation }) => {
   const route = useRoute();
-  const { cleaner }: { cleaner: ICleaner } = route.params as any;
+  const { cleaner }: { cleaner: ICustomer } = route.params as any;
   const { dispatchSnackbar } = useSnackbar();
   const { user } = useAuthState();
 

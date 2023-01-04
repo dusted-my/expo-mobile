@@ -1,26 +1,48 @@
 import { getAuth, onAuthStateChanged, User } from "@firebase/auth";
+import { doc, onSnapshot, Unsubscribe } from "firebase/firestore";
 import { useState, useEffect, useContext, createContext } from "react";
+import { auth, firestore } from "../../firebase/config";
+import { ICustomer } from "../../interfaces";
 
 interface AuthContext {
   user: User;
-  error: Error;
   loading: boolean;
+  details: ICustomer;
+  setDetails: React.Dispatch<React.SetStateAction<ICustomer>>;
 }
 export const AuthContext = createContext({} as AuthContext);
 
 export const AuthProvider = (props: any) => {
   const [user, setUser] = useState<User>();
-  const [error, setError] = useState<Error>();
   const [loading, setLoading] = useState(true);
 
+  const [details, setDetails] = useState<ICustomer>();
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(getAuth(), (user) => {
-      setUser(user);
+    let unsubscribeDoc: Unsubscribe;
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       setLoading(false);
+
+      if (!user) return;
+      setUser(user);
+      unsubscribeDoc = onSnapshot(doc(firestore, "users", user.uid), (doc) => {
+        const details = doc.data() as ICustomer;
+        setDetails(details);
+      });
     });
-    return () => unsubscribe();
+
+    return () => {
+      unsubscribe();
+      unsubscribeDoc();
+    };
   }, []);
-  return <AuthContext.Provider value={{ user, error, loading }} {...props} />;
+
+  return (
+    <AuthContext.Provider
+      value={{ user, loading, details, setDetails }}
+      {...props}
+    />
+  );
 };
 
 export const useAuthState = () => {

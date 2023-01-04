@@ -1,12 +1,14 @@
 import { signOut } from "firebase/auth";
 import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import { Button, Divider } from "react-native-paper";
+import { Button, Divider, MD2Colors } from "react-native-paper";
 import Navbar from "../components/Navbar";
 import { auth } from "../firebase/config";
-import { PrivateRoute } from "../providers";
+import { PrivateRoute, useAuthState } from "../providers";
 
 const SettingsScreen = ({ navigation }) => {
+  const { details } = useAuthState();
+
   function handleLogout() {
     signOut(auth);
     navigation.navigate("Welcome");
@@ -23,7 +25,7 @@ const SettingsScreen = ({ navigation }) => {
                 source={require("../assets/profile-pic.jpg")}
               />
               <View style={styles.profileDescription}>
-                <Text style={styles.name}>Jace Wayland</Text>
+                <Text style={styles.name}>{details.fullName}</Text>
                 <TouchableOpacity onPress={() => alert("Hello")}>
                   <Text style={styles.editButton}>Edit Profile</Text>
                 </TouchableOpacity>
@@ -46,10 +48,23 @@ const SettingsScreen = ({ navigation }) => {
             </View>
             <View>
               <Text style={styles.title}>Opportunities</Text>
-              <TouchableOpacity onPress={() => navigation.navigate("Request")}>
-                <Text style={styles.options}>Clean with Dusted</Text>
-                <Divider></Divider>
-              </TouchableOpacity>
+              {details.status === "pending_cleaner" ? (
+                <View>
+                  <Text style={[styles.options, styles.disabledOption]}>
+                    Clean with Dusted
+                  </Text>
+                  <Text style={styles.appliedText}>You have applied</Text>
+                  <Divider></Divider>
+                </View>
+              ) : (
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Request")}
+                >
+                  <Text style={styles.options}>Clean with Dusted</Text>
+                  <Text></Text>
+                  <Divider></Divider>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
           <View style={styles.logOut}>
@@ -113,6 +128,14 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_500Medium",
     paddingVertical: 15,
     paddingLeft: 10,
+  },
+  disabledOption: {
+    color: MD2Colors.grey500,
+  },
+  appliedText: {
+    paddingBottom: 15,
+    paddingLeft: 10,
+    color: MD2Colors.orange700,
   },
   logOut: {
     paddingBottom: 30,

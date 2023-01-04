@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { List } from "react-native-paper";
-import { ICleaner } from "../../interfaces";
+import { ICustomer } from "../../interfaces";
 
 interface Props {
-  cleaner: ICleaner;
+  cleaner: ICustomer;
 }
 const Profile = (props: Props) => {
   const { cleaner } = props;

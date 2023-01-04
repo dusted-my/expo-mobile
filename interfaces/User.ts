@@ -4,22 +4,21 @@ export interface ICustomer {
   id: string;
   email: string;
   fullName: string;
+  isCleaner: boolean;
   status: "active" | "pending_cleaner";
   createdAt: Timestamp;
   updatedAt: Timestamp;
-}
 
-export interface ICleaner extends ICustomer {
-  nric: string;
-  address: string;
-  hourlyRate: number;
-  gender: string;
-  imageUrl: string;
-  nricFrontImageUrl: string;
-  nricBackImageUrl: string;
-  isCleaner: string;
-  services: string[];
-  stars: number;
+  // cleaner
+  nric?: string;
+  address?: string;
+  hourlyRate?: number;
+  gender?: string;
+  imageUrl?: string;
+  nricFrontImageUrl?: string;
+  nricBackImageUrl?: string;
+  services?: string[];
+  stars?: number;
 }
 
 export interface IApplyCleanerForm {
