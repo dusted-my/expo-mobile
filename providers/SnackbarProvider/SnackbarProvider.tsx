@@ -5,7 +5,6 @@ import React, {
   useContext,
   useReducer,
 } from "react";
-import GlobalSnackBar from "./GlobalSnackbar";
 import {
   SnackbarProviderAction,
   SnackbarProviderActionType,
@@ -58,7 +57,6 @@ export const SnackbarProvider = ({ children }) => {
       }}
     >
       {children}
-      <GlobalSnackBar />
     </SnackbarContext.Provider>
   );
 };

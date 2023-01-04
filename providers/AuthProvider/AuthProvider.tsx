@@ -21,14 +21,17 @@ export const AuthProvider = (props: any) => {
   useEffect(() => {
     let unsubscribeDoc: Unsubscribe;
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+        unsubscribeDoc = onSnapshot(
+          doc(firestore, "users", user.uid),
+          (doc) => {
+            const details = doc.data() as ICustomer;
+            setDetails(details);
+          }
+        );
+      }
       setLoading(false);
-
-      if (!user) return;
-      setUser(user);
-      unsubscribeDoc = onSnapshot(doc(firestore, "users", user.uid), (doc) => {
-        const details = doc.data() as ICustomer;
-        setDetails(details);
-      });
     });
 
     return () => {

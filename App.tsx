@@ -18,6 +18,8 @@ import BookingConfirmedScreen from "./screens/BookingConfirmedScreen";
 import { useLoadFonts } from "./hooks";
 import { ContextProvider } from "./providers";
 import CleanerScreen from "./screens/CleanerScreen";
+import EditProfileScreen from "./screens/EditProfileScreen";
+import GlobalSnackBar from "./providers/SnackbarProvider/GlobalSnackbar";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,9 +30,9 @@ export default function App() {
   if (!fontsLoaded) return null;
 
   return (
-    <NavigationContainer>
-      <PaperProvider>
-        <ContextProvider>
+    <ContextProvider>
+      <NavigationContainer>
+        <PaperProvider>
           <Stack.Navigator>
             <Stack.Screen
               name="Welcome"
@@ -50,6 +52,7 @@ export default function App() {
               options={options}
             />
             <Stack.Screen name="Request" component={RequestScreen} />
+            <Stack.Screen name="EditProfile" component={EditProfileScreen} />
             <Stack.Screen name="Report" component={ReportScreen} />
             <Stack.Screen
               name="Chat"
@@ -68,8 +71,9 @@ export default function App() {
               component={ForgetPasswordScreen}
             />
           </Stack.Navigator>
-        </ContextProvider>
-      </PaperProvider>
-    </NavigationContainer>
+          <GlobalSnackBar />
+        </PaperProvider>
+      </NavigationContainer>
+    </ContextProvider>
   );
 }
