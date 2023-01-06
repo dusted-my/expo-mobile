@@ -1,7 +1,9 @@
+import dayjs from "dayjs";
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Chip } from "react-native-paper";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Chip, MD2Colors } from "react-native-paper";
 import { useQuery } from "react-query";
+import Contract from "../components/Contract";
 import {
   PrivateRoute,
   SnackbarProviderActionType,
@@ -67,9 +69,16 @@ const ContractListScreen = ({ navigation }) => {
           ) : !proposed.length ? (
             <Text>No Contracts Proposed</Text>
           ) : (
-            proposed.map((contract) => (
-              <Text key={contract.contractId}>{contract.contractId}</Text>
-            ))
+            <View style={styles.contracts}>
+              {proposed.map((contract) => (
+                <Pressable
+                  key={contract.contractId}
+                  onPress={() => navigation.navigate("Contract", { contract })}
+                >
+                  <Contract contract={contract} />
+                </Pressable>
+              ))}
+            </View>
           )
         ) : tab === "received" ? (
           isLoadingReceived ? (
@@ -77,9 +86,16 @@ const ContractListScreen = ({ navigation }) => {
           ) : !received.length ? (
             <Text>No Contracts Received</Text>
           ) : (
-            received.map((contract) => (
-              <Text key={contract.contractId}>{contract.contractId}</Text>
-            ))
+            <View style={styles.contracts}>
+              {received.map((contract) => (
+                <Pressable
+                  key={contract.contractId}
+                  onPress={() => navigation.navigate("Contract", { contract })}
+                >
+                  <Contract contract={contract} />
+                </Pressable>
+              ))}
+            </View>
           )
         ) : null}
       </ScrollView>
@@ -98,6 +114,9 @@ const styles = StyleSheet.create({
   },
   chip: {
     marginRight: 16,
+  },
+  contracts: {
+    marginVertical: 16,
   },
 });
 

@@ -1,3 +1,5 @@
+import { useRoute } from "@react-navigation/native";
+import dayjs from "dayjs";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
 import {
@@ -9,11 +11,15 @@ import {
   ScrollView,
 } from "react-native";
 import { Button } from "react-native-paper";
+import { IContract } from "../interfaces";
 import { PrivateRoute } from "../providers";
 
 const options = ["Credit/Debit", "Cash", "E-wallet"];
 
-const PaymentScreen = ({ navigation }) => {
+const ContractScreen = ({ navigation }) => {
+  const route = useRoute();
+  const { contract }: { contract: IContract } = route.params as any;
+
   const [selected, setSelected] = useState("");
 
   function select(value: string) {
@@ -24,21 +30,23 @@ const PaymentScreen = ({ navigation }) => {
     <PrivateRoute navigation={navigation}>
       <ScrollView>
         <View style={styles.body}>
-          <Image
-            style={styles.logo}
-            source={require("../assets/dusted.png")}
-          ></Image>
-          <View style={styles.card}>
-            <Text style={styles.page}>Booking Details</Text>
+          <View style={styles.logoContainer}>
+            <Image
+              style={styles.logo}
+              source={require("../assets/dusted.png")}
+            ></Image>
+            <Text style={styles.page}>Contract Details</Text>
             <Image
               style={styles.profile}
-              source={require("../assets/cleaner.jpg")}
+              // source={{ uri: contract. }}
             />
             <Text style={styles.name}>Anna Jowel</Text>
-            <Text>Fair:</Text>
-            <Text style={styles.price}>RM 80</Text>
-            <View>
-              <View style={styles.buttonRow}>
+            <Text>Total:</Text>
+            <Text style={styles.price}>RM {contract.total}</Text>
+          </View>
+          <View style={styles.card}>
+            {contract.status === "cleaner_done" ? (
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {options.map((option) => (
                   <Button
                     key={option}
@@ -56,20 +64,30 @@ const PaymentScreen = ({ navigation }) => {
                     {option}
                   </Button>
                 ))}
-              </View>
+              </ScrollView>
+            ) : null}
+            <View>
               <View>
                 <Text style={styles.title}>Location: </Text>
-                <Text style={styles.details}>
-                  Jalan 29 Pandan Indah Wilayah Persekutuan 56200 Malaysia
-                </Text>
+                <Text style={styles.details}>{contract.address}</Text>
               </View>
               <View>
-                <Text style={styles.title}>Contact No.: </Text>
-                <Text style={styles.details}>03-9274-3421</Text>
+                <Text style={styles.title}>Contact: </Text>
+                <Text style={styles.details}></Text>
               </View>
               <View>
                 <Text style={styles.title}>Date: </Text>
-                <Text style={styles.details}>14 Nov 2022 14:30 - 15:30</Text>
+                <Text style={styles.details}>
+                  {dayjs(contract.startAt.toDate()).format("ddd, D MMM YYYY")}
+                </Text>
+              </View>
+              <View>
+                <Text style={styles.title}>Time: </Text>
+                <Text style={styles.details}>
+                  {dayjs(contract.startAt.toDate()).format("hh:mm a")}
+                  {" - "}
+                  {dayjs(contract.endAt.toDate()).format("hh:mm a")}
+                </Text>
               </View>
               <TouchableOpacity
                 onPress={() => navigation.navigate("Booking Confirmed")}
@@ -93,26 +111,25 @@ const PaymentScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   body: {
-    alignItems: "center",
     margin: 20,
     borderWidth: 1,
     borderColor: "#FFF",
     shadowColor: "000",
     borderRadius: 10,
     backgroundColor: "#FFF",
-    paddingHorizontal: 50,
-    paddingVertical: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 32,
+  },
+  logoContainer: {
+    alignItems: "center",
   },
   logo: {
-    // marginTop: "10%",
     resizeMode: "contain",
     height: 42.72,
     width: 181,
     marginLeft: 26,
   },
-  card: {
-    alignItems: "center",
-  },
+  card: {},
   page: {
     fontSize: 20,
     paddingTop: 40,
@@ -134,11 +151,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     paddingVertical: 18,
     fontWeight: "500",
-  },
-  buttonRow: {
-    flexDirection: "row",
-    padding: 10,
-    justifyContent: "center",
   },
   complaintButton: {
     marginHorizontal: 10,
@@ -188,4 +200,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PaymentScreen;
+export default ContractScreen;

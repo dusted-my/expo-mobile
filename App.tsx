@@ -9,11 +9,9 @@ import ForgetPasswordScreen from "./screens/ForgetPasswordScreen";
 import WelcomeScreen from "./screens/WelcomeScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import RequestScreen from "./screens/RequestScreen";
-import ChatScreen from "./screens/ChatScreen";
 import CleanerListScreen from "./screens/CleanerListScreen";
 import ReportScreen from "./screens/ReportScreen";
-import BookingScreen from "./screens/CleanerScreen";
-import PaymentScreen from "./screens/PaymentScreen";
+import ContractScreen from "./screens/ContractScreen";
 import BookingConfirmedScreen from "./screens/BookingConfirmedScreen";
 import { useLoadFonts } from "./hooks";
 import { ContextProvider } from "./providers";
@@ -52,9 +50,9 @@ export default function App() {
             <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
             <Stack.Screen name="Report" component={ReportScreen} />
             <Stack.Screen name="Contract List" component={ContractListScreen} />
+            <Stack.Screen name="Contract" component={ContractScreen} />
             <Stack.Screen name="Cleaner List" component={CleanerListScreen} />
             <Stack.Screen name="Cleaner" component={CleanerScreen} />
-            <Stack.Screen name="Payment" component={PaymentScreen} />
             <Stack.Screen
               name="Booking Confirmed"
               component={BookingConfirmedScreen}
