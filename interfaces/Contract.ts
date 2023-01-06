@@ -21,3 +21,5 @@ export interface IContract {
     | "client_done";
   updatedAt: Timestamp;
 }
+
+export interface ICreateContractForm extends Omit<IContract, "contractId"> {}

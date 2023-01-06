@@ -1,8 +1,8 @@
 import { addDoc, collection } from "firebase/firestore";
 import { firestore } from "../firebase/config";
-import { IContract } from "../interfaces";
+import { IContract, ICreateContractForm } from "../interfaces";
 
-export const createContract = async (contract: IContract) => {
+export const createContract = async (contract: ICreateContractForm) => {
   const ref = collection(firestore, "contracts");
   try {
     await addDoc(ref, contract);

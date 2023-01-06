@@ -17,7 +17,7 @@ import Notes from "../components/CleanerScreen/Notes";
 import Profile from "../components/CleanerScreen/Profile";
 import Schedule from "../components/CleanerScreen/Schedule";
 import Services from "../components/CleanerScreen/Services";
-import { IContract, ICustomer } from "../interfaces";
+import { IContract, ICreateContractForm, ICustomer } from "../interfaces";
 import { convertStringToFloat, trimObjectStrings } from "../utils";
 import * as yup from "yup";
 import Total from "../components/CleanerScreen/Total";
@@ -94,7 +94,7 @@ const CleanerScreen = ({ navigation }) => {
       dayjs(date).set("hour", e.hour()).set("minute", e.minute()).toDate()
     );
 
-    const newContract: IContract = {
+    const newContract: ICreateContractForm = {
       address,
       notes,
       serviceRequired,
