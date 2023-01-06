@@ -1,6 +1,6 @@
 import { useRoute } from "@react-navigation/native";
 import React, { useState } from "react";
-import { View, StyleSheet, Text, Pressable } from "react-native";
+import { View, StyleSheet, Text, Pressable, ScrollView } from "react-native";
 import { useQuery } from "react-query";
 import ServiceChips from "../components/ServiceChips";
 import Cleaner from "../components/Cleaner";
@@ -47,7 +47,7 @@ const CleanerListScreen = ({ navigation }) => {
 
   return (
     <PrivateRoute navigation={navigation}>
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View>
           <View style={styles.sectionHeader}>
             <Text style={styles.title}>Filter by Service</Text>
@@ -73,7 +73,7 @@ const CleanerListScreen = ({ navigation }) => {
             <Text>Loading...</Text>
           )}
         </View>
-      </View>
+      </ScrollView>
     </PrivateRoute>
   );
 };

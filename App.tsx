@@ -20,6 +20,7 @@ import { ContextProvider } from "./providers";
 import CleanerScreen from "./screens/CleanerScreen";
 import EditProfileScreen from "./screens/EditProfileScreen";
 import GlobalSnackBar from "./providers/SnackbarProvider/GlobalSnackbar";
+import ContractListScreen from "./screens/ContractListScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -46,19 +47,11 @@ export default function App() {
               component={HomeScreen}
               options={options}
             />
-            <Stack.Screen
-              name="Settings"
-              component={SettingsScreen}
-              options={options}
-            />
+            <Stack.Screen name="Settings" component={SettingsScreen} />
             <Stack.Screen name="Request" component={RequestScreen} />
             <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
             <Stack.Screen name="Report" component={ReportScreen} />
-            <Stack.Screen
-              name="Chat"
-              component={ChatScreen}
-              options={options}
-            />
+            <Stack.Screen name="Contract List" component={ContractListScreen} />
             <Stack.Screen name="Cleaner List" component={CleanerListScreen} />
             <Stack.Screen name="Cleaner" component={CleanerScreen} />
             <Stack.Screen name="Payment" component={PaymentScreen} />

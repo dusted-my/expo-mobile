@@ -30,7 +30,7 @@ const MyComponent = ({ navigation }) => {
       <Appbar.Action
         icon="clipboard-text"
         color="#FFF"
-        onPress={() => navigation.navigate("Chat")}
+        onPress={() => navigation.navigate("Contract List")}
       />
       <Appbar.Action
         icon="cog"
