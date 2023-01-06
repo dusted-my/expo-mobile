@@ -28,12 +28,12 @@ const MyComponent = ({ navigation }) => {
         onPress={() => navigation.navigate("Home")}
       />
       <Appbar.Action
-        icon="message"
+        icon="clipboard-text"
         color="#FFF"
         onPress={() => navigation.navigate("Chat")}
       />
       <Appbar.Action
-        icon="account"
+        icon="cog"
         color="#FFF"
         onPress={() => navigation.navigate("Settings")}
       />

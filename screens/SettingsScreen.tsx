@@ -1,7 +1,7 @@
 import { signOut } from "firebase/auth";
 import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import { Button, Divider, MD2Colors } from "react-native-paper";
+import { Button, Chip, Divider, MD2Colors } from "react-native-paper";
 import Navbar from "../components/Navbar";
 import { auth } from "../firebase/config";
 import { PrivateRoute, useAuthState } from "../providers";
@@ -26,48 +26,51 @@ const SettingsScreen = ({ navigation }) => {
               />
               <View style={styles.profileDescription}>
                 <Text style={styles.name}>{details.fullName}</Text>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("Edit Profile")}
-                >
-                  <Text style={styles.editButton}>Edit Profile</Text>
-                </TouchableOpacity>
+                {details.isCleaner ? <Chip>Cleaner</Chip> : null}
               </View>
             </View>
             <View>
               <Text style={styles.title}>General</Text>
-              <TouchableOpacity onPress={() => alert("Hello")}>
+              {/* <TouchableOpacity onPress={() => alert("Hello")}>
                 <Text style={styles.options}>Settings</Text>
               </TouchableOpacity>
               <Divider></Divider>
               <TouchableOpacity onPress={() => alert("Hello")}>
                 <Text style={styles.options}>Help Center</Text>
+              </TouchableOpacity> */}
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Edit Profile")}
+              >
+                <Text style={styles.options}>Edit Profile</Text>
               </TouchableOpacity>
               <Divider></Divider>
-              <TouchableOpacity onPress={() => navigation.navigate("Report")}>
+              {/* <TouchableOpacity onPress={() => navigation.navigate("Report")}>
                 <Text style={styles.options}>Report</Text>
               </TouchableOpacity>
-              <Divider></Divider>
+              <Divider></Divider> */}
             </View>
-            <View>
-              <Text style={styles.title}>Opportunities</Text>
-              {details.status === "pending_cleaner" ? (
-                <View>
-                  <Text style={[styles.options, styles.disabledOption]}>
-                    Be a Cleaner
-                  </Text>
-                  <Text style={styles.appliedText}>You have applied</Text>
-                  <Divider></Divider>
-                </View>
-              ) : (
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("Request")}
-                >
-                  <Text style={styles.options}>Clean with Dusted</Text>
-                  <Text></Text>
-                  <Divider></Divider>
-                </TouchableOpacity>
-              )}
-            </View>
+            {!details.isCleaner ? (
+              <View>
+                <Text style={styles.title}>Opportunities</Text>
+                {details.status === "pending_cleaner" ? (
+                  <View>
+                    <Text style={[styles.options, styles.disabledOption]}>
+                      Be a Cleaner
+                    </Text>
+                    <Text style={styles.appliedText}>You have applied</Text>
+                    <Divider></Divider>
+                  </View>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("Request")}
+                  >
+                    <Text style={styles.options}>Clean with Dusted</Text>
+                    <Text></Text>
+                    <Divider></Divider>
+                  </TouchableOpacity>
+                )}
+              </View>
+            ) : null}
           </View>
           <View style={styles.logOut}>
             <Button
@@ -109,8 +112,9 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   profileDescription: {
-    display: "flex",
-    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    height: 50,
   },
   editButton: {
     paddingTop: 8,

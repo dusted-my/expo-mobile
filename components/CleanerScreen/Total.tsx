@@ -16,7 +16,7 @@ const Total = (props: Props) => {
   return (
     <View>
       <Text style={styles.title}>
-        Total (RM)<Text style={styles.description}>Required</Text>
+        Total (RM) <Text style={styles.description}>Required</Text>
       </Text>
       <TextInput
         mode="outlined"
