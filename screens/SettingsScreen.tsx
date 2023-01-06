@@ -2,7 +2,6 @@ import { signOut } from "firebase/auth";
 import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Button, Chip, Divider, MD2Colors } from "react-native-paper";
-import Navbar from "../components/Navbar";
 import { auth } from "../firebase/config";
 import { PrivateRoute, useAuthState } from "../providers";
 
@@ -84,7 +83,6 @@ const SettingsScreen = ({ navigation }) => {
             </Button>
           </View>
         </View>
-        <Navbar navigation={navigation}></Navbar>
       </View>
     </PrivateRoute>
   );
@@ -96,7 +94,6 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   container: {
-    marginTop: 60,
     padding: 40,
     height: "100%",
     justifyContent: "space-between",

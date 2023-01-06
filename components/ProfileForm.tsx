@@ -244,7 +244,7 @@ const ProfileForm = (props: Props) => {
           >
             {errors.address}
           </HelperText>
-          {isEdit ? null : (
+          {isEdit && !details.isCleaner ? null : (
             <>
               <TextInput
                 style={styles.input}
@@ -364,7 +364,7 @@ const ProfileForm = (props: Props) => {
               </Button>
             </View>
           </View>
-          {isEdit ? null : (
+          {isEdit && !details.isCleaner ? null : (
             <>
               <Text style={styles.textGender}>Services Offer: </Text>
               <ServiceChips
