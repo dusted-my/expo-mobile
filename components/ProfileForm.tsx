@@ -57,6 +57,13 @@ const validationSchema = yup.object({
   nricFrontImageUrl: yup.string().required("NRIC Front is required"),
   nricBackImageUrl: yup.string().required("NRIC Back is required"),
 });
+const editValidationSchema = yup.object({
+  fullName: yup
+    .string()
+    .required("NRIC Name is required")
+    .min(3, "Must have at least 3 characters")
+    .max(255, "Must have at most 255 characters"),
+});
 
 type ImageType = "profile" | "nric-front" | "nric-back";
 interface ImageStatus {
@@ -65,23 +72,24 @@ interface ImageStatus {
 }
 
 interface Props {
+  isEdit?: boolean;
   mutationRes: UseBaseMutationResult<void, any, IApplyCleanerForm, unknown>;
 }
 const ProfileForm = (props: Props) => {
-  const { mutationRes } = props;
+  const { isEdit, mutationRes } = props;
   const { mutate, isLoading } = mutationRes;
 
   const { user, details } = useAuthState();
   const initialValues: IApplyCleanerForm = {
     uid: user.uid,
     fullName: details.fullName,
-    nric: details.nric,
-    address: details.address,
-    hourlyRate: details.hourlyRate?.toFixed(2),
-    gender: details.gender,
-    imageUrl: details.imageUrl,
-    nricFrontImageUrl: details.nricFrontImageUrl,
-    nricBackImageUrl: details.nricBackImageUrl,
+    nric: details.nric || "",
+    address: details.address || "",
+    hourlyRate: details.hourlyRate?.toFixed(2) || "0.00",
+    gender: details.gender || "",
+    imageUrl: details.imageUrl || "",
+    nricFrontImageUrl: details.nricFrontImageUrl || "",
+    nricBackImageUrl: details.nricBackImageUrl || "",
     services: details.services || [],
   };
 
@@ -173,7 +181,7 @@ const ProfileForm = (props: Props) => {
     <Formik
       initialValues={initialValues}
       onSubmit={handleSubmit}
-      validationSchema={validationSchema}
+      validationSchema={isEdit ? editValidationSchema : validationSchema}
     >
       {({
         handleBlur,
@@ -236,22 +244,26 @@ const ProfileForm = (props: Props) => {
           >
             {errors.address}
           </HelperText>
-          <TextInput
-            style={styles.input}
-            outlineStyle={styles.inputOutline}
-            placeholder="Hourly Rate (RM)"
-            value={values.hourlyRate}
-            onChangeText={handleChange("hourlyRate")}
-            onBlur={handleBlur("hourlyRate")}
-            error={Boolean(errors.hourlyRate && touched.hourlyRate)}
-            mode="outlined"
-          />
-          <HelperText
-            type="error"
-            visible={Boolean(errors.hourlyRate && touched.hourlyRate)}
-          >
-            {errors.hourlyRate}
-          </HelperText>
+          {isEdit ? null : (
+            <>
+              <TextInput
+                style={styles.input}
+                outlineStyle={styles.inputOutline}
+                placeholder="Hourly Rate (RM)"
+                value={values.hourlyRate}
+                onChangeText={handleChange("hourlyRate")}
+                onBlur={handleBlur("hourlyRate")}
+                error={Boolean(errors.hourlyRate && touched.hourlyRate)}
+                mode="outlined"
+              />
+              <HelperText
+                type="error"
+                visible={Boolean(errors.hourlyRate && touched.hourlyRate)}
+              >
+                {errors.hourlyRate}
+              </HelperText>
+            </>
+          )}
           <Text style={styles.textGender}>Gender:</Text>
           <View style={styles.radioButton}>
             <RadioButton.Group
@@ -352,14 +364,18 @@ const ProfileForm = (props: Props) => {
               </Button>
             </View>
           </View>
-          <Text style={styles.textGender}>Services Offer: </Text>
-          <ServiceChips
-            selected={values.services}
-            handlePress={(service) =>
-              handleSelect(service, values.services, setFieldValue)
-            }
-          />
-          <HelperText type="info">Select at least 1</HelperText>
+          {isEdit ? null : (
+            <>
+              <Text style={styles.textGender}>Services Offer: </Text>
+              <ServiceChips
+                selected={values.services}
+                handlePress={(service) =>
+                  handleSelect(service, values.services, setFieldValue)
+                }
+              />
+              <HelperText type="info">Select at least 1</HelperText>
+            </>
+          )}
           <View style={styles.buttomPadding}>
             <Button
               style={styles.button}

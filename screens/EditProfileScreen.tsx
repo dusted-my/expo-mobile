@@ -35,7 +35,7 @@ const RequestScreen = ({ navigation }) => {
       <ScrollView>
         <View style={styles.container}>
           <Text style={styles.title}>Edit Profile</Text>
-          <ProfileForm mutationRes={mutationRes} />
+          <ProfileForm isEdit mutationRes={mutationRes} />
         </View>
       </ScrollView>
     </PrivateRoute>
