@@ -3,14 +3,19 @@ import { Text, View, ScrollView, StyleSheet, Pressable } from "react-native";
 import { Button } from "react-native-paper";
 import { useQuery } from "react-query";
 import Cleaner from "../Cleaner";
-import { SnackbarProviderActionType, useSnackbar } from "../../providers";
+import {
+  SnackbarProviderActionType,
+  useAuthState,
+  useSnackbar,
+} from "../../providers";
 import { getCleaners } from "../../queries";
 
 const HomeScreenCleaners = ({ navigation }) => {
   const { dispatchSnackbar } = useSnackbar();
+  const { user } = useAuthState();
 
   const { data: cleaners, isLoading } = useQuery({
-    queryFn: () => getCleaners(3),
+    queryFn: () => getCleaners(user.uid, 3),
     onError: () =>
       dispatchSnackbar({
         type: SnackbarProviderActionType.OPEN,

@@ -32,6 +32,8 @@ export const AuthProvider = (props: any) => {
           }
         );
       } else {
+        setUser(null);
+        setDetails(null);
         setLoading(false);
       }
     });

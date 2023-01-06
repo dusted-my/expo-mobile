@@ -5,16 +5,21 @@ import { useQuery } from "react-query";
 import ServiceChips from "../components/ServiceChips";
 import Cleaner from "../components/Cleaner";
 import { mockServices } from "../mocks";
-import { SnackbarProviderActionType, useSnackbar } from "../providers";
+import {
+  SnackbarProviderActionType,
+  useAuthState,
+  useSnackbar,
+} from "../providers";
 import { PrivateRoute } from "../providers";
 import { getCleaners } from "../queries";
 
 const CleanerListScreen = ({ navigation }) => {
   const { dispatchSnackbar } = useSnackbar();
+  const { user } = useAuthState();
   const route = useRoute();
 
   const { data: cleaners, isLoading } = useQuery({
-    queryFn: () => getCleaners(),
+    queryFn: () => getCleaners(user.uid),
     onError: () =>
       dispatchSnackbar({
         type: SnackbarProviderActionType.OPEN,
