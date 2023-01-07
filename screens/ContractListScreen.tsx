@@ -4,6 +4,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Chip, MD2Colors } from "react-native-paper";
 import { useQuery } from "react-query";
 import Contract from "../components/Contract";
+import { useRefreshOnFocus } from "../hooks";
 import {
   PrivateRoute,
   SnackbarProviderActionType,
@@ -17,9 +18,13 @@ import {
 
 const ContractListScreen = ({ navigation }) => {
   const { dispatchSnackbar } = useSnackbar();
-  const { user } = useAuthState();
+  const { user, details } = useAuthState();
 
-  const { data: proposed, isLoading: isLoadingProposed } = useQuery({
+  const {
+    data: proposed,
+    isLoading: isLoadingProposed,
+    refetch: refetchProposed,
+  } = useQuery({
     queryKey: "proposed",
     queryFn: () => getProposedContracts(user.uid),
     onError: () =>
@@ -28,9 +33,15 @@ const ContractListScreen = ({ navigation }) => {
         variant: "error",
         message: "Unable to find cleaners",
       }),
+    initialData: [],
   });
+  useRefreshOnFocus(refetchProposed);
 
-  const { data: received, isLoading: isLoadingReceived } = useQuery({
+  const {
+    data: received,
+    isLoading: isLoadingReceived,
+    refetch: refetchReceived,
+  } = useQuery({
     queryKey: "received",
     queryFn: () => getReceivedContracts(user.uid),
     onError: () =>
@@ -39,29 +50,41 @@ const ContractListScreen = ({ navigation }) => {
         variant: "error",
         message: "Unable to find cleaners",
       }),
+    initialData: [],
   });
+  useRefreshOnFocus(refetchReceived);
 
-  const [tab, setTab] = useState<"proposed" | "received">("proposed");
+  const [tab, setTab] = useState<"proposed" | "received">(
+    details.isCleaner ? "received" : "proposed"
+  );
 
   return (
     <PrivateRoute navigation={navigation}>
       <ScrollView style={styles.container}>
-        <ScrollView horizontal style={styles.chips}>
+        <View
+          style={[
+            styles.chips,
+            {
+              flexDirection: details.isCleaner ? "row-reverse" : "row",
+              justifyContent: details.isCleaner ? "flex-end" : "flex-start",
+            },
+          ]}
+        >
           <Chip
             style={styles.chip}
             mode={tab === "proposed" ? "flat" : "outlined"}
             onPress={() => setTab("proposed")}
           >
-            Proposed
+            Proposed ({proposed.length})
           </Chip>
           <Chip
             style={styles.chip}
             mode={tab === "received" ? "flat" : "outlined"}
             onPress={() => setTab("received")}
           >
-            Received
+            Received ({received.length})
           </Chip>
-        </ScrollView>
+        </View>
 
         {tab === "proposed" ? (
           isLoadingProposed ? (
@@ -73,7 +96,9 @@ const ContractListScreen = ({ navigation }) => {
               {proposed.map((contract) => (
                 <Pressable
                   key={contract.contractId}
-                  onPress={() => navigation.navigate("Contract", { contract })}
+                  onPress={() =>
+                    navigation.navigate("Proposed Contract", { contract })
+                  }
                 >
                   <Contract contract={contract} />
                 </Pressable>
@@ -90,7 +115,9 @@ const ContractListScreen = ({ navigation }) => {
               {received.map((contract) => (
                 <Pressable
                   key={contract.contractId}
-                  onPress={() => navigation.navigate("Contract", { contract })}
+                  onPress={() =>
+                    navigation.navigate("Received Contract", { contract })
+                  }
                 >
                   <Contract contract={contract} />
                 </Pressable>

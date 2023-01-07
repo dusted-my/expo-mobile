@@ -11,7 +11,7 @@ import SettingsScreen from "./screens/SettingsScreen";
 import RequestScreen from "./screens/RequestScreen";
 import CleanerListScreen from "./screens/CleanerListScreen";
 import ReportScreen from "./screens/ReportScreen";
-import ContractScreen from "./screens/ContractScreen";
+import ContractScreen from "./screens/ProposedContractScreen";
 import BookingConfirmedScreen from "./screens/BookingConfirmedScreen";
 import { useLoadFonts } from "./hooks";
 import { ContextProvider } from "./providers";
@@ -19,6 +19,8 @@ import CleanerScreen from "./screens/CleanerScreen";
 import EditProfileScreen from "./screens/EditProfileScreen";
 import GlobalSnackBar from "./providers/SnackbarProvider/GlobalSnackbar";
 import ContractListScreen from "./screens/ContractListScreen";
+import ProposedContractScreen from "./screens/ProposedContractScreen";
+import ReceivedContractScreen from "./screens/ReceivedContractScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -32,7 +34,7 @@ export default function App() {
     <ContextProvider>
       <NavigationContainer>
         <PaperProvider>
-          <Stack.Navigator>
+          <Stack.Navigator initialRouteName="Home">
             <Stack.Screen
               name="Welcome"
               component={WelcomeScreen}
@@ -50,7 +52,14 @@ export default function App() {
             <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
             <Stack.Screen name="Report" component={ReportScreen} />
             <Stack.Screen name="Contract List" component={ContractListScreen} />
-            <Stack.Screen name="Contract" component={ContractScreen} />
+            <Stack.Screen
+              name="Proposed Contract"
+              component={ProposedContractScreen}
+            />
+            <Stack.Screen
+              name="Received Contract"
+              component={ReceivedContractScreen}
+            />
             <Stack.Screen name="Cleaner List" component={CleanerListScreen} />
             <Stack.Screen name="Cleaner" component={CleanerScreen} />
             <Stack.Screen

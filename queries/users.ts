@@ -1,4 +1,12 @@
-import { collection, getDocs, limit, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  limit,
+  query,
+  where,
+} from "firebase/firestore";
 import { firestore } from "../firebase/config";
 import { ICustomer } from "../interfaces";
 
@@ -12,4 +20,10 @@ export const getCleaners = async (ownUid: string, max?: number) => {
     cleaners.push({ id: res.id, ...(res.data() as ICustomer) });
   });
   return cleaners;
+};
+
+export const getOneUser = async (docPath: string): Promise<ICustomer> => {
+  const ref = doc(firestore, docPath);
+  const snapshot = await getDoc(ref);
+  return snapshot.data() as ICustomer;
 };

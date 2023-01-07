@@ -3,6 +3,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { MD2Colors } from "react-native-paper";
 import { IContract } from "../interfaces";
+import ContractStatus from "./ContractStatus";
 
 interface Props {
   contract: IContract;
@@ -19,6 +20,9 @@ const Contract = (props: Props) => {
         {" - "}
         {dayjs(contract.endAt.toDate()).format("hh:mm a")}
       </Text>
+      <View style={styles.status}>
+        <ContractStatus status={contract.status} />
+      </View>
     </View>
   );
 };
@@ -28,6 +32,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     padding: 16,
     borderRadius: 16,
+    alignItems: "stretch",
   },
   contractService: {
     fontFamily: "Inter_700Bold",
@@ -39,6 +44,9 @@ const styles = StyleSheet.create({
   },
   contractDateTime: {
     color: MD2Colors.grey500,
+  },
+  status: {
+    marginTop: 8,
   },
 });
 
