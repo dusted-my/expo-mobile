@@ -1,3 +1,4 @@
+import { StripeProvider } from "@stripe/stripe-react-native";
 import * as React from "react";
 import { QueryClientProvider } from "react-query";
 import { AuthProvider } from "./AuthProvider/AuthProvider";
@@ -25,6 +26,8 @@ interface ContextProviderProps {
 }
 export function ContextProvider(props: ContextProviderProps) {
   const { children } = props;
+  const publishableKey =
+    "pk_test_51MH7LBDfPzkOswzKP3GzLm6W0t02pJfjrUTZqIcHNrW99ozHkU0lAoSbbroh0EfFaKnrmkVv2qtMQKKWoUlg60Kg00Z1GWrPdt";
 
   return (
     <ProviderComposer
@@ -32,6 +35,7 @@ export function ContextProvider(props: ContextProviderProps) {
         <SnackbarProvider children={children} />,
         <QueryClientProvider client={queryClient} />,
         <AuthProvider />,
+        <StripeProvider publishableKey={publishableKey} children={children} />,
       ]}
     >
       {children}

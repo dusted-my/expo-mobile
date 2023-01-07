@@ -1,6 +1,12 @@
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
-import { firestore } from "../firebase/config";
-import { IContract, ICreateContractForm } from "../interfaces";
+import { httpsCallable } from "firebase/functions";
+import { firestore, functions } from "../firebase/config";
+import {
+  IContract,
+  ICreateContractForm,
+  IPaymentIntentBody,
+  IPaymentSheetParams,
+} from "../interfaces";
 
 export const createContract = async (
   contract: ICreateContractForm
@@ -19,6 +25,18 @@ export const confirmContract = async (contractId: string) => {
   const data: Partial<IContract> = { status: "client_submitted" };
   try {
     await updateDoc(ref, data);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export const fetchPaymentSheetParams = async (
+  body: IPaymentIntentBody
+): Promise<IPaymentSheetParams> => {
+  const createPaymentIntent = httpsCallable(functions, "createPaymentIntent");
+  try {
+    const res = await createPaymentIntent(body);
+    return res.data as IPaymentSheetParams;
   } catch (e) {
     throw new Error(e);
   }

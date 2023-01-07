@@ -18,19 +18,32 @@ import { IContract } from "../interfaces";
 import {
   PrivateRoute,
   SnackbarProviderActionType,
+  useAuthState,
   useSnackbar,
 } from "../providers";
 import { getOneUser } from "../queries";
-import { clientDoneContract, confirmContract } from "../mutations";
+import {
+  clientDoneContract,
+  confirmContract,
+  fetchPaymentSheetParams,
+} from "../mutations";
 import ContractStatus from "../components/ContractStatus";
+import {
+  initPaymentSheet,
+  presentPaymentSheet,
+} from "@stripe/stripe-react-native";
 
 type PaymentOption = "card" | "ewallet" | "cash";
 const PAYMENT_OPTIONS: PaymentOption[] = ["card", "ewallet", "cash"];
+
+const DISABLED_COLORS = [MD2Colors.grey300, MD2Colors.grey300];
+const GRADIENT_COLORS = ["#CF91FF", "#5782F5"];
 
 const ProposedContractScreen = ({ navigation }) => {
   const route = useRoute();
   const { contract }: { contract: IContract } = route.params as any;
   const { dispatchSnackbar } = useSnackbar();
+  const { details } = useAuthState();
 
   const { data: cleaner, isLoading } = useQuery({
     queryKey: contract.cleanerDoc,
@@ -83,8 +96,50 @@ const ProposedContractScreen = ({ navigation }) => {
     },
   });
 
+  const { mutate: mutatePayment, isLoading: isLoadingPayment } = useMutation({
+    mutationFn: fetchPaymentSheetParams,
+    onError: (e: any) =>
+      dispatchSnackbar({
+        type: SnackbarProviderActionType.OPEN,
+        variant: "error",
+        message: e.message || "Failed to Prepare Payment",
+      }),
+    onSuccess: async (data) => {
+      const { error } = await initPaymentSheet({
+        merchantDisplayName: "Dusted",
+        paymentIntentClientSecret: data.clientSecret,
+        defaultBillingDetails: {
+          email: details.email,
+          name: details.fullName,
+          address: {
+            country: "MY",
+          },
+        },
+      });
+      if (error) {
+        dispatchSnackbar({
+          type: SnackbarProviderActionType.OPEN,
+          variant: "info",
+          message: error.message || "Failed to Make Payment",
+        });
+      }
+
+      const { error: errorPresent } = await presentPaymentSheet();
+      if (errorPresent) {
+        dispatchSnackbar({
+          type: SnackbarProviderActionType.OPEN,
+          variant: "info",
+          message: errorPresent.message || "Failed to Present Payment Layout",
+        });
+      }
+    },
+  });
   const handlePayment = () => {
-    // mutateConfirm()
+    const { total, contractId } = contract;
+
+    //* convert to Stripe amount standard
+    const amount = total * 100;
+    mutatePayment({ amount, contractId });
   };
 
   const { mutate: mutateDone, isLoading: isLoadingDone } = useMutation({
@@ -198,7 +253,9 @@ const ProposedContractScreen = ({ navigation }) => {
                       disabled={isLoadingConfirm}
                     >
                       <LinearGradient
-                        colors={["#CF91FF", "#5782F5"]}
+                        colors={
+                          isLoadingConfirm ? DISABLED_COLORS : GRADIENT_COLORS
+                        }
                         start={{ x: 0, y: 0 }}
                         end={{ x: 0.9, y: 0.5 }}
                         style={[styles.button, styles.buttonBook]}
@@ -209,10 +266,12 @@ const ProposedContractScreen = ({ navigation }) => {
                   ) : (
                     <TouchableOpacity
                       onPress={() => handlePayment()}
-                      disabled={isLoadingConfirm}
+                      disabled={isLoadingPayment}
                     >
                       <LinearGradient
-                        colors={["#CF91FF", "#5782F5"]}
+                        colors={
+                          isLoadingPayment ? DISABLED_COLORS : GRADIENT_COLORS
+                        }
                         start={{ x: 0, y: 0 }}
                         end={{ x: 0.9, y: 0.5 }}
                         style={[styles.button, styles.buttonBook]}
@@ -228,7 +287,7 @@ const ProposedContractScreen = ({ navigation }) => {
                     disabled={isLoadingDone}
                   >
                     <LinearGradient
-                      colors={["#CF91FF", "#5782F5"]}
+                      colors={isLoadingDone ? DISABLED_COLORS : GRADIENT_COLORS}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 0.9, y: 0.5 }}
                       style={[styles.button, styles.buttonBook]}

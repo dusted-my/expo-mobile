@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 16,
     alignItems: "stretch",
+    marginVertical: 8,
   },
   contractService: {
     fontFamily: "Inter_700Bold",

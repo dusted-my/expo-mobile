@@ -23,3 +23,12 @@ export interface IContract {
 }
 
 export interface ICreateContractForm extends Omit<IContract, "contractId"> {}
+
+export interface IPaymentIntentBody {
+  amount: number;
+  contractId: string;
+}
+
+export interface IPaymentSheetParams {
+  clientSecret: string;
+}

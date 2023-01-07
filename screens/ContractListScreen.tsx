@@ -142,9 +142,7 @@ const styles = StyleSheet.create({
   chip: {
     marginRight: 16,
   },
-  contracts: {
-    marginVertical: 16,
-  },
+  contracts: {},
 });
 
 export default ContractListScreen;
