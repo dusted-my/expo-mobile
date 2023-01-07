@@ -18,14 +18,14 @@ import { IContract } from "../interfaces";
 import {
   PrivateRoute,
   SnackbarProviderActionType,
-  useAuthState,
   useSnackbar,
 } from "../providers";
 import { getOneUser } from "../queries";
 import { clientDoneContract, confirmContract } from "../mutations";
 import ContractStatus from "../components/ContractStatus";
 
-const options = ["Credit/Debit", "Cash", "E-wallet"];
+type PaymentOption = "card" | "ewallet" | "cash";
+const PAYMENT_OPTIONS: PaymentOption[] = ["card", "ewallet", "cash"];
 
 const ProposedContractScreen = ({ navigation }) => {
   const route = useRoute();
@@ -37,10 +37,12 @@ const ProposedContractScreen = ({ navigation }) => {
     queryFn: () => getOneUser(contract.cleanerDoc),
   });
 
-  const [selected, setSelected] = useState("");
+  const [paymentOption, setPaymentOption] = useState<PaymentOption>(
+    PAYMENT_OPTIONS[0]
+  );
 
-  function select(value: string) {
-    setSelected(value);
+  function handleSelectPaymentOption(value: PaymentOption) {
+    setPaymentOption(value);
   }
 
   const handleEmail = async (email: string) => {
@@ -64,7 +66,7 @@ const ProposedContractScreen = ({ navigation }) => {
   };
 
   const { mutate: mutateConfirm, isLoading: isLoadingConfirm } = useMutation({
-    mutationFn: confirmContract,
+    mutationFn: () => confirmContract(contract.contractId),
     onError: (e: any) =>
       dispatchSnackbar({
         type: SnackbarProviderActionType.OPEN,
@@ -80,6 +82,10 @@ const ProposedContractScreen = ({ navigation }) => {
       });
     },
   });
+
+  const handlePayment = () => {
+    // mutateConfirm()
+  };
 
   const { mutate: mutateDone, isLoading: isLoadingDone } = useMutation({
     mutationFn: () => clientDoneContract(contract.contractId),
@@ -126,19 +132,19 @@ const ProposedContractScreen = ({ navigation }) => {
             <View style={styles.main}>
               {contract.status === "client_submitting" ? (
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  {options.map((option) => (
+                  {PAYMENT_OPTIONS.map((option) => (
                     <Button
                       key={option}
                       style={[
                         styles.complaintButton,
-                        selected === option && styles.selectedButton,
+                        paymentOption === option && styles.selectedButton,
                       ]}
                       labelStyle={[
                         styles.complaintButtonLabel,
-                        selected === option && styles.selectedButtonLabel,
+                        paymentOption === option && styles.selectedButtonLabel,
                       ]}
                       mode="outlined"
-                      onPress={() => select(option)}
+                      onPress={() => handleSelectPaymentOption(option)}
                     >
                       {option}
                     </Button>
@@ -186,19 +192,35 @@ const ProposedContractScreen = ({ navigation }) => {
                   </Text>
                 </View>
                 {contract.status === "client_submitting" ? (
-                  <TouchableOpacity
-                    onPress={() => mutateConfirm(contract.contractId)}
-                    disabled={isLoadingConfirm}
-                  >
-                    <LinearGradient
-                      colors={["#CF91FF", "#5782F5"]}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 0.9, y: 0.5 }}
-                      style={[styles.button, styles.buttonBook]}
+                  paymentOption === "cash" ? (
+                    <TouchableOpacity
+                      onPress={() => mutateConfirm()}
+                      disabled={isLoadingConfirm}
                     >
-                      <Text style={styles.buttonLabelBook}>Confirm</Text>
-                    </LinearGradient>
-                  </TouchableOpacity>
+                      <LinearGradient
+                        colors={["#CF91FF", "#5782F5"]}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 0.9, y: 0.5 }}
+                        style={[styles.button, styles.buttonBook]}
+                      >
+                        <Text style={styles.buttonLabelBook}>Confirm</Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={() => handlePayment()}
+                      disabled={isLoadingConfirm}
+                    >
+                      <LinearGradient
+                        colors={["#CF91FF", "#5782F5"]}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 0.9, y: 0.5 }}
+                        style={[styles.button, styles.buttonBook]}
+                      >
+                        <Text style={styles.buttonLabelBook}>Pay</Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  )
                 ) : null}
                 {contract.status === "cleaner_done" ? (
                   <TouchableOpacity
@@ -245,7 +267,9 @@ const styles = StyleSheet.create({
     width: 181,
     marginLeft: 26,
   },
-  main: {},
+  main: {
+    marginTop: 32,
+  },
   page: {
     fontSize: 20,
     paddingTop: 40,
@@ -280,6 +304,7 @@ const styles = StyleSheet.create({
   },
   complaintButtonLabel: {
     color: "#CCC",
+    textTransform: "capitalize",
   },
   information: {
     alignItems: "center",

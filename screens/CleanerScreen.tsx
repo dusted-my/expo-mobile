@@ -70,13 +70,13 @@ const CleanerScreen = ({ navigation }) => {
         variant: "error",
         message: e,
       }),
-    onSuccess: () => {
+    onSuccess: (newContract) => {
       dispatchSnackbar({
         type: SnackbarProviderActionType.OPEN,
         variant: "success",
         message: "Contract Proposed",
       });
-      navigation.navigate("Payment");
+      navigation.navigate("Proposed Contract", { contract: newContract });
     },
   });
 

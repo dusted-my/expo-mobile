@@ -1,11 +1,14 @@
-import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { firestore } from "../firebase/config";
 import { IContract, ICreateContractForm } from "../interfaces";
 
-export const createContract = async (contract: ICreateContractForm) => {
+export const createContract = async (
+  contract: ICreateContractForm
+): Promise<IContract> => {
   const ref = collection(firestore, "contracts");
   try {
-    await addDoc(ref, contract);
+    const newDoc = await addDoc(ref, contract);
+    return { ...contract, contractId: newDoc.id };
   } catch (e) {
     throw new Error(e);
   }
