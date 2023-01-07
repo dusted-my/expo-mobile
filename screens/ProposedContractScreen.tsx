@@ -22,7 +22,7 @@ import {
   useSnackbar,
 } from "../providers";
 import { getOneUser } from "../queries";
-import { confirmContract } from "../mutations";
+import { clientDoneContract, confirmContract } from "../mutations";
 import ContractStatus from "../components/ContractStatus";
 
 const options = ["Credit/Debit", "Cash", "E-wallet"];
@@ -81,6 +81,24 @@ const ProposedContractScreen = ({ navigation }) => {
     },
   });
 
+  const { mutate: mutateDone, isLoading: isLoadingDone } = useMutation({
+    mutationFn: () => clientDoneContract(contract.contractId),
+    onError: (e: any) =>
+      dispatchSnackbar({
+        type: SnackbarProviderActionType.OPEN,
+        variant: "error",
+        message: e.message || "Failed to Done Contract",
+      }),
+    onSuccess: () => {
+      navigation.navigate("Contract List");
+      dispatchSnackbar({
+        type: SnackbarProviderActionType.OPEN,
+        variant: "success",
+        message: `The Contract is marked as Done!`,
+      });
+    },
+  });
+
   return (
     <PrivateRoute navigation={navigation}>
       <ScrollView>
@@ -106,7 +124,7 @@ const ProposedContractScreen = ({ navigation }) => {
               <ContractStatus status={contract.status} />
             </View>
             <View style={styles.main}>
-              {contract.status === "cleaner_done" ? (
+              {contract.status === "client_submitting" ? (
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   {options.map((option) => (
                     <Button
@@ -184,7 +202,8 @@ const ProposedContractScreen = ({ navigation }) => {
                 ) : null}
                 {contract.status === "cleaner_done" ? (
                   <TouchableOpacity
-                    onPress={() => navigation.navigate("Booking Confirmed")}
+                    onPress={() => mutateDone()}
+                    disabled={isLoadingDone}
                   >
                     <LinearGradient
                       colors={["#CF91FF", "#5782F5"]}
@@ -192,7 +211,7 @@ const ProposedContractScreen = ({ navigation }) => {
                       end={{ x: 0.9, y: 0.5 }}
                       style={[styles.button, styles.buttonBook]}
                     >
-                      <Text style={styles.buttonLabelBook}>Pay</Text>
+                      <Text style={styles.buttonLabelBook}>Confirm Done</Text>
                     </LinearGradient>
                   </TouchableOpacity>
                 ) : null}

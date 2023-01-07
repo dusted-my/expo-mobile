@@ -34,7 +34,7 @@ export default function App() {
     <ContextProvider>
       <NavigationContainer>
         <PaperProvider>
-          <Stack.Navigator initialRouteName="Home">
+          <Stack.Navigator>
             <Stack.Screen
               name="Welcome"
               component={WelcomeScreen}

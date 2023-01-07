@@ -35,3 +35,27 @@ export const approveContract = async (
     throw new Error(e);
   }
 };
+
+export const cleanerDoneContract = async (contractId: string) => {
+  const ref = doc(firestore, `contracts/${contractId}`);
+  const data: Partial<IContract> = {
+    status: "cleaner_done",
+  };
+  try {
+    await updateDoc(ref, data);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export const clientDoneContract = async (contractId: string) => {
+  const ref = doc(firestore, `contracts/${contractId}`);
+  const data: Partial<IContract> = {
+    status: "client_done",
+  };
+  try {
+    await updateDoc(ref, data);
+  } catch (e) {
+    throw new Error(e);
+  }
+};

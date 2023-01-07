@@ -1,4 +1,3 @@
-import * as Clipboard from "expo-clipboard";
 import { useRoute } from "@react-navigation/native";
 import dayjs from "dayjs";
 import { LinearGradient } from "expo-linear-gradient";
@@ -20,7 +19,7 @@ import {
   useSnackbar,
 } from "../providers";
 import { getOneUser } from "../queries";
-import { approveContract } from "../mutations";
+import { approveContract, cleanerDoneContract } from "../mutations";
 import ContractStatus from "../components/ContractStatus";
 
 const options = ["Credit/Debit", "Cash", "E-wallet"];
@@ -30,11 +29,7 @@ const ProposedContractScreen = ({ navigation }) => {
   const { contract }: { contract: IContract } = route.params as any;
   const { dispatchSnackbar } = useSnackbar();
 
-  const {
-    data: client,
-    isLoading,
-    refetch,
-  } = useQuery({
+  const { data: client, isLoading } = useQuery({
     queryKey: contract.clientDoc,
     queryFn: () => getOneUser(contract.clientDoc),
   });
@@ -56,11 +51,28 @@ const ProposedContractScreen = ({ navigation }) => {
       }),
     onSuccess: (_, approved) => {
       navigation.navigate("Contract List");
-      refetch();
       dispatchSnackbar({
         type: SnackbarProviderActionType.OPEN,
         variant: "success",
         message: `The Contract is ${approved ? "Approved" : "Declined"}`,
+      });
+    },
+  });
+
+  const { mutate: mutateDone, isLoading: isLoadingDone } = useMutation({
+    mutationFn: () => cleanerDoneContract(contract.contractId),
+    onError: (e: any) =>
+      dispatchSnackbar({
+        type: SnackbarProviderActionType.OPEN,
+        variant: "error",
+        message: e.message || "Failed to Done Contract",
+      }),
+    onSuccess: () => {
+      navigation.navigate("Contract List");
+      dispatchSnackbar({
+        type: SnackbarProviderActionType.OPEN,
+        variant: "success",
+        message: `The Contract is marked as Done!`,
       });
     },
   });
@@ -186,9 +198,10 @@ const ProposedContractScreen = ({ navigation }) => {
                     </Button>
                   </View>
                 ) : null}
-                {contract.status === "cleaner_done" ? (
+                {contract.status === "cleaner_approved" ? (
                   <TouchableOpacity
-                    onPress={() => navigation.navigate("Booking Confirmed")}
+                    onPress={() => mutateDone()}
+                    disabled={isLoadingDone}
                   >
                     <LinearGradient
                       colors={["#CF91FF", "#5782F5"]}
@@ -196,7 +209,7 @@ const ProposedContractScreen = ({ navigation }) => {
                       end={{ x: 0.9, y: 0.5 }}
                       style={[styles.button, styles.buttonBook]}
                     >
-                      <Text style={styles.buttonLabelBook}>Pay</Text>
+                      <Text style={styles.buttonLabelBook}>Done Contract</Text>
                     </LinearGradient>
                   </TouchableOpacity>
                 ) : null}

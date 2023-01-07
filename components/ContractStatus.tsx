@@ -21,7 +21,7 @@ const ContractStatus = (props: Props) => {
       case "client_submitted":
         return (
           <Chip style={styles.info} textStyle={styles.infoText}>
-            Confirmed
+            Confirmed & Paid
           </Chip>
         );
       case "cleaner_approved":
@@ -45,7 +45,7 @@ const ContractStatus = (props: Props) => {
       case "client_done":
         return (
           <Chip style={styles.success} textStyle={styles.successText}>
-            Paid
+            Done
           </Chip>
         );
       default:
