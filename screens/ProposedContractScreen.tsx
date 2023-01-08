@@ -1,4 +1,3 @@
-import * as Clipboard from "expo-clipboard";
 import { useRoute } from "@react-navigation/native";
 import dayjs from "dayjs";
 import { LinearGradient } from "expo-linear-gradient";
@@ -32,12 +31,14 @@ import {
   initPaymentSheet,
   presentPaymentSheet,
 } from "@stripe/stripe-react-native";
+import Header from "../components/ProposedContractScreen/Header";
+import PaymentOptions from "../components/ProposedContractScreen/PaymentOptions";
+import Details from "../components/ProposedContractScreen/Details";
+import PayButton from "../components/ProposedContractScreen/PayButton";
+import DoneButton from "../components/ProposedContractScreen/DoneButton";
 
 type PaymentOption = "card" | "ewallet" | "cash";
-const PAYMENT_OPTIONS: PaymentOption[] = ["card", "ewallet", "cash"];
-
-const DISABLED_COLORS = [MD2Colors.grey300, MD2Colors.grey300];
-const GRADIENT_COLORS = ["#CF91FF", "#5782F5"];
+export const PAYMENT_OPTIONS: PaymentOption[] = ["card", "ewallet", "cash"];
 
 const ProposedContractScreen = ({ navigation }) => {
   const route = useRoute();
@@ -58,107 +59,7 @@ const ProposedContractScreen = ({ navigation }) => {
     setPaymentOption(value);
   }
 
-  const handleEmail = async (email: string) => {
-    const mailUrl = `mailto:${email}`;
-    try {
-      const can = await Linking.canOpenURL(mailUrl);
-      if (can) return await Linking.openURL(mailUrl);
-      await Clipboard.setStringAsync(email);
-      dispatchSnackbar({
-        type: SnackbarProviderActionType.OPEN,
-        variant: "info",
-        message: "Email Copied!",
-      });
-    } catch (e: any) {
-      dispatchSnackbar({
-        type: SnackbarProviderActionType.OPEN,
-        variant: "error",
-        message: e.message || "Error emailing or copying email",
-      });
-    }
-  };
-
-  const { mutate: mutateConfirm, isLoading: isLoadingConfirm } = useMutation({
-    mutationFn: () => confirmContract(contract.contractId),
-    onError: (e: any) =>
-      dispatchSnackbar({
-        type: SnackbarProviderActionType.OPEN,
-        variant: "error",
-        message: e.message || "Failed to Confirm Contract",
-      }),
-    onSuccess: () => {
-      navigation.navigate("Contract List");
-      dispatchSnackbar({
-        type: SnackbarProviderActionType.OPEN,
-        variant: "success",
-        message: "Your Contract is Confirmed",
-      });
-    },
-  });
-
-  const { mutate: mutatePayment, isLoading: isLoadingPayment } = useMutation({
-    mutationFn: fetchPaymentSheetParams,
-    onError: (e: any) =>
-      dispatchSnackbar({
-        type: SnackbarProviderActionType.OPEN,
-        variant: "error",
-        message: e.message || "Failed to Prepare Payment",
-      }),
-    onSuccess: async (data) => {
-      const { error } = await initPaymentSheet({
-        merchantDisplayName: "Dusted",
-        paymentIntentClientSecret: data.clientSecret,
-        defaultBillingDetails: {
-          email: details.email,
-          name: details.fullName,
-          address: {
-            country: "MY",
-          },
-        },
-      });
-      if (error) {
-        dispatchSnackbar({
-          type: SnackbarProviderActionType.OPEN,
-          variant: "info",
-          message: error.message || "Failed to Make Payment",
-        });
-      }
-
-      const { error: errorPresent } = await presentPaymentSheet();
-      if (errorPresent) {
-        dispatchSnackbar({
-          type: SnackbarProviderActionType.OPEN,
-          variant: "info",
-          message: errorPresent.message || "Failed to Present Payment Layout",
-        });
-      }
-    },
-  });
-  const handlePayment = () => {
-    const { total, contractId } = contract;
-
-    //* convert to Stripe amount standard
-    const amount = total * 100;
-    mutatePayment({ amount, contractId });
-  };
-
-  const { mutate: mutateDone, isLoading: isLoadingDone } = useMutation({
-    mutationFn: () => clientDoneContract(contract.contractId),
-    onError: (e: any) =>
-      dispatchSnackbar({
-        type: SnackbarProviderActionType.OPEN,
-        variant: "error",
-        message: e.message || "Failed to Done Contract",
-      }),
-    onSuccess: () => {
-      navigation.navigate("Contract List");
-      dispatchSnackbar({
-        type: SnackbarProviderActionType.OPEN,
-        variant: "success",
-        message: `The Contract is marked as Done!`,
-      });
-    },
-  });
+  const goBack = () => navigation.navigate("Contract List");
 
   return (
     <PrivateRoute navigation={navigation}>
@@ -167,136 +68,21 @@ const ProposedContractScreen = ({ navigation }) => {
           <Text>Loading Content...</Text>
         ) : (
           <View style={styles.card}>
-            <View style={styles.header}>
-              <Image
-                style={styles.logo}
-                source={require("../assets/dusted.png")}
-              ></Image>
-              <Text style={styles.page}>Contract Details</Text>
-              <View>
-                <Image
-                  style={styles.profile}
-                  source={{ uri: cleaner.imageUrl }}
-                />
-                <Text style={styles.name}>{cleaner.fullName}</Text>
-              </View>
-              <Text>Total:</Text>
-              <Text style={styles.price}>RM {contract.total.toFixed(2)}</Text>
-              <ContractStatus status={contract.status} />
-            </View>
+            <Header cleaner={cleaner} contract={contract} />
             <View style={styles.main}>
-              {contract.status === "client_submitting" ? (
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  {PAYMENT_OPTIONS.map((option) => (
-                    <Button
-                      key={option}
-                      style={[
-                        styles.complaintButton,
-                        paymentOption === option && styles.selectedButton,
-                      ]}
-                      labelStyle={[
-                        styles.complaintButtonLabel,
-                        paymentOption === option && styles.selectedButtonLabel,
-                      ]}
-                      mode="outlined"
-                      onPress={() => handleSelectPaymentOption(option)}
-                    >
-                      {option}
-                    </Button>
-                  ))}
-                </ScrollView>
-              ) : null}
-              <View>
-                <View>
-                  <Text style={styles.title}>Address: </Text>
-                  <Text style={styles.details}>{contract.address}</Text>
-                </View>
-                <View>
-                  <Text style={styles.title}>Service: </Text>
-                  <Text
-                    style={[styles.details, { textTransform: "capitalize" }]}
-                  >
-                    {contract.serviceRequired}
-                  </Text>
-                </View>
-                <View>
-                  <Text style={styles.title}>Date: </Text>
-                  <Text style={styles.details}>
-                    {dayjs(contract.startAt.toDate()).format("ddd, D MMM YYYY")}
-                  </Text>
-                </View>
-                <View>
-                  <Text style={styles.title}>Time: </Text>
-                  <Text style={styles.details}>
-                    {dayjs(contract.startAt.toDate()).format("hh:mm a")}
-                    {" - "}
-                    {dayjs(contract.endAt.toDate()).format("hh:mm a")}
-                  </Text>
-                </View>
-                <View>
-                  <Text style={styles.title}>Notes: </Text>
-                  <Text style={styles.details}>{contract.notes}</Text>
-                </View>
-                <View>
-                  <Text style={styles.title}>Cleaner Contact: </Text>
-                  <Text
-                    style={[styles.details, styles.link]}
-                    onPress={() => handleEmail(cleaner.email)}
-                  >
-                    {cleaner.email}
-                  </Text>
-                </View>
-                {contract.status === "client_submitting" ? (
-                  paymentOption === "cash" ? (
-                    <TouchableOpacity
-                      onPress={() => mutateConfirm()}
-                      disabled={isLoadingConfirm}
-                    >
-                      <LinearGradient
-                        colors={
-                          isLoadingConfirm ? DISABLED_COLORS : GRADIENT_COLORS
-                        }
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 0.9, y: 0.5 }}
-                        style={[styles.button, styles.buttonBook]}
-                      >
-                        <Text style={styles.buttonLabelBook}>Confirm</Text>
-                      </LinearGradient>
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-                      onPress={() => handlePayment()}
-                      disabled={isLoadingPayment}
-                    >
-                      <LinearGradient
-                        colors={
-                          isLoadingPayment ? DISABLED_COLORS : GRADIENT_COLORS
-                        }
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 0.9, y: 0.5 }}
-                        style={[styles.button, styles.buttonBook]}
-                      >
-                        <Text style={styles.buttonLabelBook}>Pay</Text>
-                      </LinearGradient>
-                    </TouchableOpacity>
-                  )
-                ) : null}
-                {contract.status === "cleaner_done" ? (
-                  <TouchableOpacity
-                    onPress={() => mutateDone()}
-                    disabled={isLoadingDone}
-                  >
-                    <LinearGradient
-                      colors={isLoadingDone ? DISABLED_COLORS : GRADIENT_COLORS}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 0.9, y: 0.5 }}
-                      style={[styles.button, styles.buttonBook]}
-                    >
-                      <Text style={styles.buttonLabelBook}>Confirm Done</Text>
-                    </LinearGradient>
-                  </TouchableOpacity>
-                ) : null}
-              </View>
+              <PaymentOptions
+                status={contract.status}
+                paymentOption={paymentOption}
+                handleSelectPaymentOption={handleSelectPaymentOption}
+              />
+              <Details contract={contract} cleaner={cleaner} />
+              <PayButton
+                contract={contract}
+                cleaner={cleaner}
+                paymentOption={paymentOption}
+                goBack={goBack}
+              />
+              <DoneButton contract={contract} goBack={goBack} />
             </View>
           </View>
         )}
@@ -316,75 +102,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 32,
   },
-  header: {
-    alignItems: "center",
-    justifyContent: "flex-start",
-  },
-  logo: {
-    resizeMode: "contain",
-    height: 42.72,
-    width: 181,
-    marginLeft: 26,
-  },
-  main: {
-    marginTop: 32,
-  },
-  page: {
-    fontSize: 20,
-    paddingTop: 40,
-  },
-  profile: {
-    height: 111,
-    width: 111,
-    borderRadius: 100,
-    alignItems: "center",
-    marginVertical: 20,
-  },
-  name: {
-    textAlign: "center",
-    fontSize: 18,
-    fontWeight: "400",
-    paddingBottom: 16,
-  },
-  price: {
-    fontSize: 24,
-    paddingVertical: 18,
-    fontWeight: "500",
-  },
-  complaintButton: {
-    marginHorizontal: 10,
-    borderColor: "#CCC",
-  },
-  selectedButton: {
-    borderColor: "#000",
-  },
-  selectedButtonLabel: {
-    color: "#000",
-  },
-  complaintButtonLabel: {
-    color: "#CCC",
-    textTransform: "capitalize",
-  },
+  main: { marginTop: 32 },
   information: {
     alignItems: "center",
   },
 
-  title: {
-    fontSize: 18,
-    fontWeight: "400",
-
-    paddingTop: 20,
-  },
-  details: {
-    flexWrap: "wrap",
-    alignItems: "flex-start",
-    fontSize: 16,
-    fontWeight: "300",
-  },
-  link: {
-    color: MD2Colors.blue500,
-    textDecorationLine: "underline",
-  },
   button: {
     marginTop: 40,
     borderRadius: 100,
