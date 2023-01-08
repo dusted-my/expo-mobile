@@ -11,8 +11,6 @@ import SettingsScreen from "./screens/SettingsScreen";
 import RequestScreen from "./screens/RequestScreen";
 import CleanerListScreen from "./screens/CleanerListScreen";
 import ReportScreen from "./screens/ReportScreen";
-import ContractScreen from "./screens/ProposedContractScreen";
-import BookingConfirmedScreen from "./screens/BookingConfirmedScreen";
 import { useLoadFonts } from "./hooks";
 import { ContextProvider } from "./providers";
 import CleanerScreen from "./screens/CleanerScreen";
@@ -21,6 +19,7 @@ import GlobalSnackBar from "./providers/SnackbarProvider/GlobalSnackbar";
 import ContractListScreen from "./screens/ContractListScreen";
 import ProposedContractScreen from "./screens/ProposedContractScreen";
 import ReceivedContractScreen from "./screens/ReceivedContractScreen";
+import FeedbackScreen from "./screens/FeedbackScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +34,7 @@ export default function App() {
       <NavigationContainer>
         <PaperProvider>
           <Stack.Navigator>
+            {/* public routes */}
             <Stack.Screen
               name="Welcome"
               component={WelcomeScreen}
@@ -43,14 +43,18 @@ export default function App() {
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />
             <Stack.Screen
+              name="Forget Password"
+              component={ForgetPasswordScreen}
+            />
+
+            {/* private routes */}
+            <Stack.Screen
               name="Home"
               component={HomeScreen}
               options={options}
             />
-            <Stack.Screen name="Settings" component={SettingsScreen} />
-            <Stack.Screen name="Request" component={RequestScreen} />
-            <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
-            <Stack.Screen name="Report" component={ReportScreen} />
+            <Stack.Screen name="Cleaner List" component={CleanerListScreen} />
+            <Stack.Screen name="Cleaner" component={CleanerScreen} />
             <Stack.Screen name="Contract List" component={ContractListScreen} />
             <Stack.Screen
               name="Proposed Contract"
@@ -60,16 +64,11 @@ export default function App() {
               name="Received Contract"
               component={ReceivedContractScreen}
             />
-            <Stack.Screen name="Cleaner List" component={CleanerListScreen} />
-            <Stack.Screen name="Cleaner" component={CleanerScreen} />
-            <Stack.Screen
-              name="Booking Confirmed"
-              component={BookingConfirmedScreen}
-            />
-            <Stack.Screen
-              name="Forget Password"
-              component={ForgetPasswordScreen}
-            />
+            <Stack.Screen name="Report" component={ReportScreen} />
+            <Stack.Screen name="Settings" component={SettingsScreen} />
+            <Stack.Screen name="Request" component={RequestScreen} />
+            <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
+            <Stack.Screen name="Feedback" component={FeedbackScreen} />
           </Stack.Navigator>
           <GlobalSnackBar />
         </PaperProvider>
