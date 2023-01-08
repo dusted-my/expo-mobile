@@ -1,10 +1,18 @@
 import { useRoute } from "@react-navigation/native";
+import { Timestamp } from "firebase/firestore";
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { useMutation } from "react-query";
-import { ICustomer } from "../interfaces";
-import { PrivateRoute } from "../providers";
+import { ICreateReportForm, ICustomer } from "../interfaces";
+import { createReport } from "../mutations";
+import {
+  PrivateRoute,
+  SnackbarProviderActionType,
+  useAuthState,
+  useSnackbar,
+} from "../providers";
+import { convertDateToTs, trimObjectStrings } from "../utils";
 
 const options = [
   "Did not show up",
@@ -18,24 +26,50 @@ const options = [
 const ReportScreen = ({ navigation }) => {
   const route = useRoute();
   const { cleaner }: { cleaner: ICustomer } = route.params as any;
+  console.log("cleaner", cleaner);
+  const { user } = useAuthState();
+  const { dispatchSnackbar } = useSnackbar();
 
-  const [selected, setSelected] = useState<string[]>([]);
+  const [issues, setIssues] = useState<string[]>([]);
   function select(value: string) {
-    if (selected.includes(value)) {
-      setSelected((selected) =>
-        selected.filter((selection) => selection !== value)
-      );
+    if (issues.includes(value)) {
+      setIssues((issues) => issues.filter((selection) => selection !== value));
       return;
     }
-    setSelected((selected) => selected.concat(value));
+    setIssues((issues) => issues.concat(value));
   }
 
-  const [feedback, setFeedback] = useState("");
+  const [message, setMessage] = useState("");
 
-  const { mutate, isLoading } = useMutation({});
+  const { mutate, isLoading } = useMutation({
+    mutationFn: createReport,
+    onError: (e: any) =>
+      dispatchSnackbar({
+        type: SnackbarProviderActionType.OPEN,
+        variant: "error",
+        message: e.message || "Failed to Make Report",
+      }),
+    onSuccess: () => {
+      dispatchSnackbar({
+        type: SnackbarProviderActionType.OPEN,
+        variant: "success",
+        message: "Cleaner Reported",
+      });
+      navigation.navigate("Home");
+    },
+  });
 
   function handleSubmit() {
-    alert(selected);
+    const form: ICreateReportForm = trimObjectStrings({
+      cleanerDoc: `/users/${cleaner.id}` as const,
+      clientDoc: `/users/${user.uid}` as const,
+      issues,
+      message,
+      status: "active",
+      createdAt: convertDateToTs(new Date()),
+      updatedAt: convertDateToTs(new Date()),
+    });
+    mutate(form);
   }
 
   return (
@@ -84,11 +118,11 @@ const ReportScreen = ({ navigation }) => {
                       key={option}
                       style={[
                         styles.complaintButton,
-                        selected.includes(option) && styles.selectedButton,
+                        issues.includes(option) && styles.issuesButton,
                       ]}
                       labelStyle={[
                         styles.complaintButtonLabel,
-                        selected.includes(option) && styles.selectedButtonLabel,
+                        issues.includes(option) && styles.issuesButtonLabel,
                       ]}
                       mode="outlined"
                       onPress={() => select(option)}
@@ -102,11 +136,11 @@ const ReportScreen = ({ navigation }) => {
             <TextInput
               multiline
               numberOfLines={5}
-              style={styles.feedback}
-              outlineStyle={styles.feedbackOutline}
+              style={styles.message}
+              outlineStyle={styles.messageOutline}
               placeholder="Tell us more about it"
-              value={feedback}
-              onChangeText={(text) => setFeedback(text)}
+              value={message}
+              onChangeText={(text) => setMessage(text)}
               mode="outlined"
             />
             <View style={styles.buttomPadding}>
@@ -116,7 +150,7 @@ const ReportScreen = ({ navigation }) => {
                 buttonColor="#000000"
                 mode="contained"
                 onPress={handleSubmit}
-                disabled={!selected.length}
+                disabled={!issues.length || isLoading}
               >
                 Submit
               </Button>
@@ -173,10 +207,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     borderColor: "#CCC",
   },
-  selectedButton: {
+  issuesButton: {
     borderColor: "#000",
   },
-  selectedButtonLabel: {
+  issuesButtonLabel: {
     color: "#000",
   },
   buttonsContainer: {
@@ -198,14 +232,14 @@ const styles = StyleSheet.create({
     color: "#999",
     padding: 10,
   },
-  feedback: {
+  message: {
     marginVertical: 12,
     fontSize: 20,
     width: "100%",
     height: 150,
     textAlignVertical: "top",
   },
-  feedbackOutline: {
+  messageOutline: {
     borderWidth: 2,
     borderColor: "#CCC",
     borderRadius: 10,

@@ -7,6 +7,7 @@ import {
   IPaymentIntentBody,
   IPaymentSheetParams,
 } from "../interfaces";
+import { convertDateToTs } from "../utils";
 
 export const createContract = async (
   contract: ICreateContractForm
@@ -22,7 +23,10 @@ export const createContract = async (
 
 export const confirmContract = async (contractId: string) => {
   const ref = doc(firestore, `contracts/${contractId}`);
-  const data: Partial<IContract> = { status: "client_submitted" };
+  const data: Partial<IContract> = {
+    status: "client_submitted",
+    updatedAt: convertDateToTs(new Date()),
+  };
   try {
     await updateDoc(ref, data);
   } catch (e) {
@@ -49,6 +53,7 @@ export const approveContract = async (
   const ref = doc(firestore, `contracts/${contractId}`);
   const data: Partial<IContract> = {
     status: approved ? "cleaner_approved" : "cleaner_declined",
+    updatedAt: convertDateToTs(new Date()),
   };
   try {
     await updateDoc(ref, data);
@@ -61,6 +66,7 @@ export const cleanerDoneContract = async (contractId: string) => {
   const ref = doc(firestore, `contracts/${contractId}`);
   const data: Partial<IContract> = {
     status: "cleaner_done",
+    updatedAt: convertDateToTs(new Date()),
   };
   try {
     await updateDoc(ref, data);
@@ -73,6 +79,7 @@ export const clientDoneContract = async (contractId: string) => {
   const ref = doc(firestore, `contracts/${contractId}`);
   const data: Partial<IContract> = {
     status: "client_done",
+    updatedAt: convertDateToTs(new Date()),
   };
   try {
     await updateDoc(ref, data);

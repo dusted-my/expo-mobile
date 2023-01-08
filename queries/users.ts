@@ -25,5 +25,5 @@ export const getCleaners = async (ownUid: string, max?: number) => {
 export const getOneUser = async (docPath: string): Promise<ICustomer> => {
   const ref = doc(firestore, docPath);
   const snapshot = await getDoc(ref);
-  return snapshot.data() as ICustomer;
+  return { ...snapshot.data(), id: snapshot.id } as ICustomer;
 };
