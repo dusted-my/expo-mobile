@@ -10,6 +10,7 @@ import PaymentOptions from "../components/ProposedContractScreen/PaymentOptions"
 import Details from "../components/ProposedContractScreen/Details";
 import PayButton from "../components/ProposedContractScreen/PayButton";
 import DoneButton from "../components/ProposedContractScreen/DoneButton";
+import ReportCleanerButton from "../components/ProposedContractScreen/ReportCleanerButton";
 
 type PaymentOption = "card" | "ewallet" | "cash";
 export const PAYMENT_OPTIONS: PaymentOption[] = ["card", "cash"];
@@ -55,6 +56,10 @@ const ProposedContractScreen = ({ navigation }) => {
                 goBack={goBack}
               />
               <DoneButton contract={contract} goBack={goBack} />
+              <ReportCleanerButton
+                status={contract.status}
+                goReport={() => navigation.navigate("Report", { cleaner })}
+              />
             </View>
           </View>
         )}

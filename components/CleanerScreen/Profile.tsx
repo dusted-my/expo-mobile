@@ -33,11 +33,11 @@ const Profile = (props: Props) => {
           </Text>
         </View>
       </View>
-      <List.Icon
+      {/* <List.Icon
         style={styles.message}
         color="#000"
         icon="message-minus-outline"
-      />
+      /> */}
     </View>
   );
 };

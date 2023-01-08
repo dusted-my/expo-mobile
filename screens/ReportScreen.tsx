@@ -1,6 +1,9 @@
+import { useRoute } from "@react-navigation/native";
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import { Button, TextInput } from "react-native-paper";
+import { useMutation } from "react-query";
+import { ICustomer } from "../interfaces";
 import { PrivateRoute } from "../providers";
 
 const options = [
@@ -13,8 +16,10 @@ const options = [
 ];
 
 const ReportScreen = ({ navigation }) => {
-  const [selected, setSelected] = useState<string[]>([]);
+  const route = useRoute();
+  const { cleaner }: { cleaner: ICustomer } = route.params as any;
 
+  const [selected, setSelected] = useState<string[]>([]);
   function select(value: string) {
     if (selected.includes(value)) {
       setSelected((selected) =>
@@ -25,10 +30,13 @@ const ReportScreen = ({ navigation }) => {
     setSelected((selected) => selected.concat(value));
   }
 
+  const [feedback, setFeedback] = useState("");
+
+  const { mutate, isLoading } = useMutation({});
+
   function handleSubmit() {
     alert(selected);
   }
-  const [feedback, setFeedback] = useState("");
 
   return (
     <PrivateRoute navigation={navigation}>
@@ -42,9 +50,9 @@ const ReportScreen = ({ navigation }) => {
             <Text style={styles.title}>Report Cleaner</Text>
             <Image
               style={styles.cleaner}
-              source={require("../assets/cleaner.jpg")}
+              source={{ uri: cleaner.imageUrl }}
             ></Image>
-            <Text style={styles.name}>Anna Jowel</Text>
+            <Text style={styles.name}>{cleaner.fullName}</Text>
             <View style={styles.buttonsContainer}>
               {/*
                * create fake arrays with the half length of options
@@ -108,6 +116,7 @@ const ReportScreen = ({ navigation }) => {
                 buttonColor="#000000"
                 mode="contained"
                 onPress={handleSubmit}
+                disabled={!selected.length}
               >
                 Submit
               </Button>
