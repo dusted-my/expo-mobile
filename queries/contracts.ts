@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { firestore } from "../firebase/config";
 import { IContract } from "../interfaces";
 
@@ -21,7 +21,8 @@ export const getReceivedContracts = async (uid: string) => {
   const contracts: IContract[] = [];
   snapshot.forEach((res) => {
     const contract = res.data() as IContract;
+    if (contract.status === "client_submitting") return;
     contracts.push({ ...contract, contractId: res.id });
   });
-  return contracts;
+  return contracts.sort((a, b) => b.startAt.seconds - a.startAt.seconds);
 };

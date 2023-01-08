@@ -22,7 +22,11 @@ export const PrivateRoute = (props: Props) => {
 
   return loading ? (
     <View
-      style={{ height: "100%", alignItems: "center", justifyContent: "center" }}
+      style={{
+        minHeight: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
     >
       <ActivityIndicator />
     </View>

@@ -58,12 +58,12 @@ const ContractListScreen = ({ navigation }) => {
     details.isCleaner ? "received" : "proposed"
   );
 
-  const totalEarned =
-    details.isCleaner &&
-    received.reduce(
-      (prev, curr) => curr.status === "client_done" && prev + curr.total,
-      0.0
-    );
+  const totalEarned = details.isCleaner
+    ? received.reduce(
+        (prev, curr) => curr.status === "client_done" && prev + curr.total,
+        0.0
+      )
+    : 0.0;
 
   return (
     <PrivateRoute navigation={navigation}>
@@ -99,7 +99,6 @@ const ContractListScreen = ({ navigation }) => {
             Received ({received.length})
           </Chip>
         </View>
-
         {tab === "proposed" ? (
           isLoadingProposed ? (
             <Text>Loading...</Text>
@@ -146,13 +145,12 @@ const ContractListScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
-    padding: 32,
-    paddingBottom: 50,
+    paddingHorizontal: 16,
   },
   totalEarned: {
     fontFamily: "Inter_700Bold",
     fontSize: 22,
+    marginTop: 16,
   },
   chips: {
     marginVertical: 16,

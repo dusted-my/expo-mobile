@@ -21,11 +21,15 @@ const SettingsScreen = ({ navigation }) => {
             <View style={styles.details}>
               <Image
                 style={styles.profile}
-                source={require("../assets/profile-pic.jpg")}
+                source={{ uri: details.imageUrl }}
               />
               <View style={styles.profileDescription}>
                 <Text style={styles.name}>{details.fullName}</Text>
-                {details.isCleaner ? <Chip>Cleaner</Chip> : null}
+                {details.isCleaner ? (
+                  <View style={styles.cleanerBadge}>
+                    <Text style={styles.cleanerBadgeText}>Cleaner</Text>
+                  </View>
+                ) : null}
               </View>
             </View>
             <View>
@@ -109,9 +113,17 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   profileDescription: {
-    justifyContent: "center",
-    alignItems: "flex-start",
-    height: 50,
+    flex: 1,
+    alignItems: "baseline",
+  },
+  cleanerBadge: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 50,
+    backgroundColor: MD2Colors.blue50,
+  },
+  cleanerBadgeText: {
+    color: MD2Colors.blue500,
   },
   editButton: {
     paddingTop: 8,

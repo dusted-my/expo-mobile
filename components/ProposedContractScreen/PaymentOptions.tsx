@@ -2,19 +2,20 @@ import React from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
 import { IContract } from "../../interfaces";
-import { PAYMENT_OPTIONS } from "../../screens/ProposedContractScreen";
 
 interface Props {
   status: IContract["status"];
+  paymentOptions: string[];
   paymentOption: string;
   handleSelectPaymentOption: (option: string) => void;
 }
 const PaymentOptions = (props: Props) => {
-  const { status, paymentOption, handleSelectPaymentOption } = props;
+  const { status, paymentOptions, paymentOption, handleSelectPaymentOption } =
+    props;
 
   return status === "client_submitting" ? (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-      {PAYMENT_OPTIONS.map((option) => (
+      {paymentOptions.map((option) => (
         <Button
           key={option}
           style={[

@@ -12,27 +12,29 @@ interface Props {
 const FeedbackButton = (props: Props) => {
   const { gaveFeedback, status, goFeedback } = props;
 
-  return status === "client_done" && !gaveFeedback ? (
-    <TouchableOpacity onPress={() => goFeedback()}>
+  return status === "client_done" ? (
+    !gaveFeedback ? (
+      <TouchableOpacity onPress={() => goFeedback()}>
+        <LinearGradient
+          colors={GRADIENT_COLORS}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0.9, y: 0.5 }}
+          style={styles.button}
+        >
+          <Text style={styles.buttonLabel}>Give Feedback</Text>
+        </LinearGradient>
+      </TouchableOpacity>
+    ) : (
       <LinearGradient
-        colors={GRADIENT_COLORS}
+        colors={DISABLED_COLORS}
         start={{ x: 0, y: 0 }}
         end={{ x: 0.9, y: 0.5 }}
         style={styles.button}
       >
-        <Text style={styles.buttonLabel}>Give Feedback</Text>
+        <Text style={styles.buttonLabel}>Submitted Feedback</Text>
       </LinearGradient>
-    </TouchableOpacity>
-  ) : (
-    <LinearGradient
-      colors={DISABLED_COLORS}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 0.9, y: 0.5 }}
-      style={styles.button}
-    >
-      <Text style={styles.buttonLabel}>Submitted Feedback</Text>
-    </LinearGradient>
-  );
+    )
+  ) : null;
 };
 
 const styles = StyleSheet.create({

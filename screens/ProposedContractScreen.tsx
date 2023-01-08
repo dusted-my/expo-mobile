@@ -50,6 +50,7 @@ const ProposedContractScreen = ({ navigation }) => {
             <View style={styles.main}>
               <PaymentOptions
                 status={contract.status}
+                paymentOptions={PAYMENT_OPTIONS}
                 paymentOption={paymentOption}
                 handleSelectPaymentOption={handleSelectPaymentOption}
               />

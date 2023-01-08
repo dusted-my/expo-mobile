@@ -23,6 +23,7 @@ export const AuthProvider = (props: any) => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
+        setLoading(true);
         unsubscribeDoc = onSnapshot(
           doc(firestore, "users", user.uid),
           (doc) => {
