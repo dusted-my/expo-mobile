@@ -58,9 +58,23 @@ const ContractListScreen = ({ navigation }) => {
     details.isCleaner ? "received" : "proposed"
   );
 
+  const totalEarned =
+    details.isCleaner &&
+    received.reduce(
+      (prev, curr) => curr.status === "client_done" && prev + curr.total,
+      0.0
+    );
+
   return (
     <PrivateRoute navigation={navigation}>
       <ScrollView style={styles.container}>
+        {details.isCleaner ? (
+          <View>
+            <Text style={styles.totalEarned}>
+              Total Earned: RM {totalEarned.toFixed(2)}
+            </Text>
+          </View>
+        ) : null}
         <View
           style={[
             styles.chips,
@@ -135,6 +149,10 @@ const styles = StyleSheet.create({
     height: "100%",
     padding: 32,
     paddingBottom: 50,
+  },
+  totalEarned: {
+    fontFamily: "Inter_700Bold",
+    fontSize: 22,
   },
   chips: {
     marginVertical: 16,

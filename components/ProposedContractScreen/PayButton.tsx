@@ -3,9 +3,12 @@ import {
   presentPaymentSheet,
 } from "@stripe/stripe-react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
+import { Unsubscribe } from "firebase/auth";
+import { doc, onSnapshot } from "firebase/firestore";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useMutation } from "react-query";
+import { firestore } from "../../firebase/config";
 import { IContract, ICustomer } from "../../interfaces";
 import { confirmContract, fetchPaymentSheetParams } from "../../mutations";
 import {
@@ -25,6 +28,11 @@ const PayButton = (props: Props) => {
   const { contract, cleaner, paymentOption, goBack } = props;
   const { dispatchSnackbar } = useSnackbar();
   const { details } = useAuthState();
+
+  let unsubscribeDoc: Unsubscribe;
+  useEffect(() => {
+    return () => unsubscribeDoc && unsubscribeDoc();
+  }, []);
 
   const { mutate: mutateConfirm, isLoading: isLoadingConfirm } = useMutation({
     mutationFn: () => confirmContract(contract.contractId),
@@ -91,6 +99,23 @@ const PayButton = (props: Props) => {
       });
       return;
     }
+
+    unsubscribeDoc = onSnapshot(
+      doc(firestore, "contracts", contract.contractId),
+      (doc) => {
+        const contract = doc.data() as IContract;
+        if (contract.status === "client_submitted") {
+          dispatchSnackbar({
+            type: SnackbarProviderActionType.OPEN,
+            variant: "success",
+            message: `Successfully paid RM ${contract.total.toFixed(2)} to ${
+              cleaner.fullName
+            }!`,
+          });
+          goBack();
+        }
+      }
+    );
   };
 
   return contract.status === "client_submitting" ? (
