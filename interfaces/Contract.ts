@@ -20,6 +20,7 @@ export interface IContract {
     | "cleaner_done"
     | "client_done";
   updatedAt: Timestamp;
+  gaveFeedback?: boolean;
 }
 
 export interface ICreateContractForm extends Omit<IContract, "contractId"> {}

@@ -58,6 +58,7 @@ const ProposedContractScreen = ({ navigation }) => {
               />
               <DoneButton contract={contract} goBack={goBack} />
               <FeedbackButton
+                gaveFeedback={contract.gaveFeedback}
                 status={contract.status}
                 goFeedback={() =>
                   navigation.navigate("Feedback", { contract, cleaner })

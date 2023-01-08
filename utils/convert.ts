@@ -5,5 +5,5 @@ export const convertStringToFloat = (value: string, fractionDigits = 2) => {
 };
 
 export const convertDateToTs = (date: Date) => {
-  return new Timestamp(date.valueOf() / 1000, 0);
+  return new Timestamp(parseInt((date.valueOf() / 1000).toFixed(2)), 0);
 };

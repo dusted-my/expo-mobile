@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { MD2Colors } from "react-native-paper";
+import { Chip, MD2Colors } from "react-native-paper";
 import { IContract } from "../interfaces";
 import ContractStatus from "./ContractStatus";
 
@@ -22,6 +22,7 @@ const Contract = (props: Props) => {
       </Text>
       <View style={styles.status}>
         <ContractStatus status={contract.status} />
+        {contract.gaveFeedback ? <Chip selected>Feedback</Chip> : null}
       </View>
     </View>
   );
@@ -47,7 +48,16 @@ const styles = StyleSheet.create({
     color: MD2Colors.grey500,
   },
   status: {
+    flex: 1,
     marginTop: 8,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+  },
+  success: {
+    backgroundColor: MD2Colors.green50,
+  },
+  successText: {
+    color: MD2Colors.green600,
   },
 });
 
