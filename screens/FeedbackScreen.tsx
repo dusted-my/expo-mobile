@@ -49,16 +49,16 @@ const FeedbackScreen = ({ navigation }) => {
   });
 
   function handleSubmit() {
-    const form: ICreateFeedbackForm = trimObjectStrings({
+    const form: ICreateFeedbackForm = {
+      stars,
+      message: message.trim(),
       cleanerDoc: `/users/${cleaner.id}` as const,
       clientDoc: `/users/${user.uid}` as const,
       contractDoc: `/contracts/${contract.contractId}` as const,
-      stars,
-      message,
       status: "active",
-      createdAt: Timestamp.fromDate(new Date()),
-      updatedAt: Timestamp.fromDate(new Date()),
-    });
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    };
     mutate(form);
   }
 

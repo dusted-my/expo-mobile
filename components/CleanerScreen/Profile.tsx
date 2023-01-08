@@ -1,16 +1,18 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
-import { List } from "react-native-paper";
+import { Button, List, MD2Colors } from "react-native-paper";
+import { Rating } from "react-native-ratings";
 import { ICustomer } from "../../interfaces";
 
 interface Props {
   cleaner: ICustomer;
+  goFeedbacks: () => void;
 }
 const Profile = (props: Props) => {
-  const { cleaner } = props;
+  const { cleaner, goFeedbacks } = props;
 
   return (
-    <View style={styles.profileMessage}>
+    <View style={styles.container}>
       <View style={styles.body}>
         <Image
           style={styles.profile}
@@ -18,21 +20,22 @@ const Profile = (props: Props) => {
         ></Image>
         <View style={styles.profileDescription}>
           <Text style={styles.name}>{cleaner.fullName}</Text>
-          <View style={styles.stars}>
-            {[...Array(cleaner.stars)].map((_, index) => (
-              <List.Icon
-                icon="star"
-                color="#ECC12A"
-                style={{ margin: 0 }}
-                key={`star-${index}`}
-              />
-            ))}
-          </View>
+          <Rating
+            type="custom"
+            readonly
+            imageSize={20}
+            style={{ alignItems: "flex-start" }}
+            tintColor={MD2Colors.grey200}
+            startingValue={cleaner.stars}
+          />
           <Text style={styles.hourlyRate}>
             RM {cleaner.hourlyRate}.00 / hour
           </Text>
         </View>
       </View>
+      <Button mode="text" icon="chevron-double-right" onPress={goFeedbacks}>
+        View Feedbacks
+      </Button>
       {/* <List.Icon
         style={styles.message}
         color="#000"
@@ -44,7 +47,8 @@ const Profile = (props: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 20,
+    paddingBottom: 16,
+    alignItems: "flex-start",
   },
   body: {
     alignItems: "center",
@@ -67,11 +71,6 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     margin: 10,
-  },
-  profileMessage: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingBottom: 16,
   },
   message: {
     marginRight: 30,

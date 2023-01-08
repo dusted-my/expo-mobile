@@ -116,7 +116,12 @@ const CleanerScreen = ({ navigation }) => {
     <PrivateRoute navigation={navigation}>
       <ScrollView>
         <View style={styles.container}>
-          <Profile cleaner={cleaner} />
+          <Profile
+            cleaner={cleaner}
+            goFeedbacks={() =>
+              navigation.navigate("Feedback List", { cleanerId: cleaner.id })
+            }
+          />
           <Divider style={styles.divider}></Divider>
           <Formik
             initialValues={initialValues}

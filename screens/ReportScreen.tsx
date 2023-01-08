@@ -60,15 +60,15 @@ const ReportScreen = ({ navigation }) => {
   });
 
   function handleSubmit() {
-    const form: ICreateReportForm = trimObjectStrings({
+    const form: ICreateReportForm = {
+      issues,
+      message: message.trim(),
       cleanerDoc: `/users/${cleaner.id}` as const,
       clientDoc: `/users/${user.uid}` as const,
-      issues,
-      message,
       status: "active",
-      createdAt: convertDateToTs(new Date()),
-      updatedAt: convertDateToTs(new Date()),
-    });
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    };
     mutate(form);
   }
 

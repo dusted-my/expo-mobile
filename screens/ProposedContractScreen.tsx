@@ -42,7 +42,11 @@ const ProposedContractScreen = ({ navigation }) => {
           <Text>Loading Content...</Text>
         ) : (
           <View style={styles.card}>
-            <Header cleaner={cleaner} contract={contract} />
+            <Header
+              cleaner={cleaner}
+              contract={contract}
+              goCleaner={() => navigation.navigate("Cleaner", { cleaner })}
+            />
             <View style={styles.main}>
               <PaymentOptions
                 status={contract.status}

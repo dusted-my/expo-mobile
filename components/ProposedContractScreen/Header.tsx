@@ -1,23 +1,29 @@
 import React from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
+import { Button, Divider } from "react-native-paper";
 import { IContract, ICustomer } from "../../interfaces";
 import ContractStatus from "../ContractStatus";
 
 interface Props {
   cleaner: ICustomer;
   contract: IContract;
+  goCleaner: () => void;
 }
 const Header = (props: Props) => {
-  const { cleaner, contract } = props;
+  const { cleaner, contract, goCleaner } = props;
 
   return (
     <View style={styles.header}>
       <Image style={styles.logo} source={require("../../assets/dusted.png")} />
-      <Text style={styles.page}>Contract Details</Text>
+      <Text style={styles.title}>Contract Details</Text>
       <View>
         <Image style={styles.profile} source={{ uri: cleaner.imageUrl }} />
         <Text style={styles.name}>{cleaner.fullName}</Text>
+        <Button mode="text" onPress={() => goCleaner()}>
+          View Profile
+        </Button>
       </View>
+      <Divider style={styles.divider} />
       <Text>Total:</Text>
       <Text style={styles.price}>RM {contract.total.toFixed(2)}</Text>
       <ContractStatus status={contract.status} />
@@ -27,6 +33,7 @@ const Header = (props: Props) => {
 
 const styles = StyleSheet.create({
   header: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
   },
@@ -36,10 +43,7 @@ const styles = StyleSheet.create({
     width: 181,
     marginLeft: 26,
   },
-  main: {
-    marginTop: 32,
-  },
-  page: {
+  title: {
     fontSize: 20,
     paddingTop: 40,
   },
@@ -53,8 +57,11 @@ const styles = StyleSheet.create({
   name: {
     textAlign: "center",
     fontSize: 18,
-    fontWeight: "400",
-    paddingBottom: 16,
+    fontWeight: "500",
+  },
+  divider: {
+    width: "100%",
+    marginVertical: 16,
   },
   price: {
     fontSize: 24,

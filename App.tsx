@@ -20,6 +20,7 @@ import ContractListScreen from "./screens/ContractListScreen";
 import ProposedContractScreen from "./screens/ProposedContractScreen";
 import ReceivedContractScreen from "./screens/ReceivedContractScreen";
 import FeedbackScreen from "./screens/FeedbackScreen";
+import FeedbackListScreen from "./screens/FeedbackListScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -68,6 +69,7 @@ export default function App() {
             <Stack.Screen name="Settings" component={SettingsScreen} />
             <Stack.Screen name="Request" component={RequestScreen} />
             <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
+            <Stack.Screen name="Feedback List" component={FeedbackListScreen} />
             <Stack.Screen name="Feedback" component={FeedbackScreen} />
           </Stack.Navigator>
           <GlobalSnackBar />

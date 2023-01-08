@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { List } from "react-native-paper";
+import { Rating } from "react-native-ratings";
 import { ICustomer } from "../interfaces";
 
 interface Props {
@@ -22,16 +23,12 @@ const Cleaner = (props: Props) => {
             {cleaner.services?.length ? cleaner.services[0] : "-"}
             {cleaner.services?.length > 1 ? "..." : ""}
           </Text>
-          <View style={styles.stars}>
-            {[...Array(cleaner.stars)].map((_, index) => (
-              <List.Icon
-                icon="star"
-                color="#ECC12A"
-                style={{ margin: 0 }}
-                key={`${cleaner.id}-star-${index}`}
-              />
-            ))}
-          </View>
+          <Rating
+            readonly
+            imageSize={16}
+            style={{ alignItems: "flex-start", backgroundColor: "#0000" }}
+            startingValue={cleaner.stars}
+          />
         </View>
       </View>
     </View>
