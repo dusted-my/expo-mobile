@@ -26,7 +26,6 @@ const options = [
 const ReportScreen = ({ navigation }) => {
   const route = useRoute();
   const { cleaner }: { cleaner: ICustomer } = route.params as any;
-  console.log("cleaner", cleaner);
   const { user } = useAuthState();
   const { dispatchSnackbar } = useSnackbar();
 

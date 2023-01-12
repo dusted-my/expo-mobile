@@ -11,7 +11,7 @@ export const getProposedContracts = async (uid: string) => {
     const contract = res.data() as IContract;
     contracts.push({ ...contract, contractId: res.id });
   });
-  return contracts;
+  return contracts.sort((a, b) => b.startAt.seconds - a.startAt.seconds);
 };
 
 export const getReceivedContracts = async (uid: string) => {

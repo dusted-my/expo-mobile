@@ -90,7 +90,7 @@ const ProposedContractScreen = ({ navigation }) => {
                 source={require("../assets/dusted.png")}
               ></Image>
               <Text style={styles.page}>Contract Details</Text>
-              <View>
+              <View style={{ alignItems: "center" }}>
                 {client.imageUrl ? (
                   <Image source={{ uri: client.imageUrl }} />
                 ) : (
@@ -110,27 +110,6 @@ const ProposedContractScreen = ({ navigation }) => {
               <ContractStatus status={contract.status} />
             </View>
             <View style={styles.main}>
-              {contract.status === "cleaner_done" ? (
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  {options.map((option) => (
-                    <Button
-                      key={option}
-                      style={[
-                        styles.complaintButton,
-                        selected === option && styles.selectedButton,
-                      ]}
-                      labelStyle={[
-                        styles.complaintButtonLabel,
-                        selected === option && styles.selectedButtonLabel,
-                      ]}
-                      mode="outlined"
-                      onPress={() => select(option)}
-                    >
-                      {option}
-                    </Button>
-                  ))}
-                </ScrollView>
-              ) : null}
               <View>
                 <View>
                   <Text style={styles.title}>Address: </Text>
@@ -254,6 +233,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     alignItems: "center",
     marginVertical: 20,
+    backgroundColor: MD2Colors.grey300,
   },
   name: {
     textAlign: "center",

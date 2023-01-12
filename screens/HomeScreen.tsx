@@ -37,6 +37,9 @@ const HomeScreen = ({ navigation }) => {
                   left={<TextInput.Icon icon="magnify" />}
                   value={search}
                   onChangeText={(text) => setSearch(text)}
+                  onSubmitEditing={() =>
+                    navigation.navigate("Cleaner List", { search })
+                  }
                 />
               </View>
             </ImageBackground>

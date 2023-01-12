@@ -1,7 +1,7 @@
 import { signOut } from "firebase/auth";
 import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import { Button, Chip, Divider, MD2Colors } from "react-native-paper";
+import { Avatar, Button, Chip, Divider, MD2Colors } from "react-native-paper";
 import { auth } from "../firebase/config";
 import { PrivateRoute, useAuthState } from "../providers";
 
@@ -19,10 +19,21 @@ const SettingsScreen = ({ navigation }) => {
         <View style={styles.container}>
           <View>
             <View style={styles.details}>
-              <Image
-                style={styles.profile}
-                source={{ uri: details.imageUrl }}
-              />
+              {details.imageUrl ? (
+                <Avatar.Image
+                  style={styles.profile}
+                  source={{ uri: details.imageUrl }}
+                />
+              ) : (
+                <Avatar.Text
+                  style={styles.profile}
+                  label={details.fullName
+                    .split(" ")
+                    .slice(0, 2)
+                    .map((word) => word[0].toUpperCase())
+                    .join("")}
+                />
+              )}
               <View style={styles.profileDescription}>
                 <Text style={styles.name}>{details.fullName}</Text>
                 {details.isCleaner ? (
@@ -111,6 +122,7 @@ const styles = StyleSheet.create({
     width: 80,
     borderRadius: 100,
     marginRight: 16,
+    backgroundColor: MD2Colors.grey300,
   },
   profileDescription: {
     flex: 1,

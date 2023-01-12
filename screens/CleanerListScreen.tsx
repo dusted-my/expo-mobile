@@ -28,16 +28,24 @@ const CleanerListScreen = ({ navigation }) => {
       }),
   });
 
-  const { service }: any = route.params;
-  const [selected, setSelected] = useState<string>(service || "");
+  const { service, search }: { service: string; search: string } =
+    route.params as any;
+  const [searchTerm, setSearchTerm] = useState(search || "");
+
+  const [selected, setSelected] = useState(service || "");
   const handleSelect = (service: string) =>
     setSelected((selected) => {
       if (selected === service) return "";
       if (!mockServices.includes(service)) return "";
+      setSearchTerm("");
       return service;
     });
 
-  const filteredCleaners = selected
+  const filteredCleaners = searchTerm
+    ? cleaners.filter((cleaner) =>
+        cleaner.fullName.toLowerCase().includes(search.toLowerCase())
+      )
+    : selected
     ? cleaners.filter((cleaner) => {
         if (!cleaner.services) return false;
         if (!cleaner.services.includes(selected)) return false;
@@ -55,6 +63,11 @@ const CleanerListScreen = ({ navigation }) => {
           <ServiceChips selected={[selected]} handlePress={handleSelect} />
         </View>
         <View style={styles.cleaners}>
+          {searchTerm ? (
+            <Text style={[styles.title, styles.searchResult]}>
+              Search Results of "{search}"
+            </Text>
+          ) : null}
           {!isLoading ? (
             filteredCleaners.length ? (
               filteredCleaners.map((cleaner) => (
@@ -87,6 +100,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontFamily: "Inter_600SemiBold",
+  },
+  searchResult: {
+    marginVertical: 16,
   },
   sectionHeader: {
     flexDirection: "row",
