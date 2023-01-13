@@ -22,6 +22,7 @@ const SettingsScreen = ({ navigation }) => {
               {details.imageUrl ? (
                 <Avatar.Image
                   style={styles.profile}
+                  size={80}
                   source={{ uri: details.imageUrl }}
                 />
               ) : (
